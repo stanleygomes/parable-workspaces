@@ -79,8 +79,7 @@
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./ && npm run copy-wasm",
-    "copy-wasm": "mkdir -p out/repository && cp node_modules/sql.js/dist/sql-wasm.wasm out/repository/sql-wasm.wasm",
+    "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "lint": "eslint src",
     "format:check": "prettier --check .",
@@ -90,9 +89,9 @@
   "dependencies": {
     "archiver": "^7.0.1",
     "date-fns": "^4.1.0",
-    "sql.js": "^1.14.1",
     "zod": "^4.3.6"
   },
+
   "devDependencies": {
     "@types/archiver": "^6.0.3",
     "@types/jest": "^30.0.0",
