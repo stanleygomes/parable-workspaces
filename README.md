@@ -4,13 +4,13 @@
 [![GitHub issues](https://img.shields.io/github/issues/stanleygomes/parable-workspaces.svg?style=flat&logo=github)](https://github.com/stanleygomes/parable-workspaces/issues)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-# Parable Workspaces
+# 🗃️ Parable Workspaces
 
 ![screenshot](https://github.com/stanleygomes/parable-workspaces/raw/HEAD/resources/screenshot.png)
 
 <!-- Plugin description -->
 
-**Parable Workspaces** is the best way to manage your vscode, cursor and antigravity workspaces. Switch between projects instantly, keep your workspaces organized, and sync your favorite projects across all your devices.
+**Parable Workspaces** is the elegant and efficient workspace manager for your projects in vscode, cursor and antigravity.
 
 - **Instant Project Switching**: Quickly jump between saved workspaces without losing your flow.
 - **Visual Identification**: Assign colors and icons to your workspaces for instant recognition in the Activity Bar.

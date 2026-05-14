@@ -108,7 +108,7 @@ export default function Home(): JSX.Element {
               &gt; System initialized...
             </p>
             <p className="text-[#33ff00]">
-              &gt; Description: The best way to manage your vscode, cursor and antigravity workspaces.
+              &gt; Description: The elegant and efficient workspace manager for your projects.
             </p>
             <p className="text-[#33ff00]">
               &gt; Status: Online. Ready for download.
