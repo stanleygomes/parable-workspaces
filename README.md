@@ -1,36 +1,31 @@
-![Build](https://github.com/stanleygomes/codex-notes/workflows/Build/badge.svg)
+![Build](https://github.com/stanleygomes/parable-workspaces/workflows/Build/badge.svg)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/stanleygomes/codex-notes.svg?style=flat&logo=github)](https://github.com/stanleygomes/codex-notes/network)
-[![GitHub issues](https://img.shields.io/github/issues/stanleygomes/codex-notes.svg?style=flat&logo=github)](https://github.com/stanleygomes/codex-notes/issues)
+[![GitHub stars](https://img.shields.io/github/stars/stanleygomes/parable-workspaces.svg?style=flat&logo=github)](https://github.com/stanleygomes/parable-workspaces/network)
+[![GitHub issues](https://img.shields.io/github/issues/stanleygomes/parable-workspaces.svg?style=flat&logo=github)](https://github.com/stanleygomes/parable-workspaces/issues)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-# 🗒️ Codex Notes
+# Parable Workspaces
 
-![screenshot](https://github.com/stanleygomes/codex-notes/raw/HEAD/resources/screenshot.png)
+![screenshot](https://github.com/stanleygomes/parable-workspaces/raw/HEAD/resources/screenshot.png)
 
 <!-- Plugin description -->
 
-**Codex Notes** is a powerful plugin for managing notes directly within your IDE. Keep your thoughts, code snippets, and documentation organized without leaving your development environment.
+**Parable Workspaces** is a powerful workspace manager for VS Code. Switch between projects instantly, keep your workspaces organized, and sync your favorite projects across all your devices.
 
-- **Create, edit, delete, rename, and search notes** with full markdown support
-- **Favorite and assign colors to notes** for quick identification and access
-- **Sort notes** by title, creation date, or favorite status
-- **Duplicate notes** for easy replication
-- **Import notes** from external files
-- **Export notes** to external files
-- **Open note file locations** in the file system
-- **Filter notes** by favorites
-- **Create notes from selected text** in the editor
-- **Integrated search** via IntelliJ's Search Everywhere
-- **Customizable settings** for file extension, notes directory, export options, import options, and folder access
+- **Instant Project Switching**: Quickly jump between saved workspaces without losing your flow.
+- **Cloud Sync**: All your saved projects are automatically synced via VS Code Settings Sync.
+- **Visual Identification**: Assign colors and icons to your workspaces for instant recognition in the Activity Bar.
+- **Quick Access**: Search and open projects directly from the command palette (`Ctrl+P`).
+- **Automatic Detection**: Get notified to save new folders as workspaces as soon as you open them.
+- **Peacock Integration**: Customize the editor's color scheme per workspace to never lose track of where you are.
 <!-- Plugin description end -->
 
 ## 🌐 Plugin Marketplace Links
 
-| Platform             | Link                                                                                                      |
-| -------------------- | --------------------------------------------------------------------------------------------------------- |
-| VS Code              | [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=StanleyGomes.codex-notes) |
-| Antigravity / Cursor | [Open VSX Registry](https://open-vsx.org/extension/stanleygomes/codex-notes)                              |
+| Platform             | Link                                                                                                             |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| VS Code              | [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=StanleyGomes.parable-workspaces) |
+| Antigravity / Cursor | [Open VSX Registry](https://open-vsx.org/extension/stanleygomes/parable-workspaces)                              |
 
 ## 📋 Table of Contents
 
@@ -50,19 +45,17 @@
 
 ### Opening the Tool Window
 
-- Click on the **Codex Notes** icon in the left sidebar of your editor;
+- Click on the **Parable Workspaces** icon in the left sidebar of your editor;
+- Use the `List Saved Projects` command from the Command Palette.
 
 ## ⌨️ Keyboard Shortcuts
 
-| Action          | Shortcut                  |
-| --------------- | ------------------------- |
-| Open note       | `Double-click` or `Enter` |
-| Rename note     | `F2`                      |
-| Toggle favorite | `F`                       |
-| Delete note     | `Delete`                  |
-| Duplicate note  | `Ctrl+D`                  |
-| Export note     | `Ctrl+E`                  |
-| Open location   | `Ctrl+Shift+E`            |
+| Action         | Shortcut                  |
+| -------------- | ------------------------- |
+| Open Project   | `Double-click` or `Enter` |
+| Edit Metadata  | `F2`                      |
+| Remove Project | `Delete`                  |
+| Save Current   | `Ctrl+Alt+S`              |
 
 ## 🛠️ Development
 
@@ -82,13 +75,11 @@
     ```
 3.  Press `F5` to start a new VS Code instance with the extension enabled.
 4.  To debug the **Webview**:
-    - Open the Codex Notes view.
+    - Open the Parable Workspaces view.
     - Run the command: `Developer: Open Webview Developer Tools` from the Command Palette.
 5.  To debug the **Extension Host**:
     - Check the `Debug Console` in the main VS Code window for logs and errors.
     - Set breakpoints directly in the TypeScript files.
-
-```
 
 **Available Commands**
 
@@ -159,7 +150,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- [Issue Tracker](https://github.com/stanleygomes/codex-notes/issues)
+- [Issue Tracker](https://github.com/stanleygomes/parable-workspaces/issues)
 
 ---
 

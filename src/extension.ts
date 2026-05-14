@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { NoteRepository } from './repository/NoteRepository';
+import { WorkspaceRepository } from './repository/WorkspaceRepository';
 import { CreateNoteService } from './service/CreateNoteService';
 import { DeleteNoteService } from './service/DeleteNoteService';
 import { RenameNoteService } from './service/RenameNoteService';
@@ -13,6 +14,7 @@ import { SortNotesService } from './service/SortNotesService';
 import { FilterNotesService } from './service/FilterNotesService';
 import { OpenNoteLocationService } from './service/OpenNoteLocationService';
 import { QuickSearchService } from './service/QuickSearchService';
+import { WorkspaceService } from './service/WorkspaceService';
 import { NotesViewProvider } from './ui/NotesViewProvider';
 import { Note } from './dto/Note';
 import {
@@ -32,6 +34,7 @@ export async function activate(
 ): Promise<void> {
   console.log('Activating Codex Notes extension...');
   const repository = await NoteRepository.initialize();
+  const workspaceRepository = new WorkspaceRepository(context);
 
   console.log('Codex Notes extension activated successfully');
   const createService = new CreateNoteService(repository);
@@ -51,6 +54,8 @@ export async function activate(
     searchService,
     openNote,
   );
+
+  const workspaceService = new WorkspaceService(workspaceRepository);
 
   console.log('Services initialized successfully');
 
@@ -118,6 +123,12 @@ export async function activate(
     vscode.commands.registerCommand('codexNotes.openBackup', handleOpenBackup),
     vscode.commands.registerCommand('codexNotes.searchNotes', () =>
       quickSearchService.show(),
+    ),
+    vscode.commands.registerCommand('workspaceManager.saveProject', () =>
+      workspaceService.saveCurrentWorkspace(),
+    ),
+    vscode.commands.registerCommand('workspaceManager.listProjects', () =>
+      workspaceService.listProjects(),
     ),
   );
 }

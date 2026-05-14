@@ -1,11 +1,11 @@
 {
-  "name": "codex-notes",
-  "displayName": "Codex Notes",
-  "description": "A powerful plugin for managing notes directly within your IDE. Keep your thoughts, code snippets, and documentation organized without leaving your development environment",
-  "version": "2.2.4",
+  "name": "parable-workspaces",
+  "displayName": "Parable Workspaces",
+  "description": "A powerful workspace manager for VS Code. Switch between projects instantly, keep your workspaces organized, and sync your favorite projects across all your devices.",
+  "version": "1.0.0",
   "license": "MIT",
   "publisher": "stanleygomes",
-  "repository": "https://github.com/stanleygomes/codex-notes",
+  "repository": "https://github.com/stanleygomes/parable-workspaces",
   "engines": {
     "vscode": "^1.85.0",
     "node": "24.x"
@@ -21,7 +21,7 @@
       "activitybar": [
         {
           "id": "codexNotesContainer",
-          "title": "Codex Notes",
+          "title": "Parable Workspaces",
           "icon": "resources/icons/tab-icon.png"
         }
       ]
@@ -31,7 +31,7 @@
         {
           "type": "webview",
           "id": "codexNotes.notesView",
-          "name": "Explorer",
+          "name": "Workspaces",
           "icon": "resources/icons/tab-icon.png"
         }
       ]
@@ -74,6 +74,16 @@
         "command": "codexNotes.searchNotes",
         "title": "Search Notes",
         "category": "Codex Notes"
+      },
+      {
+        "command": "workspaceManager.saveProject",
+        "title": "Save Current Workspace",
+        "category": "Workspace Manager"
+      },
+      {
+        "command": "workspaceManager.listProjects",
+        "title": "List Saved Projects",
+        "category": "Workspace Manager"
       }
     ],
     "menus": {
@@ -110,7 +120,7 @@
       }
     ],
     "configuration": {
-      "title": "Codex Notes",
+      "title": "Parable Workspaces",
       "properties": {
         "codexNotes.fileExtension": {
           "type": "string",
@@ -126,9 +136,9 @@
     },
     "quickAccess": [
       {
-        "prefix": "n",
-        "placeholder": "Search Codex Notes...",
-        "command": "codexNotes.searchNotes"
+        "prefix": "p",
+        "placeholder": "Search Parable Workspaces...",
+        "command": "workspaceManager.listProjects"
       }
     ]
   },

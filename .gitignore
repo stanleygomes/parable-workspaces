@@ -93,7 +93,6 @@ tmp/
 temp/
 
 # Editor directories and files
-!.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
@@ -108,4 +107,7 @@ ehthumbs.db
 Desktop.ini
 
 # extension specific files
-codex-notes.vsix
+parable-workspaces.vsix
+
+# docs specific files
+ROADMAP.md

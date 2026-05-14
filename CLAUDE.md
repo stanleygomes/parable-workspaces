@@ -1,6 +1,6 @@
 ## Project Overview
 
-**Codex Notes** is a VS Code extension for managing notes directly within the IDE. The extension provides a sidebar view with features for creating, managing, searching, and organizing notes with markdown support.
+**Parable Workspaces** is a VS Code extension for managing projects and workspaces. It provides a sidebar view to save, organize, and switch between projects instantly, with support for cloud synchronization and visual identification.
 
 ### Technology Stack
 
@@ -15,6 +15,12 @@
 ```
 src/
 ├── extension.ts           # Main extension entry point
+├── workspaces/            # Workspace management logic
+│   ├── WorkspaceRepository.ts
+│   └── WorkspaceService.ts
+├── ui/                    # Webview UI components
+├── commands/              # Command registrations
+└── utils/                 # Utility functions
 ```
 
 ### VS Code Extension Architecture
@@ -55,9 +61,10 @@ src/
 **Package Structure**:
 
 - Follow the existing structure under `src/`
-- Core functionality in `notes/`
+- Persistence layer in `repository/`
+- Business logic in `service/`
 - UI components in `ui/`
-- Utilities in `utils/`
+- Utilities in `helper/`
 
 **VS Code APIs**:
 

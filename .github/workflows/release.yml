@@ -148,23 +148,23 @@ jobs:
         run: npm run compile
 
       - name: Package VSIX
-        run: npx @vscode/vsce package --no-yarn --out codex-notes.vsix
+        run: npx @vscode/vsce package --no-yarn --out parable-workspaces.vsix
 
       - name: Publish to Visual Studio Marketplace
         env:
           VSCE_PAT: ${{ secrets.MARKETPLACE_VSCE_PAT }}
-        run: npx @vscode/vsce publish --packagePath codex-notes.vsix --no-yarn
+        run: npx @vscode/vsce publish --packagePath parable-workspaces.vsix --no-yarn
 
       - name: Publish to OpenVSX Marketplace
         env:
           OVSX_PAT: ${{ secrets.MARKETPLACE_OVSX_PAT }}
-        run: npx ovsx publish codex-notes.vsix
+        run: npx ovsx publish parable-workspaces.vsix
 
       - name: Upload VSIX Artifact
         uses: actions/upload-artifact@v7
         with:
           name: vscode-extension-vsix
-          path: codex-notes.vsix
+          path: parable-workspaces.vsix
 
   create_release:
     name: Create GitHub Release
