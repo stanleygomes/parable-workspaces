@@ -20,17 +20,17 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "codexNotesContainer",
+          "id": "parableWorkspacesContainer",
           "title": "Parable Workspaces",
           "icon": "resources/icons/tab-icon.png"
         }
       ]
     },
     "views": {
-      "codexNotesContainer": [
+      "parableWorkspacesContainer": [
         {
           "type": "webview",
-          "id": "codexNotes.notesView",
+          "id": "workspaceManager.workspacesView",
           "name": "Workspaces",
           "icon": "resources/icons/tab-icon.png"
         }
@@ -54,11 +54,12 @@
       "view/title": [
         {
           "command": "workspaceManager.openBackup",
-          "when": "view == codexNotes.notesView",
+          "when": "view == workspaceManager.workspacesView",
           "group": "navigation"
         }
       ]
     },
+
 
     "configuration": {
       "title": "Parable Workspaces",

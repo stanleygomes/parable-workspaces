@@ -6,7 +6,8 @@ import { WorkspaceMapper } from '../mapper/WorkspaceMapper';
 import { WebviewMessage } from '../type/WebviewMessage';
 
 export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
-  public static readonly viewType = 'codexNotes.notesView';
+  public static readonly viewType = 'workspaceManager.workspacesView';
+
 
   private view?: vscode.WebviewView;
   private currentQuery = '';
