@@ -67,11 +67,33 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     // Sort by last opened by default
     workspaces.sort((a, b) => b.lastOpened - a.lastOpened);
 
+    // Check if current workspace is saved
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    let isCurrentSaved = true;
+    let currentWorkspaceName = '';
+
+    if (workspaceFolders && workspaceFolders.length > 0) {
+      const primaryFolder = workspaceFolders[0];
+      const workspaceFile = vscode.workspace.workspaceFile;
+      const currentId = Buffer.from(
+        workspaceFile?.fsPath || primaryFolder.uri.fsPath,
+      ).toString('base64');
+      isCurrentSaved = this.repository.getAll().some((w) => w.id === currentId);
+      currentWorkspaceName = workspaceFile
+        ? vscode.workspace.name || primaryFolder.name
+        : primaryFolder.name;
+    }
+
     this.view.webview.postMessage({
       command: 'updateWorkspaces',
       workspaces: workspaces.map((ws) => WorkspaceMapper.toWebview(ws)),
+      currentStatus: {
+        isSaved: isCurrentSaved,
+        name: currentWorkspaceName,
+      },
     });
   }
+
 
   private async handleMessage(message: WebviewMessage): Promise<void> {
     switch (message.command) {

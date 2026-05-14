@@ -21,7 +21,7 @@
         placeholder="Search workspaces..."
       />
     </div>
-
+    <div id="bannerContainer"></div>
     
     <div class="workspaces-list" id="workspacesList"></div>
     <div class="context-menu" id="contextMenu"></div>
@@ -133,8 +133,29 @@
         const message = event.data;
         if (message.command === 'updateWorkspaces') {
           renderWorkspaces(message.workspaces);
+          renderBanner(message.currentStatus);
         }
       });
+
+      function renderBanner(status) {
+        const container = document.getElementById('bannerContainer');
+        if (!status || status.isSaved || !status.name) {
+          container.innerHTML = '';
+          return;
+        }
+
+        container.innerHTML = `
+          <div class="save-banner">
+            <p class="banner-text">This workspace is not saved yet</p>
+            <button class="primary-btn featured-btn" id="btnSaveBanner">Save "${escapeHtml(status.name)}"</button>
+          </div>
+        `;
+
+        document.getElementById('btnSaveBanner').addEventListener('click', () => {
+          vscode.postMessage({ command: 'saveCurrent' });
+        });
+      }
+
     </script>
   </body>
 </html>
