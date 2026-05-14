@@ -9,7 +9,9 @@ import { DeleteWorkspaceService } from '../service/DeleteWorkspaceService';
 import { SearchWorkspaceService } from '../service/SearchWorkspaceService';
 import { FavoriteWorkspaceService } from '../service/FavoriteWorkspaceService';
 import { SettingsService, SettingsKey } from '../service/SettingsService';
-import { EditWorkspaceService } from '../service/EditWorkspaceService';
+import { EditNameWorkspaceService } from '../service/EditNameWorkspaceService';
+import { ChangeEmojiWorkspaceService } from '../service/ChangeEmojiWorkspaceService';
+import { ChangeColorWorkspaceService } from '../service/ChangeColorWorkspaceService';
 import { SortType } from '../enum/SortType';
 
 export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
@@ -29,7 +31,9 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     private readonly searchService: SearchWorkspaceService,
     private readonly favoriteService: FavoriteWorkspaceService,
     private readonly settingsService: SettingsService,
-    private readonly editService: EditWorkspaceService,
+    private readonly editNameService: EditNameWorkspaceService,
+    private readonly changeEmojiService: ChangeEmojiWorkspaceService,
+    private readonly changeColorService: ChangeColorWorkspaceService,
   ) {
     this.showOnlyFavorites = this.settingsService.get(
       SettingsKey.ShowOnlyFavorites,
@@ -161,12 +165,17 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
         break;
       case 'editWorkspace':
         if (message.workspaceId) {
-          await this.editService.edit(message.workspaceId);
+          await this.editNameService.edit(message.workspaceId);
         }
         break;
       case 'changeEmoji':
         if (message.workspaceId) {
-          await this.editService.changeEmoji(message.workspaceId);
+          await this.changeEmojiService.changeEmoji(message.workspaceId);
+        }
+        break;
+      case 'changeColor':
+        if (message.workspaceId) {
+          await this.changeColorService.changeColor(message.workspaceId);
         }
         break;
       case 'search':

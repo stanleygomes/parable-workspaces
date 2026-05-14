@@ -7,11 +7,14 @@ import { SearchWorkspaceService } from './service/SearchWorkspaceService';
 import { FavoriteWorkspaceService } from './service/FavoriteWorkspaceService';
 import { SettingsService } from './service/SettingsService';
 import { StatusBarService } from './service/StatusBarService';
-import { EditWorkspaceService } from './service/EditWorkspaceService';
+import { EditNameWorkspaceService } from './service/EditNameWorkspaceService';
+import { ChangeEmojiWorkspaceService } from './service/ChangeEmojiWorkspaceService';
+import { ChangeColorWorkspaceService } from './service/ChangeColorWorkspaceService';
 import { ImportWorkspaceService } from './service/ImportWorkspaceService';
 import { QuickPickService } from './service/QuickPickService';
 import { ExportWorkspaceService } from './service/ExportWorkspaceService';
 import { NotificationCreateWorkspaceService } from './service/NotificationCreateWorkspaceService';
+import { ColorService } from './service/ColorService';
 import { WorkspacesViewProvider } from './ui/WorkspacesViewProvider';
 import { createHandleOpenBackup } from './editor/view';
 
@@ -27,7 +30,16 @@ export async function activate(
   const deleteService = new DeleteWorkspaceService(workspaceRepository);
   const searchService = new SearchWorkspaceService(workspaceRepository);
   const favoriteService = new FavoriteWorkspaceService(workspaceRepository);
-  const editService = new EditWorkspaceService(workspaceRepository, context.extensionUri);
+  const colorService = new ColorService(workspaceRepository);
+    const editNameService = new EditNameWorkspaceService(workspaceRepository);
+    const changeEmojiService = new ChangeEmojiWorkspaceService(
+      workspaceRepository,
+      context.extensionUri,
+    );
+    const changeColorService = new ChangeColorWorkspaceService(
+      workspaceRepository,
+      colorService,
+    );
   const importService = new ImportWorkspaceService(workspaceRepository);
   const quickPickService = new QuickPickService(workspaceRepository, openService);
   const exportService = new ExportWorkspaceService();
@@ -49,7 +61,9 @@ export async function activate(
     searchService,
     favoriteService,
     settingsService,
-    editService,
+    editNameService,
+    changeEmojiService,
+    changeColorService,
   );
 
   const handleOpenBackup = createHandleOpenBackup(
@@ -97,6 +111,7 @@ export async function activate(
   );
 
   notificationService.checkAndNotify();
+  await colorService.applyCurrentWorkspaceColor();
 
   console.log('Parable Workspaces extension activated successfully');
 }
