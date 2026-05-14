@@ -7,7 +7,7 @@
       content="default-src 'none'; style-src 'nonce-{{nonce}}'; script-src 'nonce-{{nonce}}';"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Backup & Sync - Parable Workspaces</title>
+    <title>Export Workspaces - Parable</title>
     <style nonce="{{nonce}}">
       {{style}}
     </style>
@@ -15,26 +15,20 @@
   <body>
     <div class="backup-container">
       <div class="backup-header">
-        <h1 class="backup-title">Backup & Sync</h1>
-        <p class="backup-subtitle">Manage your workspaces, import .code-workspace files or sync via VS Code Cloud.</p>
+        <h1 class="backup-title">Export & Backup</h1>
+        <p class="backup-subtitle">Export your workspaces to .code-workspace files or import existing ones.</p>
       </div>
 
-      <div class="backup-grid">
-        <div class="backup-card">
-          <h3>Import Workspace</h3>
-          <p>Load a VS Code Workspace file (.code-workspace). The folders will be extracted and added to your collection.</p>
-          <button class="primary-btn" id="btnImport">Import Workspace</button>
-        </div>
+      <div class="action-bar">
+        <button class="primary-btn" id="btnImport">Import .code-workspace</button>
+      </div>
 
-        <div class="backup-card">
-          <h3>Cloud Sync</h3>
-          <p>Your workspaces are automatically synchronized if you are logged into VS Code with Settings Sync enabled.</p>
-          <button class="primary-btn" id="btnSync" disabled>Synced with Cloud</button>
-        </div>
+      <div class="workspaces-export-list" id="workspacesList">
+        <div class="loading">Loading workspaces...</div>
       </div>
 
       <div class="backup-footer">
-        <h3>Storage Location</h3>
+        <h3>Local Data Path</h3>
         <p>Your local configuration and cache are stored at:</p>
         <code class="folder-path">{{workspaceDir}}</code>
       </div>
@@ -42,10 +36,54 @@
 
     <script nonce="{{nonce}}">
       const vscode = acquireVsCodeApi();
+      const workspacesList = document.getElementById('workspacesList');
 
       document.getElementById('btnImport').addEventListener('click', () => {
         vscode.postMessage({ command: 'import' });
       });
+
+      window.addEventListener('message', (event) => {
+        const message = event.data;
+        if (message.command === 'updateWorkspaces') {
+          renderWorkspaces(message.workspaces);
+        }
+      });
+
+      function renderWorkspaces(workspaces) {
+        if (workspaces.length === 0) {
+          workspacesList.innerHTML = '<p class="empty-msg">No workspaces to export.</p>';
+          return;
+        }
+
+        workspacesList.innerHTML = workspaces.map(ws => `
+          <div class="export-item">
+            <div class="export-info">
+              <span class="export-name">${escapeHtml(ws.name)}</span>
+              <span class="export-path">${escapeHtml(ws.folders[0] || '')}</span>
+            </div>
+            <button class="secondary-btn btn-export" data-id="${ws.id}">Export</button>
+          </div>
+        `).join('');
+
+        workspacesList.querySelectorAll('.btn-export').forEach(btn => {
+          btn.addEventListener('click', () => {
+            vscode.postMessage({ command: 'export', workspaceId: btn.dataset.id });
+          });
+        });
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      // Tell the extension we are ready to receive data
+      vscode.postMessage({ command: 'ready' });
     </script>
   </body>
 </html>
+

@@ -30,6 +30,14 @@ export function createHandleOpenBackup(
       },
     );
 
+    const refreshWebview = () => {
+      const workspaces = workspaceRepository.getAll();
+      panel?.webview.postMessage({
+        command: 'updateWorkspaces',
+        workspaces: workspaces,
+      });
+    };
+
     panel.webview.html = WebviewHelper.getHtml(
       panel.webview,
       extensionUri,
@@ -43,18 +51,23 @@ export function createHandleOpenBackup(
       switch (message.command) {
         case 'import':
           await importService.import();
+          refreshWebview();
           onRefresh();
           break;
         case 'export':
-          // Exporting requires a workspace. For now, this could be a general export of the DB
-          // but based on previous code it was exportService.exportAll(). 
-          // Since our ExportWorkspaceService exports a single workspace as .code-workspace,
-          // we might need a different approach for "Backup all".
-          // However, the user's immediate request was to show the folder.
-          vscode.window.showInformationMessage('Use o menu de contexto para exportar workspaces individuais.');
+          if (message.workspaceId) {
+            const workspace = workspaceRepository.getAll().find(w => w.id === message.workspaceId);
+            if (workspace) {
+              await exportService.export(workspace);
+            }
+          }
+          break;
+        case 'ready':
+          refreshWebview();
           break;
       }
     });
+
 
     panel.onDidDispose(() => {
       panel = undefined;
