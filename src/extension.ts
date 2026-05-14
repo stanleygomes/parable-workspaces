@@ -1,136 +1,61 @@
 import * as vscode from 'vscode';
-import { NoteRepository } from './repository/NoteRepository';
 import { WorkspaceRepository } from './repository/WorkspaceRepository';
-import { CreateNoteService } from './service/CreateNoteService';
-import { DeleteNoteService } from './service/DeleteNoteService';
-import { RenameNoteService } from './service/RenameNoteService';
-import { SearchNoteService } from './service/SearchNoteService';
-import { DuplicateNoteService } from './service/DuplicateNoteService';
-import { ExportNotesService } from './service/ExportNotesService';
-import { ImportNotesService } from './service/ImportNotesService';
-import { FavoriteNoteService } from './service/FavoriteNoteService';
-import { ChangeNoteColorService } from './service/ChangeNoteColorService';
-import { SortNotesService } from './service/SortNotesService';
-import { FilterNotesService } from './service/FilterNotesService';
-import { OpenNoteLocationService } from './service/OpenNoteLocationService';
-import { QuickSearchService } from './service/QuickSearchService';
 import { WorkspaceService } from './service/WorkspaceService';
-import { NotesViewProvider } from './ui/NotesViewProvider';
-import { Note } from './dto/Note';
+import { ImportWorkspaceService } from './service/ImportWorkspaceService';
+import { ExportWorkspaceService } from './service/ExportWorkspaceService';
+import { WorkspacesViewProvider } from './ui/WorkspacesViewProvider';
 import {
-  openNote,
-  createHandleCreate,
-  createHandleDelete,
-  createHandleRename,
-  createHandleDuplicate,
-  createHandleChangeColor,
-  createHandleImport,
-  createHandleCreateFromSelection,
   createHandleOpenBackup,
 } from './editor/view';
 
 export async function activate(
   context: vscode.ExtensionContext,
 ): Promise<void> {
-  console.log('Activating Codex Notes extension...');
-  const repository = await NoteRepository.initialize();
+  console.log('Activating Parable Workspaces extension...');
   const workspaceRepository = new WorkspaceRepository(context);
 
-  console.log('Codex Notes extension activated successfully');
-  const createService = new CreateNoteService(repository);
-  const deleteService = new DeleteNoteService(repository);
-  const renameService = new RenameNoteService(repository);
-  const searchService = new SearchNoteService(repository);
-  const duplicateService = new DuplicateNoteService(repository, createService);
-  const exportService = new ExportNotesService(repository);
-  const importService = new ImportNotesService(repository, createService);
-  const favoriteService = new FavoriteNoteService(repository);
-  const colorService = new ChangeNoteColorService(repository);
-  const sortService = new SortNotesService();
-  const filterService = new FilterNotesService();
-  const locationService = new OpenNoteLocationService();
-  const quickSearchService = new QuickSearchService(
-    repository,
-    searchService,
-    openNote,
-  );
-
   const workspaceService = new WorkspaceService(workspaceRepository);
+  const importWorkspaceService = new ImportWorkspaceService(workspaceRepository);
+  const exportWorkspaceService = new ExportWorkspaceService();
 
   console.log('Services initialized successfully');
 
-  let provider: NotesViewProvider;
-
-  const handleCreate = () => createHandleCreate(createService, provider)();
-  const handleDelete = (note: Note) =>
-    createHandleDelete(deleteService, provider)(note);
-  const handleRename = (note: Note) =>
-    createHandleRename(renameService, provider)(note);
-  const handleDuplicate = (note: Note) =>
-    createHandleDuplicate(duplicateService, provider)(note);
-  const handleChangeColor = (note: Note) =>
-    createHandleChangeColor(colorService, provider)(note);
-  const handleImport = () => createHandleImport(importService, provider)();
-  const handleOpenBackup = createHandleOpenBackup(
+  const provider = new WorkspacesViewProvider(
     context.extensionUri,
-    importService,
-    exportService,
-    () => provider.refresh(),
+    workspaceRepository,
+    workspaceService,
   );
 
-  console.log('Handlers created successfully');
-
-  provider = new NotesViewProvider(
+  const handleOpenBackup = createHandleOpenBackup(
     context.extensionUri,
-    repository,
-    searchService,
-    sortService,
-    filterService,
-    openNote,
-    handleCreate,
-    handleDelete,
-    handleRename,
-    handleDuplicate,
-    (note) => {
-      favoriteService.toggleFavorite(note);
-      provider.refresh();
-    },
-    handleChangeColor,
-    () => exportService.exportAll(),
-    handleImport,
-    (note) => locationService.openLocation(note),
+    importWorkspaceService,
+    exportWorkspaceService,
+    workspaceRepository,
+    () => provider.refresh(),
   );
 
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
-      NotesViewProvider.viewType,
+      WorkspacesViewProvider.viewType,
       provider,
     ),
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('codexNotes.createNote', handleCreate),
-    vscode.commands.registerCommand('codexNotes.createNoteFromSelection', () =>
-      createHandleCreateFromSelection(createService, provider)(),
-    ),
-    vscode.commands.registerCommand('codexNotes.refreshNotes', () =>
-      provider.refresh(),
-    ),
-    vscode.commands.registerCommand('codexNotes.exportNotes', () =>
-      exportService.exportAll(),
-    ),
-    vscode.commands.registerCommand('codexNotes.importNotes', handleImport),
-    vscode.commands.registerCommand('codexNotes.openBackup', handleOpenBackup),
-    vscode.commands.registerCommand('codexNotes.searchNotes', () =>
-      quickSearchService.show(),
-    ),
     vscode.commands.registerCommand('workspaceManager.saveProject', () =>
       workspaceService.saveCurrentWorkspace(),
     ),
-    vscode.commands.registerCommand('workspaceManager.listProjects', () =>
-      workspaceService.listProjects(),
+    vscode.commands.registerCommand('workspaceManager.openWorkspace', (workspaceId: string) =>
+      workspaceService.openWorkspace(workspaceId),
     ),
+    vscode.commands.registerCommand('workspaceManager.importWorkspace', () =>
+      importWorkspaceService.import(),
+    ),
+    vscode.commands.registerCommand('workspaceManager.openBackup', handleOpenBackup),
   );
+
+  console.log('Parable Workspaces extension activated successfully');
 }
 
 export function deactivate(): void {}
+

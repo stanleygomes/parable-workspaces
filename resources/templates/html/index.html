@@ -7,7 +7,7 @@
       content="default-src 'none'; style-src 'nonce-{{nonce}}'; script-src 'nonce-{{nonce}}';"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Codex Notes</title>
+    <title>Parable Workspaces</title>
     <style nonce="{{nonce}}">
       {{style}}
     </style>
@@ -18,116 +18,78 @@
         class="search-box"
         id="searchBox"
         type="text"
-        placeholder="Search notes..."
+        placeholder="Search workspaces..."
       />
     </div>
-    <div class="filter-row">
-      <div class="filter-group">
-        <label>Sort:</label>
-        <select class="sort-select" id="sortSelect">
-          <option value="DATE">Date</option>
-          <option value="TITLE">Title</option>
-          <option value="FAVORITE">Favorite</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Date:</label>
-        <select class="sort-select" id="dateFilter">
-          <option value="">All</option>
-          <option value="TODAY">Today</option>
-          <option value="THIS_WEEK">Week</option>
-          <option value="THIS_MONTH">Month</option>
-        </select>
-      </div>
-      <button class="filter-chip" id="filterFav" data-active="false">
-        ★ Favorites
-      </button>
-    </div>
-    <div class="notes-list" id="notesList"></div>
+
+    
+    <div class="workspaces-list" id="workspacesList"></div>
     <div class="context-menu" id="contextMenu"></div>
+
     <script nonce="{{nonce}}">
       const vscode = acquireVsCodeApi();
-      let currentNoteId = null;
-      let activeDateFilter = null;
-      let filterFavorites = false;
+      let currentWorkspaceId = null;
 
       const searchBox = document.getElementById('searchBox');
-      const notesList = document.getElementById('notesList');
+      const workspacesList = document.getElementById('workspacesList');
       const contextMenu = document.getElementById('contextMenu');
-      const sortSelect = document.getElementById('sortSelect');
-      const filterFavBtn = document.getElementById('filterFav');
-
       searchBox.addEventListener('input', () => {
         vscode.postMessage({ command: 'search', query: searchBox.value });
       });
 
-      sortSelect.addEventListener('change', () => {
-        vscode.postMessage({ command: 'sort', sortType: sortSelect.value });
-      });
-
-      filterFavBtn.addEventListener('click', () => {
-        filterFavorites = !filterFavorites;
-        filterFavBtn.classList.toggle('active', filterFavorites);
-        vscode.postMessage({ command: 'filterFavorites', filterFavorites });
-      });
-
-      const dateFilter = document.getElementById('dateFilter');
-
-      dateFilter.addEventListener('change', () => {
-        vscode.postMessage({ command: 'filterDate', dateFilter: dateFilter.value || null });
-      });
-
       document.addEventListener('click', (e) => {
+
         if (!contextMenu.contains(e.target)) {
           contextMenu.style.display = 'none';
         }
       });
 
-      function renderNotes(notes) {
-        if (notes.length === 0) {
-          notesList.innerHTML = `
+      function renderWorkspaces(workspaces) {
+        if (workspaces.length === 0) {
+          workspacesList.innerHTML = `
           <div class="empty-state">
-            <p>No notes yet.</p>
-            <button class="primary-btn" id="btnCreateEmpty">Create your first note</button>
+            <p>No workspaces saved yet.</p>
+            <button class="primary-btn" id="btnSaveCurrent">Save Current Workspace</button>
           </div>
         `;
           document
-            .getElementById('btnCreateEmpty')
+            .getElementById('btnSaveCurrent')
             .addEventListener('click', () => {
-              vscode.postMessage({ command: 'createNote' });
+              vscode.postMessage({ command: 'saveCurrent' });
             });
           return;
         }
-        notesList.innerHTML = notes
-          .map((note) => {
-            const colorClass = `note-color-${String(note.color || 'NONE').toLowerCase()}`;
-            const colorBar = `<div class="note-color-bar ${escapeHtml(colorClass)}"></div>`;
-            const favIcon = note.isFavorite
-              ? '<span class="note-favorite" title="Favorite">★</span>'
-              : '';
+
+        workspacesList.innerHTML = workspaces
+          .map((ws) => {
+            const colorStyle = ws.color ? `border-left: 4px solid ${ws.color};` : '';
             return `
-          <div class="note-item" data-id="${note.id}">
-            ${colorBar}
-            <div class="note-body">
-              <div class="note-header">
-                <span class="note-title">${escapeHtml(note.title)}</span>
-                <div class="note-meta">
-                  ${favIcon}
-                  <span class="note-date">${note.dateLabel}</span>
-                </div>
+          <div class="workspace-item" data-id="${ws.id}" style="${colorStyle}">
+            <div class="workspace-body">
+              <div class="workspace-header">
+                <span class="workspace-title">${escapeHtml(ws.name)}</span>
+                <span class="workspace-date">${ws.dateLabel}</span>
               </div>
-              ${note.preview ? `<div class="note-preview">${escapeHtml(note.preview)}</div>` : ''}
+              <div class="workspace-info">
+                <span class="workspace-folders">${ws.foldersCount} folder(s)</span>
+                <span class="workspace-path" title="${escapeHtml(ws.primaryFolder)}">${escapeHtml(ws.primaryFolder)}</span>
+              </div>
+              ${ws.tags && ws.tags.length > 0 ? `
+                <div class="workspace-tags">
+                  ${ws.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                </div>
+              ` : ''}
             </div>
           </div>
         `;
           })
           .join('');
 
-        notesList.querySelectorAll('.note-item').forEach((item) => {
+        workspacesList.querySelectorAll('.workspace-item').forEach((item) => {
           item.addEventListener('click', (e) => {
             vscode.postMessage({
-              command: 'openNote',
-              noteId: item.dataset.id,
+              command: 'openWorkspace',
+              workspaceId: item.dataset.id,
             });
           });
           item.addEventListener('contextmenu', (e) => {
@@ -137,19 +99,13 @@
         });
       }
 
-      function showContextMenu(x, y, noteId) {
-        currentNoteId = noteId;
+      function showContextMenu(x, y, workspaceId) {
+        currentWorkspaceId = workspaceId;
         contextMenu.innerHTML = `
-        <div class="context-menu-item" data-action="openNote">Open Note</div>
+        <div class="context-menu-item" data-action="openWorkspace">Open Workspace</div>
         <div class="context-menu-separator"></div>
-        <div class="context-menu-item" data-action="renameNote">Rename</div>
-        <div class="context-menu-item" data-action="duplicateNote">Duplicate</div>
-        <div class="context-menu-item" data-action="toggleFavorite">Toggle Favorite</div>
-        <div class="context-menu-item" data-action="changeColor">Change Color</div>
-        <div class="context-menu-separator"></div>
-        <div class="context-menu-item" data-action="openLocation">Open File Location</div>
-        <div class="context-menu-separator"></div>
-        <div class="context-menu-item" data-action="deleteNote">Delete</div>
+        <div class="context-menu-item" data-action="editWorkspace">Edit</div>
+        <div class="context-menu-item" data-action="deleteWorkspace">Delete</div>
       `;
         contextMenu.style.left = x + 'px';
         contextMenu.style.top = y + 'px';
@@ -158,13 +114,14 @@
         contextMenu.querySelectorAll('.context-menu-item').forEach((item) => {
           item.addEventListener('click', () => {
             const action = item.getAttribute('data-action');
-            vscode.postMessage({ command: action, noteId: currentNoteId });
+            vscode.postMessage({ command: action, workspaceId: currentWorkspaceId });
             contextMenu.style.display = 'none';
           });
         });
       }
 
       function escapeHtml(str) {
+        if (!str) return '';
         return str
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
@@ -174,10 +131,11 @@
 
       window.addEventListener('message', (event) => {
         const message = event.data;
-        if (message.command === 'updateNotes') {
-          renderNotes(message.notes);
+        if (message.command === 'updateWorkspaces') {
+          renderWorkspaces(message.workspaces);
         }
       });
     </script>
   </body>
 </html>
+

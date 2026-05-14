@@ -33,34 +33,33 @@ export class WorkspaceService {
     vscode.window.showInformationMessage(`Workspace "${name}" salvo com sucesso!`);
   }
 
-  async listProjects(): Promise<void> {
+  async openWorkspace(id: string): Promise<void> {
     const workspaces = this.repository.getAll();
-    if (workspaces.length === 0) {
-      vscode.window.showInformationMessage('Nenhum workspace salvo ainda.');
-      return;
-    }
-
-    const items = workspaces.map((w) => ({
-      label: w.name,
-      description: w.folders.length > 1 
-        ? `${w.folders.length} pastas` 
-        : w.folders[0],
-      workspace: w,
-    }));
-
-    const selected = await vscode.window.showQuickPick(items, {
-      placeHolder: 'Selecione um workspace para abrir',
-    });
-
-    if (selected) {
-      const workspace = selected.workspace;
+    const workspace = workspaces.find((w) => w.id === id);
+    if (workspace) {
       await this.repository.updateLastOpened(workspace.id);
-      
-      // If it's a single folder, open it directly. 
-      // For multi-root, we currently open the first folder as a fallback,
-      // but in the future we will handle .code-workspace files or virtual workspaces.
       const uri = vscode.Uri.file(workspace.folders[0]);
       vscode.commands.executeCommand('vscode.openFolder', uri, false);
     }
   }
+
+  async deleteWorkspace(id: string): Promise<void> {
+    await this.repository.delete(id);
+    vscode.window.showInformationMessage('Workspace excluído com sucesso.');
+  }
+
+  searchWorkspaces(query: string): Workspace[] {
+    const workspaces = this.repository.getAll();
+    if (!query.trim()) {
+      return workspaces;
+    }
+    const q = query.toLowerCase();
+    return workspaces.filter(
+      (w) =>
+        w.name.toLowerCase().includes(q) ||
+        w.folders.some((f) => f.toLowerCase().includes(q)) ||
+        w.tags.some((t) => t.toLowerCase().includes(q)),
+    );
+  }
 }
+

@@ -1,13 +1,14 @@
 import * as vscode from 'vscode';
 import { WebviewHelper } from '../../helper/WebviewHelper';
-import { FileHelper } from '../../helper/FileHelper';
-import { ImportNotesService } from '../../service/ImportNotesService';
-import { ExportNotesService } from '../../service/ExportNotesService';
+import { ImportWorkspaceService } from '../../service/ImportWorkspaceService';
+import { ExportWorkspaceService } from '../../service/ExportWorkspaceService';
+import { WorkspaceRepository } from '../../repository/WorkspaceRepository';
 
 export function createHandleOpenBackup(
   extensionUri: vscode.Uri,
-  importService: ImportNotesService,
-  exportService: ExportNotesService,
+  importService: ImportWorkspaceService,
+  exportService: ExportWorkspaceService,
+  workspaceRepository: WorkspaceRepository,
   onRefresh: () => void,
 ) {
   let panel: vscode.WebviewPanel | undefined;
@@ -19,8 +20,8 @@ export function createHandleOpenBackup(
     }
 
     panel = vscode.window.createWebviewPanel(
-      'codexNotes.backup',
-      'Backup & Sync - Codex Notes',
+      'workspaceManager.backup',
+      'Backup & Sync - Parable Workspaces',
       vscode.ViewColumn.One,
       {
         enableScripts: true,
@@ -34,7 +35,7 @@ export function createHandleOpenBackup(
       extensionUri,
       'backup',
       {
-        notesDir: FileHelper.getDefaultNotesDir(),
+        workspaceDir: workspaceRepository.getStoragePath(),
       },
     );
 
@@ -45,7 +46,12 @@ export function createHandleOpenBackup(
           onRefresh();
           break;
         case 'export':
-          await exportService.exportAll();
+          // Exporting requires a workspace. For now, this could be a general export of the DB
+          // but based on previous code it was exportService.exportAll(). 
+          // Since our ExportWorkspaceService exports a single workspace as .code-workspace,
+          // we might need a different approach for "Backup all".
+          // However, the user's immediate request was to show the folder.
+          vscode.window.showInformationMessage('Use o menu de contexto para exportar workspaces individuais.');
           break;
       }
     });
