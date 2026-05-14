@@ -17,7 +17,6 @@
   "activationEvents": [
     "onStartupFinished"
   ],
-
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
@@ -34,8 +33,7 @@
         {
           "type": "webview",
           "id": "workspaceManager.workspacesView",
-          "name": "Workspaces",
-          "icon": "resources/icons/tab-icon.png"
+          "name": ""
         }
       ]
     },
