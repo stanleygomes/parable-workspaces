@@ -4,9 +4,9 @@ import "./globals.css";
 import favicon from './img/logo.png'
 
 export const metadata: Metadata = {
-  title: "Codex Notes",
+  title: "Parable Workspaces",
   description:
-    "A powerful plugin for managing notes within your IDE. Keep your thoughts, code snippets, and documentation organized without leaving your development environment.",
+    "The best way to manage your vscode, cursor and antigravity workspaces.",
 };
 
 export default function RootLayout({

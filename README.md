@@ -10,10 +10,9 @@
 
 <!-- Plugin description -->
 
-**Parable Workspaces** is a powerful workspace manager for VS Code. Switch between projects instantly, keep your workspaces organized, and sync your favorite projects across all your devices.
+**Parable Workspaces** is the best way to manage your vscode, cursor and antigravity workspaces. Switch between projects instantly, keep your workspaces organized, and sync your favorite projects across all your devices.
 
 - **Instant Project Switching**: Quickly jump between saved workspaces without losing your flow.
-- **Cloud Sync**: All your saved projects are automatically synced via VS Code Settings Sync.
 - **Visual Identification**: Assign colors and icons to your workspaces for instant recognition in the Activity Bar.
 - **Quick Access**: Search and open projects directly from the command palette (`Ctrl+P`).
 - **Automatic Detection**: Get notified to save new folders as workspaces as soon as you open them.
@@ -50,12 +49,7 @@
 
 ## ⌨️ Keyboard Shortcuts
 
-| Action         | Shortcut                  |
-| -------------- | ------------------------- |
-| Open Project   | `Double-click` or `Enter` |
-| Edit Metadata  | `F2`                      |
-| Remove Project | `Delete`                  |
-| Save Current   | `Ctrl+Alt+S`              |
+Waiting for implementation...
 
 ## 🛠️ Development
 
@@ -155,4 +149,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 Made with 🔥 by Lumen HQ
+
+```
+
 ```
