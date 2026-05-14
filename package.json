@@ -2,7 +2,7 @@
   "name": "parable-workspaces",
   "displayName": "Parable Workspaces",
   "description": "A powerful workspace manager for VS Code. Switch between projects instantly, keep your workspaces organized, and sync your favorite projects across all your devices.",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "license": "MIT",
   "publisher": "stanleygomes",
   "repository": "https://github.com/stanleygomes/parable-workspaces",
