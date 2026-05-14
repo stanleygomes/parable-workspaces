@@ -59,13 +59,10 @@
         }
       ]
     },
-
-
     "configuration": {
       "title": "Parable Workspaces",
       "properties": {}
-    }
-,
+    },
     "quickAccess": [
       {
         "prefix": "p",
@@ -91,7 +88,6 @@
     "date-fns": "^4.1.0",
     "zod": "^4.3.6"
   },
-
   "devDependencies": {
     "@types/archiver": "^6.0.3",
     "@types/jest": "^30.0.0",

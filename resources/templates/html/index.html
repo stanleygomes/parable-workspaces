@@ -72,8 +72,8 @@
               </div>
               <div class="workspace-info">
                 <span class="workspace-folders">${ws.foldersCount} folder(s)</span>
-                <span class="workspace-path" title="${escapeHtml(ws.primaryFolder)}">${escapeHtml(ws.primaryFolder)}</span>
               </div>
+
               ${ws.tags && ws.tags.length > 0 ? `
                 <div class="workspace-tags">
                   ${ws.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
