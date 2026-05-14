@@ -94,7 +94,9 @@
     "lint": "eslint src",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "build": "npm run compile",
+    "package": "npx @vscode/vsce package"
   },
   "dependencies": {
     "archiver": "^7.0.1",

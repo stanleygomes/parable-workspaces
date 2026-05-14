@@ -111,3 +111,6 @@ parable-workspaces.vsix
 
 # docs specific files
 ROADMAP.md
+
+# vsix files
+*.vsix
