@@ -83,7 +83,10 @@
           <div class="workspace-item" data-id="${ws.id}" style="${colorStyle}">
             <div class="workspace-body">
               <div class="workspace-header">
-                <span class="workspace-title">${escapeHtml(ws.name)}</span>
+                <span class="workspace-title">
+                  ${ws.emoji ? `<span class="workspace-emoji">${ws.emoji}</span>` : ''}
+                  ${escapeHtml(ws.name)}
+                </span>
                 <div class="header-actions">
                   <span class="workspace-date">${ws.dateLabel}</span>
                   <button class="star-btn ${ws.isFavorite ? 'favorite-active' : ''}" data-id="${ws.id}">
@@ -92,9 +95,6 @@
                     </svg>
                   </button>
                 </div>
-              </div>
-              <div class="workspace-info">
-                <span class="workspace-folders">${ws.foldersCount} folder(s)</span>
               </div>
 
               ${ws.tags && ws.tags.length > 0 ? `
@@ -138,8 +138,9 @@
         contextMenu.innerHTML = `
         <div class="context-menu-item" data-action="openWorkspace">Open Workspace</div>
         <div class="context-menu-item" data-action="toggleFavorite">${isFavorite ? 'Unfavorite' : 'Favorite'}</div>
+        <div class="context-menu-item" data-action="changeEmoji">Change Emoji</div>
         <div class="context-menu-separator"></div>
-        <div class="context-menu-item" data-action="editWorkspace">Edit</div>
+        <div class="context-menu-item" data-action="editWorkspace">Rename</div>
         <div class="context-menu-item" data-action="deleteWorkspace">Delete</div>
       `;
         contextMenu.style.left = x + 'px';

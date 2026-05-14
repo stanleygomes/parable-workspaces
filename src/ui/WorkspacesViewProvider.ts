@@ -9,6 +9,7 @@ import { DeleteWorkspaceService } from '../service/DeleteWorkspaceService';
 import { SearchWorkspaceService } from '../service/SearchWorkspaceService';
 import { FavoriteWorkspaceService } from '../service/FavoriteWorkspaceService';
 import { SettingsService, SettingsKey } from '../service/SettingsService';
+import { EditWorkspaceService } from '../service/EditWorkspaceService';
 
 export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'workspaceManager.workspacesView';
@@ -26,6 +27,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     private readonly searchService: SearchWorkspaceService,
     private readonly favoriteService: FavoriteWorkspaceService,
     private readonly settingsService: SettingsService,
+    private readonly editService: EditWorkspaceService,
   ) {
     this.showOnlyFavorites = this.settingsService.get(
       SettingsKey.ShowOnlyFavorites,
@@ -139,6 +141,16 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
           if (confirm === 'Yes') {
             await this.deleteService.delete(message.workspaceId);
           }
+        }
+        break;
+      case 'editWorkspace':
+        if (message.workspaceId) {
+          await this.editService.edit(message.workspaceId);
+        }
+        break;
+      case 'changeEmoji':
+        if (message.workspaceId) {
+          await this.editService.changeEmoji(message.workspaceId);
         }
         break;
       case 'search':

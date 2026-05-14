@@ -7,5 +7,6 @@ export interface Workspace {
   tags: string[];
   lastOpened: number;
   isFavorite?: boolean;
+  emoji?: string;
 }
 

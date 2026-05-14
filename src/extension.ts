@@ -6,6 +6,8 @@ import { DeleteWorkspaceService } from './service/DeleteWorkspaceService';
 import { SearchWorkspaceService } from './service/SearchWorkspaceService';
 import { FavoriteWorkspaceService } from './service/FavoriteWorkspaceService';
 import { SettingsService } from './service/SettingsService';
+import { StatusBarService } from './service/StatusBarService';
+import { EditWorkspaceService } from './service/EditWorkspaceService';
 import { ImportWorkspaceService } from './service/ImportWorkspaceService';
 import { ExportWorkspaceService } from './service/ExportWorkspaceService';
 import { NotificationCreateWorkspaceService } from './service/NotificationCreateWorkspaceService';
@@ -24,12 +26,15 @@ export async function activate(
   const deleteService = new DeleteWorkspaceService(workspaceRepository);
   const searchService = new SearchWorkspaceService(workspaceRepository);
   const favoriteService = new FavoriteWorkspaceService(workspaceRepository);
+  const editService = new EditWorkspaceService(workspaceRepository, context.extensionUri);
   const importService = new ImportWorkspaceService(workspaceRepository);
   const exportService = new ExportWorkspaceService();
   const notificationService = new NotificationCreateWorkspaceService(
     workspaceRepository,
     saveService,
   );
+  const statusBarService = new StatusBarService(workspaceRepository);
+  context.subscriptions.push(statusBarService);
 
   console.log('Services initialized successfully');
 
@@ -42,6 +47,7 @@ export async function activate(
     searchService,
     favoriteService,
     settingsService,
+    editService,
   );
 
   const handleOpenBackup = createHandleOpenBackup(

@@ -135,6 +135,14 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.workspace-emoji {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1;
 }
 .workspace-date {
   font-size: 11px;
@@ -173,15 +181,6 @@ body {
   color: var(--vscode-charts-yellow);
 }
 
-.workspace-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.workspace-folders {
-  font-size: 11px;
-  color: var(--vscode-descriptionForeground);
-}
 .workspace-path {
   font-size: 11px;
   color: var(--vscode-textLink-foreground);
