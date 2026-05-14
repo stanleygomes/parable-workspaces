@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href={favicon} type="image/png" />
+        <link rel="icon" href={favicon.src} type="image/png" />
       </head>
       <body className={`${GeistMono.className} antialiased bg-black text-[#33ff00]`}>{children}</body>
     </html>
