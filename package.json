@@ -51,6 +51,12 @@
         "title": "Backup & Sync",
         "category": "Parable",
         "icon": "$(cloud-download)"
+      },
+      {
+        "command": "workspaceManager.refreshWorkspaces",
+        "title": "Refresh Workspaces",
+        "category": "Parable",
+        "icon": "$(refresh)"
       }
     ],
     "menus": {
@@ -58,7 +64,12 @@
         {
           "command": "workspaceManager.openBackup",
           "when": "view == workspaceManager.workspacesView",
-          "group": "navigation"
+          "group": "navigation@1"
+        },
+        {
+          "command": "workspaceManager.refreshWorkspaces",
+          "when": "view == workspaceManager.workspacesView",
+          "group": "navigation@2"
         }
       ]
     },

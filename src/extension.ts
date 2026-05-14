@@ -68,7 +68,11 @@ export async function activate(
       'workspaceManager.openBackup',
       handleOpenBackup,
     ),
+    vscode.commands.registerCommand('workspaceManager.refreshWorkspaces', () =>
+      provider.refresh(),
+    ),
   );
+
 
   context.subscriptions.push(
     vscode.workspace.onDidChangeWorkspaceFolders(() =>
