@@ -35,7 +35,6 @@ export class NotificationService {
       );
 
       if (action === 'Save Workspace') {
-
         await this.workspaceService.saveCurrentWorkspace();
       }
     }

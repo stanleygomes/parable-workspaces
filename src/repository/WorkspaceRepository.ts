@@ -6,6 +6,8 @@ import { Workspace } from '../dto/Workspace';
 export class WorkspaceRepository {
   private static readonly STORAGE_KEY = 'savedProjects';
   private readonly storageUri: vscode.Uri;
+  private readonly _onDidChange = new vscode.EventEmitter<void>();
+  public readonly onDidChange = this._onDidChange.event;
 
   constructor(private readonly context: vscode.ExtensionContext) {
     this.storageUri = vscode.Uri.joinPath(context.globalStorageUri, 'workspaces.json');
@@ -59,13 +61,17 @@ export class WorkspaceRepository {
     // Save to both file (for local visibility) and globalState (for cloud sync)
     fs.writeFileSync(this.storageUri.fsPath, JSON.stringify(workspaces, null, 2), 'utf8');
     await this.context.globalState.update(WorkspaceRepository.STORAGE_KEY, workspaces);
+    this._onDidChange.fire();
   }
+
 
   async delete(workspaceId: string): Promise<void> {
     const workspaces = this.getAll().filter((w) => w.id !== workspaceId);
     fs.writeFileSync(this.storageUri.fsPath, JSON.stringify(workspaces, null, 2), 'utf8');
     await this.context.globalState.update(WorkspaceRepository.STORAGE_KEY, workspaces);
+    this._onDidChange.fire();
   }
+
 
   async updateLastOpened(workspaceId: string): Promise<void> {
     const workspaces = this.getAll();
@@ -74,6 +80,7 @@ export class WorkspaceRepository {
       workspace.lastOpened = Date.now();
       fs.writeFileSync(this.storageUri.fsPath, JSON.stringify(workspaces, null, 2), 'utf8');
       await this.context.globalState.update(WorkspaceRepository.STORAGE_KEY, workspaces);
+      this._onDidChange.fire();
     }
   }
 }

@@ -16,7 +16,12 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     private readonly extensionUri: vscode.Uri,
     private readonly repository: WorkspaceRepository,
     private readonly service: WorkspaceService,
-  ) {}
+  ) {
+    this.repository.onDidChange(() => {
+      this.refresh();
+    });
+  }
+
 
   resolveWebviewView(
     webviewView: vscode.WebviewView,

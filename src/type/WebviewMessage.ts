@@ -3,4 +3,3 @@ export interface WebviewMessage {
   workspaceId?: string;
   query?: string;
 }
-
