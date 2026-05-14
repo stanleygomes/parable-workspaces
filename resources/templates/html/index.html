@@ -21,6 +21,14 @@
         placeholder="Search workspaces..."
       />
     </div>
+    <div class="filter-row">
+      <button class="filter-chip" id="btnShowFavorites">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0L10.5 5.5L16 6.5L12 10.5L13 16L8 13.5L3 16L4 10.5L0 6.5L5.5 5.5L8 0Z" />
+        </svg>
+        Favorites
+      </button>
+    </div>
     <div id="bannerContainer"></div>
     
     <div class="workspaces-list" id="workspacesList"></div>
@@ -29,16 +37,24 @@
     <script nonce="{{nonce}}">
       const vscode = acquireVsCodeApi();
       let currentWorkspaceId = null;
+      let showOnlyFavorites = false;
 
       const searchBox = document.getElementById('searchBox');
+      const btnShowFavorites = document.getElementById('btnShowFavorites');
       const workspacesList = document.getElementById('workspacesList');
       const contextMenu = document.getElementById('contextMenu');
+
       searchBox.addEventListener('input', () => {
         vscode.postMessage({ command: 'search', query: searchBox.value });
       });
 
-      document.addEventListener('click', (e) => {
+      btnShowFavorites.addEventListener('click', () => {
+        showOnlyFavorites = !showOnlyFavorites;
+        btnShowFavorites.classList.toggle('active', showOnlyFavorites);
+        vscode.postMessage({ command: 'toggleFavoritesFilter', showOnlyFavorites });
+      });
 
+      document.addEventListener('click', (e) => {
         if (!contextMenu.contains(e.target)) {
           contextMenu.style.display = 'none';
         }
@@ -151,6 +167,10 @@
       window.addEventListener('message', (event) => {
         const message = event.data;
         if (message.command === 'updateWorkspaces') {
+          if (message.filters) {
+            showOnlyFavorites = message.filters.showOnlyFavorites;
+            btnShowFavorites.classList.toggle('active', showOnlyFavorites);
+          }
           renderWorkspaces(message.workspaces);
           renderBanner(message.currentStatus);
         }

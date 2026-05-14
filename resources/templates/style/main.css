@@ -28,6 +28,7 @@ body {
   padding: 6px;
   font-size: 12px;
   outline: none;
+  margin-bottom: 5px;
 }
 .search-box:focus {
   border-color: var(--vscode-focusBorder);
@@ -77,19 +78,32 @@ body {
 }
 .filter-chip {
   font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  border: 1px solid var(--vscode-button-secondary-border, var(--vscode-widget-border));
-  background: var(--vscode-button-secondary-background, transparent);
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid
+    var(
+      --vscode-button-secondaryBorder,
+      var(--vscode-sideBarSectionHeader-border)
+    );
+  background: var(--vscode-button-secondaryBackground, transparent);
   color: var(--vscode-foreground);
   cursor: pointer;
   flex-shrink: 0;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 .filter-chip.active {
   background: var(--vscode-button-background);
   color: var(--vscode-button-foreground);
   border-color: var(--vscode-button-background);
+}
+.filter-chip:hover:not(.active) {
+  background: var(
+    --vscode-button-secondaryHoverBackground,
+    var(--vscode-toolbar-hoverBackground)
+  );
 }
 .workspaces-list {
   overflow-y: auto;
@@ -143,7 +157,9 @@ body {
   align-items: center;
   justify-content: center;
   opacity: 0.3;
-  transition: opacity 0.2s, color 0.2s;
+  transition:
+    opacity 0.2s,
+    color 0.2s;
 }
 .workspace-item:hover .star-btn {
   opacity: 0.7;
@@ -266,8 +282,6 @@ body {
   width: 100%;
 }
 
-
-
 /* Backup View Styles */
 .backup-container {
   padding: 32px;
@@ -328,14 +342,14 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.empty-msg, .loading {
+.empty-msg,
+.loading {
   text-align: center;
   padding: 24px;
   color: var(--vscode-descriptionForeground);
   font-style: italic;
 }
 .backup-card {
-
   background: var(--vscode-editor-background);
   border: 1px solid var(--vscode-sideBarSectionHeader-border);
   padding: 24px;

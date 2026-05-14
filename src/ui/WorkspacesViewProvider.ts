@@ -14,6 +14,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
 
   private view?: vscode.WebviewView;
   private currentQuery = '';
+  private showOnlyFavorites = false;
 
   constructor(
     private readonly extensionUri: vscode.Uri,
@@ -64,8 +65,12 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       return;
     }
 
-    const workspaces = this.searchService.search(this.currentQuery);
+    let workspaces = this.searchService.search(this.currentQuery);
     
+    if (this.showOnlyFavorites) {
+      workspaces = workspaces.filter(ws => ws.isFavorite);
+    }
+
     // Sort logic: Favorites first, then by last opened
     workspaces.sort((a, b) => {
       if (a.isFavorite && !b.isFavorite) return -1;
@@ -96,6 +101,9 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       currentStatus: {
         isSaved: isCurrentSaved,
         name: currentWorkspaceName,
+      },
+      filters: {
+        showOnlyFavorites: this.showOnlyFavorites,
       },
     });
   }
@@ -129,6 +137,10 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
         break;
       case 'search':
         this.currentQuery = message.query ?? '';
+        this.refresh();
+        break;
+      case 'toggleFavoritesFilter':
+        this.showOnlyFavorites = !!message.showOnlyFavorites;
         this.refresh();
         break;
       case 'refresh':
