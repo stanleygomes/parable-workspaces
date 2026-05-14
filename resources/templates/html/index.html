@@ -28,6 +28,11 @@
         </svg>
         Favorites
       </button>
+      <select class="sort-select" id="sortSelect">
+        <option value="favorites">Favorites First</option>
+        <option value="recent">Recent</option>
+        <option value="alphabetical">A-Z</option>
+      </select>
     </div>
     <div id="bannerContainer"></div>
     
@@ -38,9 +43,11 @@
       const vscode = acquireVsCodeApi();
       let currentWorkspaceId = null;
       let showOnlyFavorites = false;
+      let currentSort = 'favorites';
 
       const searchBox = document.getElementById('searchBox');
       const btnShowFavorites = document.getElementById('btnShowFavorites');
+      const sortSelect = document.getElementById('sortSelect');
       const workspacesList = document.getElementById('workspacesList');
       const contextMenu = document.getElementById('contextMenu');
 
@@ -52,6 +59,11 @@
         showOnlyFavorites = !showOnlyFavorites;
         btnShowFavorites.classList.toggle('active', showOnlyFavorites);
         vscode.postMessage({ command: 'toggleFavoritesFilter', showOnlyFavorites });
+      });
+
+      sortSelect.addEventListener('change', () => {
+        currentSort = sortSelect.value;
+        vscode.postMessage({ command: 'changeSort', sortType: currentSort });
       });
 
       document.addEventListener('click', (e) => {
@@ -171,6 +183,8 @@
           if (message.filters) {
             showOnlyFavorites = message.filters.showOnlyFavorites;
             btnShowFavorites.classList.toggle('active', showOnlyFavorites);
+            currentSort = message.filters.sortType;
+            sortSelect.value = currentSort;
           }
           renderWorkspaces(message.workspaces);
           renderBanner(message.currentStatus);

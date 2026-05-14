@@ -105,6 +105,21 @@ body {
     var(--vscode-toolbar-hoverBackground)
   );
 }
+.sort-select {
+  background: var(--vscode-dropdown-background);
+  color: var(--vscode-dropdown-foreground);
+  border: 1px solid var(--vscode-dropdown-border);
+  border-radius: 20px;
+  padding: 3px 8px;
+  font-size: 11px;
+  outline: none;
+  cursor: pointer;
+  flex: 1;
+  min-width: 0;
+}
+.sort-select:focus {
+  border-color: var(--vscode-focusBorder);
+}
 .workspaces-list {
   overflow-y: auto;
 }

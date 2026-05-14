@@ -10,6 +10,7 @@ import { SearchWorkspaceService } from '../service/SearchWorkspaceService';
 import { FavoriteWorkspaceService } from '../service/FavoriteWorkspaceService';
 import { SettingsService, SettingsKey } from '../service/SettingsService';
 import { EditWorkspaceService } from '../service/EditWorkspaceService';
+import { SortType } from '../enum/SortType';
 
 export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'workspaceManager.workspacesView';
@@ -17,6 +18,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
   private view?: vscode.WebviewView;
   private currentQuery = '';
   private showOnlyFavorites = false;
+  private currentSort = SortType.FavoritesFirst;
 
   constructor(
     private readonly extensionUri: vscode.Uri,
@@ -32,6 +34,10 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     this.showOnlyFavorites = this.settingsService.get(
       SettingsKey.ShowOnlyFavorites,
       false,
+    );
+    this.currentSort = this.settingsService.get(
+      SettingsKey.SortType,
+      SortType.FavoritesFirst,
     );
     this.repository.onDidChange(() => {
       this.refresh();
@@ -79,11 +85,20 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       workspaces = workspaces.filter(ws => ws.isFavorite);
     }
 
-    // Sort logic: Favorites first, then by last opened
+    // Sort logic
     workspaces.sort((a, b) => {
-      if (a.isFavorite && !b.isFavorite) return -1;
-      if (!a.isFavorite && b.isFavorite) return 1;
-      return b.lastOpened - a.lastOpened;
+      switch (this.currentSort) {
+        case SortType.FavoritesFirst:
+          if (a.isFavorite && !b.isFavorite) return -1;
+          if (!a.isFavorite && b.isFavorite) return 1;
+          return b.lastOpened - a.lastOpened;
+        case SortType.Alphabetical:
+          return a.name.localeCompare(b.name);
+        case SortType.Recent:
+          return b.lastOpened - a.lastOpened;
+        default:
+          return 0;
+      }
     });
 
     // Check if current workspace is saved
@@ -112,6 +127,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       },
       filters: {
         showOnlyFavorites: this.showOnlyFavorites,
+        sortType: this.currentSort,
       },
     });
   }
@@ -164,6 +180,16 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
           this.showOnlyFavorites,
         );
         this.refresh();
+        break;
+      case 'changeSort':
+        if (message.sortType) {
+          this.currentSort = message.sortType as SortType;
+          await this.settingsService.set(
+            SettingsKey.SortType,
+            this.currentSort,
+          );
+          this.refresh();
+        }
         break;
       case 'refresh':
         this.refresh();

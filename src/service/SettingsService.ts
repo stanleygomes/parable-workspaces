@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 export enum SettingsKey {
   ShowOnlyFavorites = 'showOnlyFavorites',
+  SortType = 'sortType',
 }
 
 export class SettingsService {

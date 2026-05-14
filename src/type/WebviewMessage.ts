@@ -3,4 +3,5 @@ export interface WebviewMessage {
   workspaceId?: string;
   query?: string;
   showOnlyFavorites?: boolean;
+  sortType?: string;
 }
