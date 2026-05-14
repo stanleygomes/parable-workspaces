@@ -1,10 +1,10 @@
 import type { JSX } from "react";
 import Image from "next/image";
-import logo from "./img/logo.svg";
+import logo from "./img/logo.png";
 
-const GITHUB_URL = "https://github.com/stanleygomes/codex-notes";
+const GITHUB_URL = "https://github.com/stanleygomes/parable-workspaces";
 const LICENSE_URL =
-  "https://github.com/stanleygomes/codex-notes/blob/master/LICENSE";
+  "https://github.com/stanleygomes/parable-workspaces/blob/master/LICENSE";
 
 interface DownloadButton {
   label: string;
@@ -16,20 +16,20 @@ interface DownloadButton {
 const DOWNLOAD_BUTTONS: DownloadButton[] = [
   {
     label: "Visual Studio Code",
-    href: "https://marketplace.visualstudio.com/items?itemName=StanleyGomes.codex-notes",
-    command: "code --install-extension StanleyGomes.codex-notes",
+    href: "https://marketplace.visualstudio.com/items?itemName=StanleyGomes.parable-workspaces",
+    command: "code --install-extension StanleyGomes.parable-workspaces",
     available: true,
   },
   {
     label: "Cursor",
-    href: "https://open-vsx.org/extension/stanleygomes/codex-notes",
-    command: "cursor --install-extension StanleyGomes.codex-notes",
+    href: "https://open-vsx.org/extension/stanleygomes/parable-workspaces",
+    command: "cursor --install-extension StanleyGomes.parable-workspaces",
     available: true,
   },
   {
     label: "Antigravity",
-    href: "https://open-vsx.org/extension/stanleygomes/codex-notes",
-    command: "antigravity --install-extension StanleyGomes.codex-notes",
+    href: "https://open-vsx.org/extension/stanleygomes/parable-workspaces",
+    command: "antigravity --install-extension StanleyGomes.parable-workspaces",
     available: true,
   },
 ];
@@ -81,18 +81,19 @@ export default function Home(): JSX.Element {
             <div className="flex-1 w-full overflow-hidden">
               <pre className="text-[#33ff00] text-[10px] sm:text-xs md:text-sm overflow-x-auto whitespace-pre-wrap leading-tight">
                 {`
-  ____           _             _   _       _            
- / ___|___   __| | _____  __ | \\ | | ___ | |_ ___  ___ 
-| |   / _ \\ / _\` |/ _ \\ \\/ / |  \\| |/ _ \\| __/ _ \\/ __|
-| |__| (_) | (_| |  __/>  <  | |\\  | (_) | ||  __/\\__ \\
- \\____\\___/ \\__,_|\\___/_/\\_\\ |_| \\_\\|___/ \\__\\___||___/
+ ____                 _     _                           _                              
+|  _ \\ __ _ _ __ __ _| |__ | | ___  __      _____  _ __| | _____ _ __   __ _  ___ ___ 
+| |_) / _\` | '__/ _\` | '_ \\| |/ _ \\ \\ \\ /\\ / / _ \\| '__| |/ / __| '_ \\ / _\` |/ __/ _ \\
+|  __/ (_| | | | (_| | |_) | |  __/  \\ V  V / (_) | |  |   <\\__ \\ |_) | (_| | (_|  __/
+|_|   \\__,_|_|  \\__,_|_.__/|_|\\___|   \\_/\\_/ \\___/|_|  |_|\\_\\___/ .__/ \\__,_|\\___\\___|
+                                                                |_|                  
 `}
               </pre>
             </div>
             <div className="relative shrink-0 border border-[#33ff00] p-1 bg-[#051100]">
               <Image
                 src={logo}
-                alt="Codex Notes logo"
+                alt="logo"
                 width={80}
                 height={80}
                 className="grayscale contrast-[200%] brightness-[1.2] sepia-[1] hue-rotate-[60deg] mix-blend-screen opacity-90"
@@ -107,7 +108,7 @@ export default function Home(): JSX.Element {
               &gt; System initialized...
             </p>
             <p className="text-[#33ff00]">
-              &gt; Description: A powerful plugin for managing notes within your IDE. organizing thoughts and code snippets.
+              &gt; Description: The best way to manage your vscode, cursor and antigravity workspaces.
             </p>
             <p className="text-[#33ff00]">
               &gt; Status: Online. Ready for download.
@@ -116,7 +117,7 @@ export default function Home(): JSX.Element {
         </div>
 
         <div className="mb-8">
-          <p className="text-[#22aa00] mb-4">root@codex-notes:~# ls -l downloads/</p>
+          <p className="text-[#22aa00] mb-4">root@parable-workspaces:~# ls -l downloads/</p>
           <div className="pl-2 sm:pl-4 border-l-2 border-[#115500]">
             {DOWNLOAD_BUTTONS.map((btn) => (
               <DownloadButtonItem key={btn.label} btn={btn} />
@@ -125,7 +126,7 @@ export default function Home(): JSX.Element {
         </div>
 
         <div className="mt-12 pt-4 border-t border-[#115500] flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-[#22aa00]">
-          <p>root@codex-notes:~# echo "Made with 🔥 by NazarethLabs"</p>
+          <p>root@parable-workspaces:~# echo "Made with 🔥 by NazarethLabs"</p>
           <div className="flex gap-4 mt-4 sm:mt-0">
             <a
               href={GITHUB_URL}

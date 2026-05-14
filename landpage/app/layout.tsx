@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
+import favicon from './img/logo.png'
 
 export const metadata: Metadata = {
   title: "Codex Notes",
@@ -16,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="icon" href={favicon} type="image/png" />
       </head>
       <body className={`${GeistMono.className} antialiased bg-black text-[#33ff00]`}>{children}</body>
     </html>
