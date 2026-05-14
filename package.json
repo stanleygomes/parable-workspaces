@@ -1,7 +1,7 @@
 {
   "name": "parable-workspaces",
   "displayName": "Parable Workspaces",
-  "description": "The best way to manage your vscode, cursor and antigravity workspaces.",
+  "description": "The best way to manage your projects workspaces.",
   "version": "1.2.0",
   "license": "MIT",
   "publisher": "stanleygomes",
