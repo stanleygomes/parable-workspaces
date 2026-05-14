@@ -24,7 +24,9 @@ export class ImportWorkspaceService {
       const workspaceData = JSON.parse(fileContent);
 
       if (!workspaceData.folders) {
-        DialogHelper.showError('Arquivo de workspace inválido: campo "folders" não encontrado.');
+        DialogHelper.showError(
+          'Invalid workspace file: "folders" field not found.',
+        );
         return;
       }
 
@@ -47,9 +49,9 @@ export class ImportWorkspaceService {
       };
 
       await this.repository.save(workspace);
-      DialogHelper.showInfo(`Workspace "${name}" importado com sucesso!`);
+      DialogHelper.showInfo(`Workspace "${name}" imported successfully!`);
     } catch (error) {
-      DialogHelper.showError(`Erro ao importar workspace: ${error}`);
+      DialogHelper.showError(`Error importing workspace: ${error}`);
     }
   }
 }

@@ -78,11 +78,12 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       case 'deleteWorkspace':
         if (message.workspaceId) {
           const confirm = await vscode.window.showWarningMessage(
-            'Tem certeza que deseja excluir este workspace?',
+            'Are you sure you want to delete this workspace?',
             { modal: true },
-            'Sim',
+            'Yes',
           );
-          if (confirm === 'Sim') {
+          if (confirm === 'Yes') {
+
             await this.service.deleteWorkspace(message.workspaceId);
             this.refresh();
           }

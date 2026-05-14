@@ -8,7 +8,7 @@ export class WorkspaceService {
   async saveCurrentWorkspace(): Promise<void> {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders || workspaceFolders.length === 0) {
-      vscode.window.showErrorMessage('Nenhuma pasta aberta para salvar.');
+      vscode.window.showErrorMessage('No folder open to save.');
       return;
     }
 
@@ -30,7 +30,7 @@ export class WorkspaceService {
     };
 
     await this.repository.save(workspace);
-    vscode.window.showInformationMessage(`Workspace "${name}" salvo com sucesso!`);
+    vscode.window.showInformationMessage(`Workspace "${name}" saved successfully!`);
   }
 
   async openWorkspace(id: string): Promise<void> {
@@ -45,7 +45,7 @@ export class WorkspaceService {
 
   async deleteWorkspace(id: string): Promise<void> {
     await this.repository.delete(id);
-    vscode.window.showInformationMessage('Workspace excluído com sucesso.');
+    vscode.window.showInformationMessage('Workspace deleted successfully.');
   }
 
   searchWorkspaces(query: string): Workspace[] {
@@ -62,4 +62,3 @@ export class WorkspaceService {
     );
   }
 }
-

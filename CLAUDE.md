@@ -73,6 +73,7 @@ src/
 - Follow VS Code extension best practices
 - Use workspace and global state appropriately
 
+
 ## Test Rules
 
 ### Test Pattern

@@ -20,9 +20,10 @@ export class ExportWorkspaceService {
 
     try {
       fs.writeFileSync(saveUri.fsPath, JSON.stringify(content, null, 2), 'utf8');
-      DialogHelper.showInfo(`Workspace exportado com sucesso para ${saveUri.fsPath}`);
+      DialogHelper.showInfo(`Workspace successfully exported to ${saveUri.fsPath}`);
     } catch (error) {
-      DialogHelper.showError(`Erro ao exportar workspace: ${error}`);
+      DialogHelper.showError(`Error exporting workspace: ${error}`);
     }
+
   }
 }
