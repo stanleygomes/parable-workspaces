@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { Workspace } from '../dto/Workspace';
 import { WorkspaceRepository } from '../repository/WorkspaceRepository';
 
 export class ColorService {
@@ -17,32 +16,36 @@ export class ColorService {
 
     const workspace = this.repository.getAll().find((w) => w.id === currentId);
     if (workspace && workspace.color) {
-      await this.applyColor(workspace.color);
+      await this.applyColor(workspace.color, workspace.textColor);
     }
   }
 
-  public async applyColor(color: string | undefined): Promise<void> {
+  public async applyColor(color: string | undefined, textColor: string | undefined): Promise<void> {
     const config = vscode.workspace.getConfiguration('workbench');
-    const customizations = config.get<any>('colorCustomizations') || {};
+    const customizations = {
+      ...(config.get<any>('colorCustomizations') || {}),
+    };
 
-    if (!color) {
-      // Remove customizations if they were set by us
-      // Note: This might remove customizations set by other extensions or the user manually
-      // but usually Peacock/Color Scheme extensions own these keys.
-      delete customizations['activityBar.background'];
-      delete customizations['activityBar.foreground'];
-      delete customizations['titleBar.activeBackground'];
-      delete customizations['titleBar.activeForeground'];
-      delete customizations['statusBar.background'];
-      delete customizations['statusBar.foreground'];
-    } else {
-      // Apply Peacock-like customizations
-      customizations['activityBar.background'] = color;
-      customizations['activityBar.foreground'] = '#ffffff';
-      customizations['titleBar.activeBackground'] = color;
-      customizations['titleBar.activeForeground'] = '#ffffff';
+    // Remove all possible previous customizations to start clean
+    delete customizations['activityBar.background'];
+    delete customizations['activityBar.foreground'];
+    delete customizations['activityBar.activeBorder'];
+    delete customizations['activityBarBadge.background'];
+    delete customizations['titleBar.activeBackground'];
+    delete customizations['titleBar.activeForeground'];
+    delete customizations['titleBar.activeBorder'];
+    delete customizations['statusBar.background'];
+    delete customizations['statusBar.foreground'];
+    delete customizations['statusBarItem.remoteBackground'];
+    delete customizations['statusBarItem.remoteForeground'];
+    delete customizations['tab.activeBorder'];
+
+    if (color) {
+      // Apply ONLY status bar background and foreground
       customizations['statusBar.background'] = color;
-      customizations['statusBar.foreground'] = '#ffffff';
+      customizations['statusBar.foreground'] = textColor || '#ffffff';
+      customizations['statusBarItem.remoteBackground'] = color;
+      customizations['statusBarItem.remoteForeground'] = textColor || '#ffffff';
     }
 
     await config.update(

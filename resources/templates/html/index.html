@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; style-src 'nonce-{{nonce}}'; script-src 'nonce-{{nonce}}';"
+      content="default-src 'none'; style-src 'nonce-{{nonce}}' 'unsafe-inline'; script-src 'nonce-{{nonce}}';"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Parable Workspaces</title>
@@ -50,6 +50,7 @@
       const sortSelect = document.getElementById('sortSelect');
       const workspacesList = document.getElementById('workspacesList');
       const contextMenu = document.getElementById('contextMenu');
+      let availableColors = [];
 
       searchBox.addEventListener('input', () => {
         vscode.postMessage({ command: 'search', query: searchBox.value });
@@ -90,9 +91,8 @@
 
         workspacesList.innerHTML = workspaces
           .map((ws) => {
-            const colorStyle = ws.color ? `border-left: 4px solid ${ws.color};` : '';
             return `
-          <div class="workspace-item" data-id="${ws.id}" style="${colorStyle}">
+          <div class="workspace-item" data-id="${ws.id}">
             <div class="workspace-body">
               <div class="workspace-header">
                 <span class="workspace-title">
@@ -131,6 +131,10 @@
         });
 
         workspacesList.querySelectorAll('.workspace-item').forEach((item) => {
+          const ws = workspaces.find(w => w.id === item.dataset.id);
+          if (ws && ws.color) {
+            item.style.borderLeftColor = ws.color;
+          }
           item.addEventListener('click', (e) => {
             vscode.postMessage({
               command: 'openWorkspace',
@@ -143,6 +147,11 @@
             showContextMenu(e.clientX, e.clientY, item.dataset.id, ws?.isFavorite);
           });
         });
+      }
+
+      function getColorEmoji(hex) {
+        const color = availableColors.find(c => c.color === hex);
+        return color ? color.label : '⚪';
       }
 
       function showContextMenu(x, y, workspaceId, isFavorite) {
@@ -186,6 +195,9 @@
             btnShowFavorites.classList.toggle('active', showOnlyFavorites);
             currentSort = message.filters.sortType;
             sortSelect.value = currentSort;
+          }
+          if (message.availableColors) {
+            availableColors = message.availableColors;
           }
           renderWorkspaces(message.workspaces);
           renderBanner(message.currentStatus);

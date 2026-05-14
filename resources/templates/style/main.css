@@ -128,6 +128,7 @@ body {
   cursor: pointer;
   border-bottom: 1px solid var(--vscode-sideBarSectionHeader-border);
   transition: background 0.2s;
+  border-left: 4px solid transparent;
 }
 .workspace-item:hover {
   background: var(--vscode-list-hoverBackground);

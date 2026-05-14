@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { WorkspaceRepository } from '../repository/WorkspaceRepository';
 import { ColorService } from './ColorService';
+import { WorkspaceColors } from '../enum/WorkspaceColor';
 
 export class ChangeColorWorkspaceService {
   constructor(
@@ -14,26 +15,15 @@ export class ChangeColorWorkspaceService {
       return;
     }
 
-    const colors = [
-      { label: '$(circle-filled)', description: 'Blue', color: '#3498db' },
-      { label: '$(circle-filled)', description: 'Red', color: '#e74c3c' },
-      { label: '$(circle-filled)', description: 'Green', color: '#2ecc71' },
-      { label: '$(circle-filled)', description: 'Yellow', color: '#f1c40f' },
-      { label: '$(circle-filled)', description: 'Purple', color: '#9b59b6' },
-      { label: '$(circle-filled)', description: 'Orange', color: '#e67e22' },
-      { label: '$(circle-filled)', description: 'Cyan', color: '#1abc9c' },
-      { label: '$(circle-filled)', description: 'Magenta', color: '#d33682' },
-      { label: '$(circle-slash)', description: 'None', color: '' },
-    ];
-
     const selectedColor = await vscode.window.showQuickPick(
       [
-        ...colors.map((c) => ({
+        ...WorkspaceColors.map((c) => ({
           label: c.label,
           description: c.description,
           color: c.color,
+          textColor: c.textColor,
         })),
-        { label: '$(edit)', description: 'Custom Hex Color...', color: 'custom' },
+        { label: '🎨', description: 'Custom Hex Color...', color: 'custom' },
       ],
       {
         placeHolder: `Select color for "${workspace.name}"`,
@@ -42,7 +32,8 @@ export class ChangeColorWorkspaceService {
 
     if (selectedColor === undefined) return;
 
-    let color = selectedColor.color;
+    let color = (selectedColor as any).color;
+    let textColor = (selectedColor as any).textColor;
 
     if (color === 'custom') {
       const hex = await vscode.window.showInputBox({
@@ -55,14 +46,16 @@ export class ChangeColorWorkspaceService {
       });
       if (hex === undefined) return;
       color = hex;
+      textColor = '#ffffff'; // Default text color for custom colors
     }
 
     workspace.color = color;
+    workspace.textColor = textColor;
     await this.repository.save(workspace);
 
     // If it's the current workspace, apply it immediately
     if (this.isCurrentWorkspace(workspace)) {
-      await this.colorService.applyColor(color);
+      await this.colorService.applyColor(color, textColor);
     }
   }
 

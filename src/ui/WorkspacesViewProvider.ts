@@ -12,6 +12,7 @@ import { SettingsService, SettingsKey } from '../service/SettingsService';
 import { EditNameWorkspaceService } from '../service/EditNameWorkspaceService';
 import { ChangeEmojiWorkspaceService } from '../service/ChangeEmojiWorkspaceService';
 import { ChangeColorWorkspaceService } from '../service/ChangeColorWorkspaceService';
+import { WorkspaceColors } from '../enum/WorkspaceColor';
 import { SortType } from '../enum/SortType';
 
 export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
@@ -133,6 +134,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
         showOnlyFavorites: this.showOnlyFavorites,
         sortType: this.currentSort,
       },
+      availableColors: WorkspaceColors,
     });
   }
 
