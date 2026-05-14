@@ -68,7 +68,14 @@
             <div class="workspace-body">
               <div class="workspace-header">
                 <span class="workspace-title">${escapeHtml(ws.name)}</span>
-                <span class="workspace-date">${ws.dateLabel}</span>
+                <div class="header-actions">
+                  <span class="workspace-date">${ws.dateLabel}</span>
+                  <button class="star-btn ${ws.isFavorite ? 'favorite-active' : ''}" data-id="${ws.id}">
+                    <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor">
+                      <path d="M8 0L10.5 5.5L16 6.5L12 10.5L13 16L8 13.5L3 16L4 10.5L0 6.5L5.5 5.5L8 0Z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div class="workspace-info">
                 <span class="workspace-folders">${ws.foldersCount} folder(s)</span>
@@ -85,6 +92,16 @@
           })
           .join('');
 
+        workspacesList.querySelectorAll('.star-btn').forEach((btn) => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            vscode.postMessage({
+              command: 'toggleFavorite',
+              workspaceId: btn.dataset.id,
+            });
+          });
+        });
+
         workspacesList.querySelectorAll('.workspace-item').forEach((item) => {
           item.addEventListener('click', (e) => {
             vscode.postMessage({
@@ -94,15 +111,17 @@
           });
           item.addEventListener('contextmenu', (e) => {
             e.preventDefault();
-            showContextMenu(e.clientX, e.clientY, item.dataset.id);
+            const ws = workspaces.find(w => w.id === item.dataset.id);
+            showContextMenu(e.clientX, e.clientY, item.dataset.id, ws?.isFavorite);
           });
         });
       }
 
-      function showContextMenu(x, y, workspaceId) {
+      function showContextMenu(x, y, workspaceId, isFavorite) {
         currentWorkspaceId = workspaceId;
         contextMenu.innerHTML = `
         <div class="context-menu-item" data-action="openWorkspace">Open Workspace</div>
+        <div class="context-menu-item" data-action="toggleFavorite">${isFavorite ? 'Unfavorite' : 'Favorite'}</div>
         <div class="context-menu-separator"></div>
         <div class="context-menu-item" data-action="editWorkspace">Edit</div>
         <div class="context-menu-item" data-action="deleteWorkspace">Delete</div>

@@ -7,6 +7,7 @@ import { SaveWorkspaceService } from '../service/SaveWorkspaceService';
 import { OpenWorkspaceService } from '../service/OpenWorkspaceService';
 import { DeleteWorkspaceService } from '../service/DeleteWorkspaceService';
 import { SearchWorkspaceService } from '../service/SearchWorkspaceService';
+import { FavoriteWorkspaceService } from '../service/FavoriteWorkspaceService';
 
 export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'workspaceManager.workspacesView';
@@ -21,6 +22,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     private readonly openService: OpenWorkspaceService,
     private readonly deleteService: DeleteWorkspaceService,
     private readonly searchService: SearchWorkspaceService,
+    private readonly favoriteService: FavoriteWorkspaceService,
   ) {
     this.repository.onDidChange(() => {
       this.refresh();
@@ -64,8 +66,12 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
 
     const workspaces = this.searchService.search(this.currentQuery);
     
-    // Sort by last opened by default
-    workspaces.sort((a, b) => b.lastOpened - a.lastOpened);
+    // Sort logic: Favorites first, then by last opened
+    workspaces.sort((a, b) => {
+      if (a.isFavorite && !b.isFavorite) return -1;
+      if (!a.isFavorite && b.isFavorite) return 1;
+      return b.lastOpened - a.lastOpened;
+    });
 
     // Check if current workspace is saved
     const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -94,12 +100,16 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     });
   }
 
-
   private async handleMessage(message: WebviewMessage): Promise<void> {
     switch (message.command) {
       case 'openWorkspace':
         if (message.workspaceId) {
           await this.openService.open(message.workspaceId);
+        }
+        break;
+      case 'toggleFavorite':
+        if (message.workspaceId) {
+          await this.favoriteService.toggleFavorite(message.workspaceId);
         }
         break;
       case 'saveCurrent':

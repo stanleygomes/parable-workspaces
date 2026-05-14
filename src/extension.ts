@@ -4,6 +4,7 @@ import { SaveWorkspaceService } from './service/SaveWorkspaceService';
 import { OpenWorkspaceService } from './service/OpenWorkspaceService';
 import { DeleteWorkspaceService } from './service/DeleteWorkspaceService';
 import { SearchWorkspaceService } from './service/SearchWorkspaceService';
+import { FavoriteWorkspaceService } from './service/FavoriteWorkspaceService';
 import { ImportWorkspaceService } from './service/ImportWorkspaceService';
 import { ExportWorkspaceService } from './service/ExportWorkspaceService';
 import { NotificationCreateWorkspaceService } from './service/NotificationCreateWorkspaceService';
@@ -20,6 +21,7 @@ export async function activate(
   const openService = new OpenWorkspaceService(workspaceRepository);
   const deleteService = new DeleteWorkspaceService(workspaceRepository);
   const searchService = new SearchWorkspaceService(workspaceRepository);
+  const favoriteService = new FavoriteWorkspaceService(workspaceRepository);
   const importService = new ImportWorkspaceService(workspaceRepository);
   const exportService = new ExportWorkspaceService();
   const notificationService = new NotificationCreateWorkspaceService(
@@ -36,6 +38,7 @@ export async function activate(
     openService,
     deleteService,
     searchService,
+    favoriteService,
   );
 
   const handleOpenBackup = createHandleOpenBackup(
@@ -72,7 +75,6 @@ export async function activate(
       provider.refresh(),
     ),
   );
-
 
   context.subscriptions.push(
     vscode.workspace.onDidChangeWorkspaceFolders(() =>

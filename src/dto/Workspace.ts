@@ -6,4 +6,6 @@ export interface Workspace {
   icon?: string;
   tags: string[];
   lastOpened: number;
+  isFavorite?: boolean;
 }
+
