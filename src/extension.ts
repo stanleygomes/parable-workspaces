@@ -1,10 +1,13 @@
 import * as vscode from 'vscode';
 import { WorkspaceRepository } from './repository/WorkspaceRepository';
-import { WorkspaceService } from './service/WorkspaceService';
+import { SaveWorkspaceService } from './service/SaveWorkspaceService';
+import { OpenWorkspaceService } from './service/OpenWorkspaceService';
+import { DeleteWorkspaceService } from './service/DeleteWorkspaceService';
+import { SearchWorkspaceService } from './service/SearchWorkspaceService';
 import { ImportWorkspaceService } from './service/ImportWorkspaceService';
 import { ExportWorkspaceService } from './service/ExportWorkspaceService';
+import { NotificationCreateWorkspaceService } from './service/NotificationCreateWorkspaceService';
 import { WorkspacesViewProvider } from './ui/WorkspacesViewProvider';
-import { NotificationService } from './service/NotificationService';
 import { createHandleOpenBackup } from './editor/view';
 
 export async function activate(
@@ -13,14 +16,15 @@ export async function activate(
   console.log('Activating Parable Workspaces extension...');
   const workspaceRepository = new WorkspaceRepository(context);
 
-  const workspaceService = new WorkspaceService(workspaceRepository);
-  const importWorkspaceService = new ImportWorkspaceService(
+  const saveService = new SaveWorkspaceService(workspaceRepository);
+  const openService = new OpenWorkspaceService(workspaceRepository);
+  const deleteService = new DeleteWorkspaceService(workspaceRepository);
+  const searchService = new SearchWorkspaceService(workspaceRepository);
+  const importService = new ImportWorkspaceService(workspaceRepository);
+  const exportService = new ExportWorkspaceService();
+  const notificationService = new NotificationCreateWorkspaceService(
     workspaceRepository,
-  );
-  const exportWorkspaceService = new ExportWorkspaceService();
-  const notificationService = new NotificationService(
-    workspaceRepository,
-    workspaceService,
+    saveService,
   );
 
   console.log('Services initialized successfully');
@@ -28,13 +32,16 @@ export async function activate(
   const provider = new WorkspacesViewProvider(
     context.extensionUri,
     workspaceRepository,
-    workspaceService,
+    saveService,
+    openService,
+    deleteService,
+    searchService,
   );
 
   const handleOpenBackup = createHandleOpenBackup(
     context.extensionUri,
-    importWorkspaceService,
-    exportWorkspaceService,
+    importService,
+    exportService,
     workspaceRepository,
     () => provider.refresh(),
   );
@@ -48,14 +55,14 @@ export async function activate(
 
   context.subscriptions.push(
     vscode.commands.registerCommand('workspaceManager.saveProject', () =>
-      workspaceService.saveCurrentWorkspace(),
+      saveService.save(),
     ),
     vscode.commands.registerCommand(
       'workspaceManager.openWorkspace',
-      (workspaceId: string) => workspaceService.openWorkspace(workspaceId),
+      (workspaceId: string) => openService.open(workspaceId),
     ),
     vscode.commands.registerCommand('workspaceManager.importWorkspace', () =>
-      importWorkspaceService.import(),
+      importService.import(),
     ),
     vscode.commands.registerCommand(
       'workspaceManager.openBackup',

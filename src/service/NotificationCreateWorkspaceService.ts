@@ -1,12 +1,14 @@
 import * as vscode from 'vscode';
 import { WorkspaceRepository } from '../repository/WorkspaceRepository';
-import { WorkspaceService } from './WorkspaceService';
+import { SaveWorkspaceService } from './SaveWorkspaceService';
 
-export class NotificationService {
+export class NotificationCreateWorkspaceService {
+
   constructor(
     private readonly repository: WorkspaceRepository,
-    private readonly workspaceService: WorkspaceService,
+    private readonly saveService: SaveWorkspaceService,
   ) {}
+
 
   async checkAndNotify(): Promise<void> {
     const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -35,8 +37,9 @@ export class NotificationService {
       );
 
       if (action === 'Save Workspace') {
-        await this.workspaceService.saveCurrentWorkspace();
+        await this.saveService.save();
       }
+
     }
   }
 }

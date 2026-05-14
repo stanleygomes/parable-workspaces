@@ -1,13 +1,15 @@
 import * as vscode from 'vscode';
 import { WorkspaceRepository } from '../repository/WorkspaceRepository';
-import { WorkspaceService } from '../service/WorkspaceService';
 import { WebviewHelper } from '../helper/WebviewHelper';
 import { WorkspaceMapper } from '../mapper/WorkspaceMapper';
 import { WebviewMessage } from '../type/WebviewMessage';
+import { SaveWorkspaceService } from '../service/SaveWorkspaceService';
+import { OpenWorkspaceService } from '../service/OpenWorkspaceService';
+import { DeleteWorkspaceService } from '../service/DeleteWorkspaceService';
+import { SearchWorkspaceService } from '../service/SearchWorkspaceService';
 
 export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'workspaceManager.workspacesView';
-
 
   private view?: vscode.WebviewView;
   private currentQuery = '';
@@ -15,13 +17,15 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
   constructor(
     private readonly extensionUri: vscode.Uri,
     private readonly repository: WorkspaceRepository,
-    private readonly service: WorkspaceService,
+    private readonly saveService: SaveWorkspaceService,
+    private readonly openService: OpenWorkspaceService,
+    private readonly deleteService: DeleteWorkspaceService,
+    private readonly searchService: SearchWorkspaceService,
   ) {
     this.repository.onDidChange(() => {
       this.refresh();
     });
   }
-
 
   resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -58,7 +62,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       return;
     }
 
-    const workspaces = this.service.searchWorkspaces(this.currentQuery);
+    const workspaces = this.searchService.search(this.currentQuery);
     
     // Sort by last opened by default
     workspaces.sort((a, b) => b.lastOpened - a.lastOpened);
@@ -73,12 +77,11 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     switch (message.command) {
       case 'openWorkspace':
         if (message.workspaceId) {
-          await this.service.openWorkspace(message.workspaceId);
+          await this.openService.open(message.workspaceId);
         }
         break;
       case 'saveCurrent':
-        await this.service.saveCurrentWorkspace();
-        this.refresh();
+        await this.saveService.save();
         break;
       case 'deleteWorkspace':
         if (message.workspaceId) {
@@ -88,9 +91,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
             'Yes',
           );
           if (confirm === 'Yes') {
-
-            await this.service.deleteWorkspace(message.workspaceId);
-            this.refresh();
+            await this.deleteService.delete(message.workspaceId);
           }
         }
         break;
