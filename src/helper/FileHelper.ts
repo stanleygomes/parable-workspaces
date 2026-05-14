@@ -12,4 +12,23 @@ export class FileHelper {
     }
     return fs.readFileSync(filePath, 'utf8');
   }
+
+  public static writeText(filePath: string, content: string): void {
+    const dir = path.dirname(filePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(filePath, content, 'utf8');
+  }
+
+  public static exists(filePath: string): boolean {
+    return fs.existsSync(filePath);
+  }
+
+  public static mkdir(dirPath: string): void {
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+  }
 }
+
