@@ -1,50 +1,65 @@
 import * as vscode from 'vscode';
 import { WorkspaceRepository } from '../repository/WorkspaceRepository';
-import { Project } from '../type/Project';
+import { Workspace } from '../dto/Workspace';
 
 export class WorkspaceService {
   constructor(private readonly repository: WorkspaceRepository) {}
 
   async saveCurrentWorkspace(): Promise<void> {
-    const folders = vscode.workspace.workspaceFolders;
-    if (!folders || folders.length === 0) {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders || workspaceFolders.length === 0) {
       vscode.window.showErrorMessage('Nenhuma pasta aberta para salvar.');
       return;
     }
 
-    const folder = folders[0];
-    const project: Project = {
-      id: Buffer.from(folder.uri.fsPath).toString('base64'),
-      name: folder.name,
-      path: folder.uri.fsPath,
+    const primaryFolder = workspaceFolders[0];
+    const folders = workspaceFolders.map((f) => f.uri.fsPath);
+    
+    // Use the workspace file name if it exists, otherwise the primary folder name
+    const workspaceFile = vscode.workspace.workspaceFile;
+    const name = workspaceFile 
+      ? vscode.workspace.name || primaryFolder.name
+      : primaryFolder.name;
+
+    const workspace: Workspace = {
+      id: Buffer.from(workspaceFile?.fsPath || primaryFolder.uri.fsPath).toString('base64'),
+      name: name,
+      folders: folders,
       lastOpened: Date.now(),
       tags: [],
     };
 
-    await this.repository.save(project);
-    vscode.window.showInformationMessage(`Projeto "${folder.name}" salvo com sucesso!`);
+    await this.repository.save(workspace);
+    vscode.window.showInformationMessage(`Workspace "${name}" salvo com sucesso!`);
   }
 
   async listProjects(): Promise<void> {
-    const projects = this.repository.getAll();
-    if (projects.length === 0) {
-      vscode.window.showInformationMessage('Nenhum projeto salvo ainda.');
+    const workspaces = this.repository.getAll();
+    if (workspaces.length === 0) {
+      vscode.window.showInformationMessage('Nenhum workspace salvo ainda.');
       return;
     }
 
-    const items = projects.map((p) => ({
-      label: p.name,
-      description: p.path,
-      project: p,
+    const items = workspaces.map((w) => ({
+      label: w.name,
+      description: w.folders.length > 1 
+        ? `${w.folders.length} pastas` 
+        : w.folders[0],
+      workspace: w,
     }));
 
     const selected = await vscode.window.showQuickPick(items, {
-      placeHolder: 'Selecione um projeto para abrir',
+      placeHolder: 'Selecione um workspace para abrir',
     });
 
     if (selected) {
-      const uri = vscode.Uri.file(selected.project.path);
-      await this.repository.updateLastOpened(selected.project.id);
+      const workspace = selected.workspace;
+      await this.repository.updateLastOpened(workspace.id);
+      
+      // If it's a single folder, open it directly. 
+      // For multi-root, we currently open the first folder as a fallback,
+      // but in the future we will handle .code-workspace files or virtual workspaces.
+      const uri = vscode.Uri.file(workspace.folders[0]);
       vscode.commands.executeCommand('vscode.openFolder', uri, false);
     }
   }

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { Project } from '../type/Project';
+import { Workspace } from '../dto/Workspace';
 
 export class WorkspaceRepository {
   private static readonly STORAGE_KEY = 'savedProjects';
@@ -11,37 +11,37 @@ export class WorkspaceRepository {
     }
   }
 
-  getAll(): Project[] {
-    return this.context.globalState.get<Project[]>(WorkspaceRepository.STORAGE_KEY, []);
+  getAll(): Workspace[] {
+    return this.context.globalState.get<Workspace[]>(WorkspaceRepository.STORAGE_KEY, []);
   }
 
-  async save(project: Project): Promise<void> {
-    const projects = this.getAll();
-    const index = projects.findIndex((p) => p.id === project.id);
+  async save(workspace: Workspace): Promise<void> {
+    const workspaces = this.getAll();
+    const index = workspaces.findIndex((w) => w.id === workspace.id);
     if (index >= 0) {
-      projects[index] = project;
+      workspaces[index] = workspace;
     } else {
-      projects.push(project);
+      workspaces.push(workspace);
     }
-    await this.context.globalState.update(WorkspaceRepository.STORAGE_KEY, projects);
+    await this.context.globalState.update(WorkspaceRepository.STORAGE_KEY, workspaces);
   }
 
-  async delete(projectId: string): Promise<void> {
-    const projects = this.getAll().filter((p) => p.id !== projectId);
+  async delete(workspaceId: string): Promise<void> {
+    const workspaces = this.getAll().filter((w) => w.id !== workspaceId);
     await this.context.globalState.update(
       WorkspaceRepository.STORAGE_KEY,
-      projects,
+      workspaces,
     );
   }
 
-  async updateLastOpened(projectId: string): Promise<void> {
-    const projects = this.getAll();
-    const project = projects.find((p) => p.id === projectId);
-    if (project) {
-      project.lastOpened = Date.now();
+  async updateLastOpened(workspaceId: string): Promise<void> {
+    const workspaces = this.getAll();
+    const workspace = workspaces.find((w) => w.id === workspaceId);
+    if (workspace) {
+      workspace.lastOpened = Date.now();
       await this.context.globalState.update(
         WorkspaceRepository.STORAGE_KEY,
-        projects,
+        workspaces,
       );
     }
   }

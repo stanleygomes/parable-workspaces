@@ -1,7 +1,7 @@
-export interface Project {
+export interface Workspace {
   id: string;
   name: string;
-  path: string;
+  folders: string[];
   color?: string;
   icon?: string;
   tags: string[];
