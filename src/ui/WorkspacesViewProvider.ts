@@ -8,6 +8,7 @@ import { OpenWorkspaceService } from '../service/OpenWorkspaceService';
 import { DeleteWorkspaceService } from '../service/DeleteWorkspaceService';
 import { SearchWorkspaceService } from '../service/SearchWorkspaceService';
 import { FavoriteWorkspaceService } from '../service/FavoriteWorkspaceService';
+import { SettingsService, SettingsKey } from '../service/SettingsService';
 
 export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'workspaceManager.workspacesView';
@@ -24,7 +25,12 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     private readonly deleteService: DeleteWorkspaceService,
     private readonly searchService: SearchWorkspaceService,
     private readonly favoriteService: FavoriteWorkspaceService,
+    private readonly settingsService: SettingsService,
   ) {
+    this.showOnlyFavorites = this.settingsService.get(
+      SettingsKey.ShowOnlyFavorites,
+      false,
+    );
     this.repository.onDidChange(() => {
       this.refresh();
     });
@@ -141,6 +147,10 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
         break;
       case 'toggleFavoritesFilter':
         this.showOnlyFavorites = !!message.showOnlyFavorites;
+        await this.settingsService.set(
+          SettingsKey.ShowOnlyFavorites,
+          this.showOnlyFavorites,
+        );
         this.refresh();
         break;
       case 'refresh':

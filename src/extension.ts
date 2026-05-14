@@ -5,6 +5,7 @@ import { OpenWorkspaceService } from './service/OpenWorkspaceService';
 import { DeleteWorkspaceService } from './service/DeleteWorkspaceService';
 import { SearchWorkspaceService } from './service/SearchWorkspaceService';
 import { FavoriteWorkspaceService } from './service/FavoriteWorkspaceService';
+import { SettingsService } from './service/SettingsService';
 import { ImportWorkspaceService } from './service/ImportWorkspaceService';
 import { ExportWorkspaceService } from './service/ExportWorkspaceService';
 import { NotificationCreateWorkspaceService } from './service/NotificationCreateWorkspaceService';
@@ -16,6 +17,7 @@ export async function activate(
 ): Promise<void> {
   console.log('Activating Parable Workspaces extension...');
   const workspaceRepository = new WorkspaceRepository(context);
+  const settingsService = new SettingsService(context);
 
   const saveService = new SaveWorkspaceService(workspaceRepository);
   const openService = new OpenWorkspaceService(workspaceRepository);
@@ -39,6 +41,7 @@ export async function activate(
     deleteService,
     searchService,
     favoriteService,
+    settingsService,
   );
 
   const handleOpenBackup = createHandleOpenBackup(
