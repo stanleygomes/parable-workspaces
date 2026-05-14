@@ -9,6 +9,7 @@ import { SettingsService } from './service/SettingsService';
 import { StatusBarService } from './service/StatusBarService';
 import { EditWorkspaceService } from './service/EditWorkspaceService';
 import { ImportWorkspaceService } from './service/ImportWorkspaceService';
+import { QuickPickService } from './service/QuickPickService';
 import { ExportWorkspaceService } from './service/ExportWorkspaceService';
 import { NotificationCreateWorkspaceService } from './service/NotificationCreateWorkspaceService';
 import { WorkspacesViewProvider } from './ui/WorkspacesViewProvider';
@@ -28,6 +29,7 @@ export async function activate(
   const favoriteService = new FavoriteWorkspaceService(workspaceRepository);
   const editService = new EditWorkspaceService(workspaceRepository, context.extensionUri);
   const importService = new ImportWorkspaceService(workspaceRepository);
+  const quickPickService = new QuickPickService(workspaceRepository, openService);
   const exportService = new ExportWorkspaceService();
   const notificationService = new NotificationCreateWorkspaceService(
     workspaceRepository,
@@ -82,6 +84,9 @@ export async function activate(
     ),
     vscode.commands.registerCommand('workspaceManager.refreshWorkspaces', () =>
       provider.refresh(),
+    ),
+    vscode.commands.registerCommand('workspaceManager.listProjects', () =>
+      quickPickService.show(),
     ),
   );
 
