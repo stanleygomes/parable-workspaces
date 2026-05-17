@@ -20,6 +20,11 @@
         type="text"
         placeholder="Search workspaces..."
       />
+      <button class="btn" id="btnToggleFilters" title="Toggle Filters">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M14 2H2v1.75l4.25 4.25V12l3.5 1.75V8l4.25-4.25V2z"/>
+        </svg>
+      </button>
     </div>
     <div class="filter-row">
       <button class="filter-chip" id="btnShowFavorites">
@@ -44,12 +49,15 @@
       let currentWorkspaceId = null;
       let showOnlyFavorites = false;
       let currentSort = 'favorites';
+      let showFilters = false;
 
       const searchBox = document.getElementById('searchBox');
+      const btnToggleFilters = document.getElementById('btnToggleFilters');
       const btnShowFavorites = document.getElementById('btnShowFavorites');
       const sortSelect = document.getElementById('sortSelect');
       const workspacesList = document.getElementById('workspacesList');
       const contextMenu = document.getElementById('contextMenu');
+      const filterRow = document.querySelector('.filter-row');
       let availableColors = [];
 
       searchBox.addEventListener('input', () => {
@@ -65,6 +73,11 @@
       sortSelect.addEventListener('change', () => {
         currentSort = sortSelect.value;
         vscode.postMessage({ command: 'changeSort', sortType: currentSort });
+      });
+
+      btnToggleFilters.addEventListener('click', () => {
+        showFilters = !showFilters;
+        vscode.postMessage({ command: 'toggleFilters', showFilters });
       });
 
       document.addEventListener('click', (e) => {
@@ -196,6 +209,10 @@
             btnShowFavorites.classList.toggle('active', showOnlyFavorites);
             currentSort = message.filters.sortType;
             sortSelect.value = currentSort;
+            
+            showFilters = !!message.filters.showFilters;
+            btnToggleFilters.classList.toggle('active', showFilters);
+            filterRow.classList.toggle('hidden', !showFilters);
           }
           if (message.availableColors) {
             availableColors = message.availableColors;

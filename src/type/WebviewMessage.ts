@@ -4,4 +4,5 @@ export interface WebviewMessage {
   query?: string;
   showOnlyFavorites?: boolean;
   sortType?: string;
+  showFilters?: boolean;
 }

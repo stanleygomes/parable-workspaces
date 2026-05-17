@@ -22,6 +22,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
   private currentQuery = '';
   private showOnlyFavorites = false;
   private currentSort = SortType.FavoritesFirst;
+  private showFilters = false;
 
   constructor(
     private readonly extensionUri: vscode.Uri,
@@ -43,6 +44,10 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     this.currentSort = this.settingsService.get(
       SettingsKey.SortType,
       SortType.FavoritesFirst,
+    );
+    this.showFilters = this.settingsService.get(
+      SettingsKey.ShowFilters,
+      false,
     );
     this.repository.onDidChange(() => {
       this.refresh();
@@ -133,6 +138,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       filters: {
         showOnlyFavorites: this.showOnlyFavorites,
         sortType: this.currentSort,
+        showFilters: this.showFilters,
       },
       availableColors: WorkspaceColors,
     });
@@ -194,6 +200,14 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
         await this.settingsService.set(
           SettingsKey.ShowOnlyFavorites,
           this.showOnlyFavorites,
+        );
+        this.refresh();
+        break;
+      case 'toggleFilters':
+        this.showFilters = !!message.showFilters;
+        await this.settingsService.set(
+          SettingsKey.ShowFilters,
+          this.showFilters,
         );
         this.refresh();
         break;

@@ -28,7 +28,6 @@ body {
   padding: 6px;
   font-size: 12px;
   outline: none;
-  margin-bottom: 5px;
 }
 .search-box:focus {
   border-color: var(--vscode-focusBorder);
@@ -397,4 +396,8 @@ body {
   word-break: break-all;
   margin-top: 8px;
   display: block;
+}
+
+.filter-row.hidden {
+  display: none !important;
 }
