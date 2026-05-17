@@ -14,7 +14,7 @@
 
 - **Instant Project Switching**: Quickly jump between saved workspaces without losing your flow.
 - **Visual Identification**: Assign colors and icons to your workspaces for instant recognition in the Activity Bar.
-- **Quick Access**: Search and open projects directly from the command palette (`Ctrl+P`).
+- **Quick Access**: Open and switch workspaces instantly from the top of the editor with a single keyboard shortcut or via the Command Palette (`Alt + P`).
 - **Automatic Detection**: Get notified to save new folders as workspaces as soon as you open them.
 - **Peacock Integration**: Customize the editor's color scheme per workspace to never lose track of where you are.
 <!-- Plugin description end -->
@@ -44,12 +44,25 @@
 
 ### Opening the Tool Window
 
-- Click on the **Parable Workspaces** icon in the left sidebar of your editor;
-- Use the `List Saved Projects` command from the Command Palette.
+- **Activity Bar**: Click on the **Parable Workspaces** icon in the left sidebar of your editor;
+- **Command Palette**: Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac) and select the command `Parable: List/Open Workspaces`;
+- **Keyboard Shortcut**: Press `Alt + P` (or `Cmd + Option + P` on Mac) to open the switcher dropdown at the top of your editor.
+
+### Creating a New Workspace
+
+You can save and register a new workspace in **Parable Workspaces** in two ways:
+1. **Sidebar Button**: Click the `+` (plus) icon at the top of the **Parable Workspaces** sidebar panel.
+2. **Command Palette**: Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac) and run the `Parable: Save Current Workspace` command.
+
+> [!TIP]
+> **Automatic Detection**: When you open a new folder in VS Code that is not yet mapped, Parable Workspaces will automatically trigger a popup notification in the bottom right corner of the editor, asking if you would like to save/register this new workspace. This keeps your workspace list updated effortlessly!
 
 ## ⌨️ Keyboard Shortcuts
 
-Waiting for implementation...
+| Shortcut | OS | Description |
+| -------- | -- | ----------- |
+| `Alt + P` | Linux / Windows | Opens the workspace switcher at the top of the screen |
+| `Cmd + Option + P` | macOS | Opens the workspace switcher at the top of the screen |
 
 ## 🛠️ Development
 
