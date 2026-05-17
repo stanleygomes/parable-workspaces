@@ -56,6 +56,12 @@
         "title": "Refresh Workspaces",
         "category": "Parable",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "workspaceManager.listProjects",
+        "title": "List/Open Workspaces",
+        "category": "Parable",
+        "icon": "$(list-unordered)"
       }
     ],
     "menus": {
@@ -72,17 +78,17 @@
         }
       ]
     },
+    "keybindings": [
+      {
+        "command": "workspaceManager.listProjects",
+        "key": "alt+p",
+        "mac": "cmd+opt+p"
+      }
+    ],
     "configuration": {
       "title": "Parable Workspaces",
       "properties": {}
-    },
-    "quickAccess": [
-      {
-        "prefix": "p",
-        "placeholder": "Search Parable Workspaces...",
-        "command": "workspaceManager.listProjects"
-      }
-    ]
+    }
   },
   "scripts": {
     "compile-tests": "tsc -p . --outDir out",
