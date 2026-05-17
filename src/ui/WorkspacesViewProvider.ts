@@ -142,7 +142,12 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     switch (message.command) {
       case 'openWorkspace':
         if (message.workspaceId) {
-          await this.openService.open(message.workspaceId);
+          await this.openService.open(message.workspaceId, false);
+        }
+        break;
+      case 'openWorkspaceNewWindow':
+        if (message.workspaceId) {
+          await this.openService.open(message.workspaceId, true);
         }
         break;
       case 'toggleFavorite':
