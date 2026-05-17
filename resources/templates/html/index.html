@@ -235,13 +235,13 @@
             availableColors = message.availableColors;
           }
           renderWorkspaces(message.workspaces);
-          renderBanner(message.currentStatus);
+          renderBanner(message.currentStatus, message.workspaces);
         }
       });
 
-      function renderBanner(status) {
+      function renderBanner(status, workspaces) {
         const container = document.getElementById('bannerContainer');
-        if (!status || status.isSaved || !status.name) {
+        if (!status || status.isSaved || !status.name || (workspaces && workspaces.length === 0)) {
           container.innerHTML = '';
           return;
         }

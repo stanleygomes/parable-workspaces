@@ -10,8 +10,11 @@ export class WorkspaceRepository {
   public readonly onDidChange = this._onDidChange.event;
 
   constructor(private readonly context: vscode.ExtensionContext) {
-    this.storageUri = vscode.Uri.joinPath(context.globalStorageUri, 'workspaces.json');
-    
+    this.storageUri = vscode.Uri.joinPath(
+      context.globalStorageUri,
+      'workspaces.json',
+    );
+
     // Ensure the global storage directory exists
     FileHelper.mkdir(context.globalStorageUri.fsPath);
 
@@ -25,9 +28,14 @@ export class WorkspaceRepository {
   }
 
   private syncFromFileSystem(): void {
-    const stateData = this.context.globalState.get<Workspace[]>(WorkspaceRepository.STORAGE_KEY);
+    const stateData = this.context.globalState.get<Workspace[]>(
+      WorkspaceRepository.STORAGE_KEY,
+    );
     if (stateData && !FileHelper.exists(this.storageUri.fsPath)) {
-      FileHelper.writeText(this.storageUri.fsPath, JSON.stringify(stateData, null, 2));
+      FileHelper.writeText(
+        this.storageUri.fsPath,
+        JSON.stringify(stateData, null, 2),
+      );
     }
   }
 
@@ -41,10 +49,16 @@ export class WorkspaceRepository {
         const content = FileHelper.readText(this.storageUri.fsPath);
         return JSON.parse(content);
       } catch (e) {
-        console.error('Error reading workspaces file, falling back to globalState', e);
+        console.error(
+          'Error reading workspaces file, falling back to globalState',
+          e,
+        );
       }
     }
-    return this.context.globalState.get<Workspace[]>(WorkspaceRepository.STORAGE_KEY, []);
+    return this.context.globalState.get<Workspace[]>(
+      WorkspaceRepository.STORAGE_KEY,
+      [],
+    );
   }
 
   async save(workspace: Workspace): Promise<void> {
@@ -55,29 +69,45 @@ export class WorkspaceRepository {
     } else {
       workspaces.push(workspace);
     }
-    
+
     // Save to both file (for local visibility) and globalState (for cloud sync)
-    FileHelper.writeText(this.storageUri.fsPath, JSON.stringify(workspaces, null, 2));
-    await this.context.globalState.update(WorkspaceRepository.STORAGE_KEY, workspaces);
+    FileHelper.writeText(
+      this.storageUri.fsPath,
+      JSON.stringify(workspaces, null, 2),
+    );
+    await this.context.globalState.update(
+      WorkspaceRepository.STORAGE_KEY,
+      workspaces,
+    );
     this._onDidChange.fire();
   }
-
 
   async delete(workspaceId: string): Promise<void> {
     const workspaces = this.getAll().filter((w) => w.id !== workspaceId);
-    FileHelper.writeText(this.storageUri.fsPath, JSON.stringify(workspaces, null, 2));
-    await this.context.globalState.update(WorkspaceRepository.STORAGE_KEY, workspaces);
+    FileHelper.writeText(
+      this.storageUri.fsPath,
+      JSON.stringify(workspaces, null, 2),
+    );
+    await this.context.globalState.update(
+      WorkspaceRepository.STORAGE_KEY,
+      workspaces,
+    );
     this._onDidChange.fire();
   }
-
 
   async updateLastOpened(workspaceId: string): Promise<void> {
     const workspaces = this.getAll();
     const workspace = workspaces.find((w) => w.id === workspaceId);
     if (workspace) {
       workspace.lastOpened = Date.now();
-      FileHelper.writeText(this.storageUri.fsPath, JSON.stringify(workspaces, null, 2));
-      await this.context.globalState.update(WorkspaceRepository.STORAGE_KEY, workspaces);
+      FileHelper.writeText(
+        this.storageUri.fsPath,
+        JSON.stringify(workspaces, null, 2),
+      );
+      await this.context.globalState.update(
+        WorkspaceRepository.STORAGE_KEY,
+        workspaces,
+      );
       this._onDidChange.fire();
     }
   }
