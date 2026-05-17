@@ -102,14 +102,27 @@
           return;
         }
 
+        function getInitials(name) {
+          if (!name) return 'WS';
+          const words = name.trim().split(/\s+/);
+          if (words.length >= 2) {
+            return (words[0][0] + words[1][0]).toUpperCase();
+          }
+          return name.substring(0, 2).toUpperCase();
+        }
+
         workspacesList.innerHTML = workspaces
           .map((ws) => {
             return `
-          <div class="workspace-item" data-id="${ws.id}">
+          <div class="workspace-item design-emoji-ring" data-id="${ws.id}">
+            <div class="workspace-emoji-wrapper">
+              ${ws.emoji 
+                ? `<span class="workspace-emoji">${ws.emoji}</span>` 
+                : `<span class="workspace-initials">${getInitials(ws.name)}</span>`}
+            </div>
             <div class="workspace-body">
               <div class="workspace-header">
                 <span class="workspace-title">
-                  ${ws.emoji ? `<span class="workspace-emoji">${ws.emoji}</span>` : ''}
                   ${escapeHtml(ws.name)}
                 </span>
                 <div class="header-actions">
@@ -145,9 +158,14 @@
 
         workspacesList.querySelectorAll('.workspace-item').forEach((item) => {
           const ws = workspaces.find(w => w.id === item.dataset.id);
-          if (ws && ws.color) {
-            item.style.borderLeftColor = ws.color;
+          if (ws) {
+            const color = ws.color || 'var(--vscode-foreground)';
+            const wrapper = item.querySelector('.workspace-emoji-wrapper');
+            if (wrapper) {
+              wrapper.style.setProperty('--workspace-color', color);
+            }
           }
+
           item.addEventListener('click', (e) => {
             vscode.postMessage({
               command: 'openWorkspace',
@@ -156,7 +174,6 @@
           });
           item.addEventListener('contextmenu', (e) => {
             e.preventDefault();
-            const ws = workspaces.find(w => w.id === item.dataset.id);
             showContextMenu(e.clientX, e.clientY, item.dataset.id, ws?.isFavorite);
           });
         });
