@@ -6,6 +6,14 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-05-17
+
+- docs: update README with new quick access shortcut, workspace creation commands, and keyboard shortcut table
+- feat: replace quick access with global keyboard shortcut and dedicated command for workspace switching
+- chore: change extension screenshot
+- Merge pull request #9 from stanleygomes/release/v1.3.0
+
+
 ## [1.3.0] - 2026-05-14
 
 - docs: update README with OpenVSX link and replace fire emoji with heart
