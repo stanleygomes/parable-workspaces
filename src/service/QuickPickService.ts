@@ -10,7 +10,7 @@ export class QuickPickService {
 
   public async show(): Promise<void> {
     const workspaces = this.repository.getAll();
-    
+
     if (workspaces.length === 0) {
       const selection = await vscode.window.showInformationMessage(
         'No workspaces saved yet.',
@@ -22,12 +22,12 @@ export class QuickPickService {
       return;
     }
 
-    // Sort by last opened
-    const sortedWorkspaces = [...workspaces].sort((a, b) => b.lastOpened - a.lastOpened);
+    const sortedWorkspaces = [...workspaces].sort(
+      (a, b) => b.lastOpened - a.lastOpened,
+    );
 
     const items = sortedWorkspaces.map((ws) => ({
       label: `${ws.emoji ? ws.emoji + ' ' : ''}${ws.name}`,
-      description: `${ws.folders.length} folder(s)`,
       detail: ws.folders[0] || '',
       id: ws.id,
     }));
