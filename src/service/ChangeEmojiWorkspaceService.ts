@@ -9,7 +9,9 @@ export class ChangeEmojiWorkspaceService {
   ) {}
 
   public async changeEmoji(workspaceId: string): Promise<void> {
-    const workspace = this.repository.getAll().find((w) => w.id === workspaceId);
+    const workspace = this.repository
+      .getAll()
+      .find((w) => w.id === workspaceId);
     if (!workspace) {
       return;
     }

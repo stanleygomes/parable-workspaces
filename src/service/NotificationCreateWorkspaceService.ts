@@ -3,12 +3,10 @@ import { WorkspaceRepository } from '../repository/WorkspaceRepository';
 import { SaveWorkspaceService } from './SaveWorkspaceService';
 
 export class NotificationCreateWorkspaceService {
-
   constructor(
     private readonly repository: WorkspaceRepository,
     private readonly saveService: SaveWorkspaceService,
   ) {}
-
 
   async checkAndNotify(): Promise<void> {
     const workspaceFolders = vscode.workspace.workspaceFolders;
@@ -39,7 +37,6 @@ export class NotificationCreateWorkspaceService {
       if (action === 'Save Workspace') {
         await this.saveService.save();
       }
-
     }
   }
 }

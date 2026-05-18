@@ -14,14 +14,16 @@ export class SaveWorkspaceService {
 
     const primaryFolder = workspaceFolders[0];
     const folders = workspaceFolders.map((f) => f.uri.fsPath);
-    
+
     const workspaceFile = vscode.workspace.workspaceFile;
-    const name = workspaceFile 
+    const name = workspaceFile
       ? vscode.workspace.name || primaryFolder.name
       : primaryFolder.name;
 
     const workspace: Workspace = {
-      id: Buffer.from(workspaceFile?.fsPath || primaryFolder.uri.fsPath).toString('base64'),
+      id: Buffer.from(
+        workspaceFile?.fsPath || primaryFolder.uri.fsPath,
+      ).toString('base64'),
       name: name,
       folders: folders,
       lastOpened: Date.now(),
@@ -29,6 +31,8 @@ export class SaveWorkspaceService {
     };
 
     await this.repository.save(workspace);
-    vscode.window.showInformationMessage(`Workspace "${name}" saved successfully!`);
+    vscode.window.showInformationMessage(
+      `Workspace "${name}" saved successfully!`,
+    );
   }
 }

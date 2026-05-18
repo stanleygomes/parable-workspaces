@@ -10,4 +10,3 @@ export interface Workspace {
   isFavorite?: boolean;
   emoji?: string;
 }
-

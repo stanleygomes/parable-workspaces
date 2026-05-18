@@ -51,6 +51,7 @@
 ### Creating a New Workspace
 
 You can save and register a new workspace in **Parable Workspaces** in two ways:
+
 1. **Sidebar Button**: Click the `+` (plus) icon at the top of the **Parable Workspaces** sidebar panel.
 2. **Command Palette**: Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac) and run the `Parable: Save Current Workspace` command.
 
@@ -59,10 +60,10 @@ You can save and register a new workspace in **Parable Workspaces** in two ways:
 
 ## ⌨️ Keyboard Shortcuts
 
-| Shortcut | OS | Description |
-| -------- | -- | ----------- |
-| `Alt + P` | Linux / Windows | Opens the workspace switcher at the top of the screen |
-| `Cmd + Option + P` | macOS | Opens the workspace switcher at the top of the screen |
+| Shortcut           | OS              | Description                                           |
+| ------------------ | --------------- | ----------------------------------------------------- |
+| `Alt + P`          | Linux / Windows | Opens the workspace switcher at the top of the screen |
+| `Cmd + Option + P` | macOS           | Opens the workspace switcher at the top of the screen |
 
 ## 🛠️ Development
 

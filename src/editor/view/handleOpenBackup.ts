@@ -56,7 +56,9 @@ export function createHandleOpenBackup(
           break;
         case 'export':
           if (message.workspaceId) {
-            const workspace = workspaceRepository.getAll().find(w => w.id === message.workspaceId);
+            const workspace = workspaceRepository
+              .getAll()
+              .find((w) => w.id === message.workspaceId);
             if (workspace) {
               await exportService.export(workspace);
             }
@@ -67,7 +69,6 @@ export function createHandleOpenBackup(
           break;
       }
     });
-
 
     panel.onDidDispose(() => {
       panel = undefined;

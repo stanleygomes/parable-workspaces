@@ -20,7 +20,10 @@ export class ColorService {
     }
   }
 
-  public async applyColor(color: string | undefined, textColor: string | undefined): Promise<void> {
+  public async applyColor(
+    color: string | undefined,
+    textColor: string | undefined,
+  ): Promise<void> {
     const config = vscode.workspace.getConfiguration('workbench');
     const customizations = {
       ...(config.get<any>('colorCustomizations') || {}),

@@ -45,10 +45,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       SettingsKey.SortType,
       SortType.FavoritesFirst,
     );
-    this.showFilters = this.settingsService.get(
-      SettingsKey.ShowFilters,
-      false,
-    );
+    this.showFilters = this.settingsService.get(SettingsKey.ShowFilters, false);
     this.repository.onDidChange(() => {
       this.refresh();
     });
@@ -90,9 +87,9 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     }
 
     let workspaces = this.searchService.search(this.currentQuery);
-    
+
     if (this.showOnlyFavorites) {
-      workspaces = workspaces.filter(ws => ws.isFavorite);
+      workspaces = workspaces.filter((ws) => ws.isFavorite);
     }
 
     // Sort logic

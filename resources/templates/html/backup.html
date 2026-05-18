@@ -16,11 +16,16 @@
     <div class="backup-container">
       <div class="backup-header">
         <h1 class="backup-title">Export & Backup</h1>
-        <p class="backup-subtitle">Export your workspaces to .code-workspace files or import existing ones.</p>
+        <p class="backup-subtitle">
+          Export your workspaces to .code-workspace files or import existing
+          ones.
+        </p>
       </div>
 
       <div class="action-bar">
-        <button class="primary-btn" id="btnImport">Import .code-workspace</button>
+        <button class="primary-btn" id="btnImport">
+          Import .code-workspace
+        </button>
       </div>
 
       <div class="workspaces-export-list" id="workspacesList">
@@ -51,11 +56,14 @@
 
       function renderWorkspaces(workspaces) {
         if (workspaces.length === 0) {
-          workspacesList.innerHTML = '<p class="empty-msg">No workspaces to export.</p>';
+          workspacesList.innerHTML =
+            '<p class="empty-msg">No workspaces to export.</p>';
           return;
         }
 
-        workspacesList.innerHTML = workspaces.map(ws => `
+        workspacesList.innerHTML = workspaces
+          .map(
+            (ws) => `
           <div class="export-item">
             <div class="export-info">
               <span class="export-name">${escapeHtml(ws.name)}</span>
@@ -63,11 +71,16 @@
             </div>
             <button class="secondary-btn btn-export" data-id="${ws.id}">Export</button>
           </div>
-        `).join('');
+        `,
+          )
+          .join('');
 
-        workspacesList.querySelectorAll('.btn-export').forEach(btn => {
+        workspacesList.querySelectorAll('.btn-export').forEach((btn) => {
           btn.addEventListener('click', () => {
-            vscode.postMessage({ command: 'export', workspaceId: btn.dataset.id });
+            vscode.postMessage({
+              command: 'export',
+              workspaceId: btn.dataset.id,
+            });
           });
         });
       }
@@ -86,4 +99,3 @@
     </script>
   </body>
 </html>
-

@@ -5,7 +5,9 @@ export class EditNameWorkspaceService {
   constructor(private readonly repository: WorkspaceRepository) {}
 
   public async edit(workspaceId: string): Promise<void> {
-    const workspace = this.repository.getAll().find((w) => w.id === workspaceId);
+    const workspace = this.repository
+      .getAll()
+      .find((w) => w.id === workspaceId);
     if (!workspace) {
       return;
     }

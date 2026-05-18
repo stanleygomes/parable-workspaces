@@ -31,17 +31,20 @@ export async function activate(
   const searchService = new SearchWorkspaceService(workspaceRepository);
   const favoriteService = new FavoriteWorkspaceService(workspaceRepository);
   const colorService = new ColorService(workspaceRepository);
-    const editNameService = new EditNameWorkspaceService(workspaceRepository);
-    const changeEmojiService = new ChangeEmojiWorkspaceService(
-      workspaceRepository,
-      context.extensionUri,
-    );
-    const changeColorService = new ChangeColorWorkspaceService(
-      workspaceRepository,
-      colorService,
-    );
+  const editNameService = new EditNameWorkspaceService(workspaceRepository);
+  const changeEmojiService = new ChangeEmojiWorkspaceService(
+    workspaceRepository,
+    context.extensionUri,
+  );
+  const changeColorService = new ChangeColorWorkspaceService(
+    workspaceRepository,
+    colorService,
+  );
   const importService = new ImportWorkspaceService(workspaceRepository);
-  const quickPickService = new QuickPickService(workspaceRepository, openService);
+  const quickPickService = new QuickPickService(
+    workspaceRepository,
+    openService,
+  );
   const exportService = new ExportWorkspaceService();
   const notificationService = new NotificationCreateWorkspaceService(
     workspaceRepository,

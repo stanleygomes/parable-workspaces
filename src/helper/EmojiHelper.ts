@@ -11,14 +11,19 @@ export interface EmojiItem {
 export class EmojiHelper {
   public static getEmojis(extensionUri: vscode.Uri): EmojiItem[] {
     try {
-      const emojiPath = path.join(extensionUri.fsPath, 'resources', 'data', 'emojis.json');
+      const emojiPath = path.join(
+        extensionUri.fsPath,
+        'resources',
+        'data',
+        'emojis.json',
+      );
       if (!fs.existsSync(emojiPath)) {
         return this.getFallbackEmojis();
       }
-      
+
       const content = fs.readFileSync(emojiPath, 'utf8');
       const emojiData = JSON.parse(content);
-      
+
       return Object.entries(emojiData).map(([emoji, data]: [string, any]) => ({
         label: emoji,
         description: data.name,

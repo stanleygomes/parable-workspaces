@@ -10,7 +10,9 @@ export class ChangeColorWorkspaceService {
   ) {}
 
   public async changeColor(workspaceId: string): Promise<void> {
-    const workspace = this.repository.getAll().find((w) => w.id === workspaceId);
+    const workspace = this.repository
+      .getAll()
+      .find((w) => w.id === workspaceId);
     if (!workspace) {
       return;
     }
