@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as os from 'os';
 import { Workspace } from '../dto/Workspace';
 import { FileHelper } from '../helper/FileHelper';
 
@@ -10,20 +11,39 @@ export class WorkspaceRepository {
   public readonly onDidChange = this._onDidChange.event;
 
   constructor(private readonly context: vscode.ExtensionContext) {
-    this.storageUri = vscode.Uri.joinPath(
-      context.globalStorageUri,
+    const oldStoragePath = path.join(
+      context.globalStorageUri.fsPath,
       'workspaces.json',
     );
+    const newStorageDir = path.join(
+      os.homedir(),
+      '.config',
+      'parable-workspaces',
+    );
+    const newStoragePath = path.join(newStorageDir, 'workspaces.json');
 
-    // Ensure the global storage directory exists
-    FileHelper.mkdir(context.globalStorageUri.fsPath);
+    FileHelper.mkdir(newStorageDir);
 
-    // Enable cloud sync for the globalState key
+    if (
+      FileHelper.exists(oldStoragePath) &&
+      !FileHelper.exists(newStoragePath)
+    ) {
+      try {
+        FileHelper.writeText(
+          newStoragePath,
+          FileHelper.readText(oldStoragePath),
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    this.storageUri = vscode.Uri.file(newStoragePath);
+
     if (context.globalState.setKeysForSync) {
       context.globalState.setKeysForSync([WorkspaceRepository.STORAGE_KEY]);
     }
 
-    // Sync from globalState to file if file doesn't exist (first time or after sync)
     this.syncFromFileSystem();
   }
 
