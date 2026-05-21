@@ -2,12 +2,18 @@ import * as vscode from 'vscode';
 import { WebviewHelper } from '../../helper/WebviewHelper';
 import { ImportWorkspaceService } from '../../service/ImportWorkspaceService';
 import { ExportWorkspaceService } from '../../service/ExportWorkspaceService';
+import { ImportBackupService } from '../../service/ImportBackupService';
+import { ExportBackupService } from '../../service/ExportBackupService';
+import { ExportZipService } from '../../service/ExportZipService';
 import { WorkspaceRepository } from '../../repository/WorkspaceRepository';
 
 export function createHandleOpenBackup(
   extensionUri: vscode.Uri,
   importService: ImportWorkspaceService,
   exportService: ExportWorkspaceService,
+  importBackupService: ImportBackupService,
+  exportBackupService: ExportBackupService,
+  exportZipService: ExportZipService,
   workspaceRepository: WorkspaceRepository,
   onRefresh: () => void,
 ) {
@@ -54,6 +60,11 @@ export function createHandleOpenBackup(
           refreshWebview();
           onRefresh();
           break;
+        case 'importBackup':
+          await importBackupService.importBackup();
+          refreshWebview();
+          onRefresh();
+          break;
         case 'export':
           if (message.workspaceId) {
             const workspace = workspaceRepository
@@ -63,6 +74,12 @@ export function createHandleOpenBackup(
               await exportService.export(workspace);
             }
           }
+          break;
+        case 'exportBackup':
+          await exportBackupService.exportAll(workspaceRepository.getAll());
+          break;
+        case 'exportZip':
+          await exportZipService.exportZip(workspaceRepository.getAll());
           break;
         case 'ready':
           refreshWebview();

@@ -13,6 +13,9 @@ import { ChangeColorWorkspaceService } from './service/ChangeColorWorkspaceServi
 import { ImportWorkspaceService } from './service/ImportWorkspaceService';
 import { QuickPickService } from './service/QuickPickService';
 import { ExportWorkspaceService } from './service/ExportWorkspaceService';
+import { ImportBackupService } from './service/ImportBackupService';
+import { ExportBackupService } from './service/ExportBackupService';
+import { ExportZipService } from './service/ExportZipService';
 import { NotificationCreateWorkspaceService } from './service/NotificationCreateWorkspaceService';
 import { ColorService } from './service/ColorService';
 import { WorkspacesViewProvider } from './ui/WorkspacesViewProvider';
@@ -41,6 +44,9 @@ export async function activate(
     colorService,
   );
   const importService = new ImportWorkspaceService(workspaceRepository);
+  const importBackupService = new ImportBackupService(workspaceRepository);
+  const exportBackupService = new ExportBackupService();
+  const exportZipService = new ExportZipService(workspaceRepository);
   const quickPickService = new QuickPickService(
     workspaceRepository,
     openService,
@@ -73,6 +79,9 @@ export async function activate(
     context.extensionUri,
     importService,
     exportService,
+    importBackupService,
+    exportBackupService,
+    exportZipService,
     workspaceRepository,
     () => provider.refresh(),
   );

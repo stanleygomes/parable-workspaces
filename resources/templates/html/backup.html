@@ -7,7 +7,7 @@
       content="default-src 'none'; style-src 'nonce-{{nonce}}'; script-src 'nonce-{{nonce}}';"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Export Workspaces - Parable</title>
+    <title>Backup & Sync - Parable</title>
     <style nonce="{{nonce}}">
       {{style}}
     </style>
@@ -15,21 +15,62 @@
   <body>
     <div class="backup-container">
       <div class="backup-header">
-        <h1 class="backup-title">Export & Backup</h1>
+        <h1 class="backup-title">Backup & Sync</h1>
         <p class="backup-subtitle">
-          Export your workspaces to .code-workspace files or import existing
-          ones.
+          Manage your workspaces metadata, export backups, or restore
+          configurations.
         </p>
       </div>
 
-      <div class="action-bar">
-        <button class="primary-btn" id="btnImport">
-          Import .code-workspace
-        </button>
-      </div>
+      <div class="backup-grid">
+        <div class="backup-section import-section">
+          <h2>Import</h2>
+          <p class="section-desc">
+            Restore backup data or import existing configurations.
+          </p>
+          <div class="card-list">
+            <div class="backup-card">
+              <h3>Single Workspace</h3>
+              <p>
+                Import a standard VS Code
+                <code>.code-workspace</code> configuration file as a new
+                workspace entry.
+              </p>
+              <button class="primary-btn" id="btnImport">
+                Import .code-workspace
+              </button>
+            </div>
+            <div class="backup-card">
+              <h3>Full Backup</h3>
+              <p>
+                Import a full workspaces backup <code>.json</code> file to
+                restore and merge all saved workspaces.
+              </p>
+              <button class="primary-btn" id="btnImportBackup">
+                Import JSON Backup
+              </button>
+            </div>
+          </div>
+        </div>
 
-      <div class="workspaces-export-list" id="workspacesList">
-        <div class="loading">Loading workspaces...</div>
+        <div class="backup-section export-section">
+          <h2>Export</h2>
+          <p class="section-desc">
+            Export all your workspaces at once, or export specific workspaces
+            individually.
+          </p>
+          <div class="bulk-actions">
+            <button class="primary-btn" id="btnExportBackup">
+              Export Backup (.json)
+            </button>
+            <button class="secondary-btn" id="btnExportZip">
+              Export All (.zip)
+            </button>
+          </div>
+          <div class="workspaces-export-list" id="workspacesList">
+            <div class="loading">Loading workspaces...</div>
+          </div>
+        </div>
       </div>
 
       <div class="backup-footer">
@@ -45,6 +86,22 @@
 
       document.getElementById('btnImport').addEventListener('click', () => {
         vscode.postMessage({ command: 'import' });
+      });
+
+      document
+        .getElementById('btnImportBackup')
+        .addEventListener('click', () => {
+          vscode.postMessage({ command: 'importBackup' });
+        });
+
+      document
+        .getElementById('btnExportBackup')
+        .addEventListener('click', () => {
+          vscode.postMessage({ command: 'exportBackup' });
+        });
+
+      document.getElementById('btnExportZip').addEventListener('click', () => {
+        vscode.postMessage({ command: 'exportZip' });
       });
 
       window.addEventListener('message', (event) => {
@@ -94,7 +151,6 @@
           .replace(/"/g, '&quot;');
       }
 
-      // Tell the extension we are ready to receive data
       vscode.postMessage({ command: 'ready' });
     </script>
   </body>

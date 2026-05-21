@@ -82,6 +82,28 @@ export class WorkspaceRepository {
     this._onDidChange.fire();
   }
 
+  async saveAll(newWorkspaces: Workspace[]): Promise<void> {
+    const workspaces = this.getAll();
+    for (const workspace of newWorkspaces) {
+      const index = workspaces.findIndex((w) => w.id === workspace.id);
+      if (index >= 0) {
+        workspaces[index] = workspace;
+      } else {
+        workspaces.push(workspace);
+      }
+    }
+
+    FileHelper.writeText(
+      this.storageUri.fsPath,
+      JSON.stringify(workspaces, null, 2),
+    );
+    await this.context.globalState.update(
+      WorkspaceRepository.STORAGE_KEY,
+      workspaces,
+    );
+    this._onDidChange.fire();
+  }
+
   async delete(workspaceId: string): Promise<void> {
     const workspaces = this.getAll().filter((w) => w.id !== workspaceId);
     FileHelper.writeText(
