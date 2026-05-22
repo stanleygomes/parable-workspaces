@@ -6,6 +6,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-05-22
+
+- docs: author on readme
+- refactor: migrate workspace storage location to user config directory and implement data migration from legacy path
+- feat: implement backup and restore functionality with JSON and ZIP export/import services
+- Please provide the list of files or the specific changes you would like me to summarize.
+- chore: fix prettier
+- chore: sort recent opened in quick access by date
+
+
 ## [1.4.0] - 2026-05-17
 
 - docs: update README with new quick access shortcut, workspace creation commands, and keyboard shortcut table
