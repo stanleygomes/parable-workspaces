@@ -161,7 +161,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Issue Tracker](https://github.com/stanleygomes/parable-workspaces/issues)
 - [AZURE Dev](https://dev.azure.com/stanleygomesdasilva)
 - [OpenVSX Publisher](https://open-vsx.org/user-settings/profile)
-
----
-
-Made with 🔥 by Lumen HQ
