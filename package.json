@@ -87,7 +87,14 @@
     ],
     "configuration": {
       "title": "Parable Workspaces",
-      "properties": {}
+      "properties": {
+        "workspaceManager.storagePath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom folder path to save workspaces.json. If empty, the default OS-specific shared directory will be used.",
+          "scope": "application"
+        }
+      }
     }
   },
   "scripts": {
