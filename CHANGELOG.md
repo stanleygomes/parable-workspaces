@@ -6,6 +6,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-05-22
+
+- docs: author on readme
+- refactor: migrate workspace storage location to user config directory and implement data migration from legacy path
+- feat: implement backup and restore functionality with JSON and ZIP export/import services
+- Please provide the list of files or the specific changes you would like me to summarize.
+- chore: fix prettier
+- chore: sort recent opened in quick access by date
+
 ## [1.5.0] - 2026-05-17
 
 - fix: hide workspace banner when empty and reformat repository code for consistency
@@ -13,7 +22,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - feat: add toggleable filter row for workspace management settings
 - feat: add option to open workspaces in a new window via context menu
 - Merge pull request #10 from stanleygomes/release/v1.4.0
-
 
 ## [1.4.0] - 2026-05-17
 
