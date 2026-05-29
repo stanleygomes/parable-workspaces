@@ -6,6 +6,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-05-29
+
+- feat: add configurable workspace storage path and implement dynamic path updates
+- Merge pull request #12 from stanleygomes/release/v1.6.0
+- Merge branch 'master' into release/v1.6.0
+- Merge pull request #11 from stanleygomes/release/v1.5.0
+- docs: update readme
+- chore(release): v1.5.0
+
+
 ## [1.6.0] - 2026-05-22
 
 - docs: author on readme
