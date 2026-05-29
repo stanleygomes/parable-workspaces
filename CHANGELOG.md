@@ -6,6 +6,15 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-05-17
+
+- fix: hide workspace banner when empty and reformat repository code for consistency
+- feat: implement styled emoji and initials badge for workspace items
+- feat: add toggleable filter row for workspace management settings
+- feat: add option to open workspaces in a new window via context menu
+- Merge pull request #10 from stanleygomes/release/v1.4.0
+
+
 ## [1.4.0] - 2026-05-17
 
 - docs: update README with new quick access shortcut, workspace creation commands, and keyboard shortcut table
