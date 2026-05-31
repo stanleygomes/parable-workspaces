@@ -32,7 +32,7 @@ export class StatusBarService {
     if (workspace && workspace.emoji) {
       this.statusBarItem.text = `${workspace.emoji} ${workspace.name}`;
       this.statusBarItem.tooltip = `Current Workspace: ${workspace.name}`;
-      this.statusBarItem.command = 'workspaceManager.workspacesView.focus';
+      this.statusBarItem.command = 'workspaceManager.listProjects';
       this.statusBarItem.show();
     } else {
       this.statusBarItem.hide();
