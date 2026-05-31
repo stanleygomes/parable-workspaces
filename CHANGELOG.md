@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-05-31
+
+- Merge pull request #13 from stanleygomes/release/v1.7.0
+- feat: update status bar command to listProjects and add unit tests for StatusBarService
+
+
 ## [1.7.0] - 2026-05-29
 
 - feat: add configurable workspace storage path and implement dynamic path updates
