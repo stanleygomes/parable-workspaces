@@ -3,61 +3,26 @@ import * as path from 'path';
 import * as os from 'os';
 import { Workspace } from '../dto/Workspace';
 import { FileHelper } from '../helper/FileHelper';
+import { OSHelper } from '../helper/OSHelper';
+import { WorkspaceFileStorage } from './WorkspaceFileStorage';
+import { WorkspaceStateStorage } from '../editor/state/WorkspaceStateStorage';
 
 export class WorkspaceRepository {
-  private static readonly STORAGE_KEY = 'savedProjects';
-  private storageUri!: vscode.Uri;
+  private readonly fileStorage: WorkspaceFileStorage;
+  private readonly stateStorage: WorkspaceStateStorage;
   private readonly _onDidChange = new vscode.EventEmitter<void>();
   public readonly onDidChange = this._onDidChange.event;
 
   constructor(private readonly context: vscode.ExtensionContext) {
-    this.updateStorageUri();
+    const targetPath = OSHelper.getDefaultConfigPath();
+    this.fileStorage = new WorkspaceFileStorage(targetPath);
+    this.stateStorage = new WorkspaceStateStorage(context);
 
-    if (context.globalState.setKeysForSync) {
-      context.globalState.setKeysForSync([WorkspaceRepository.STORAGE_KEY]);
-    }
+    this.initializeStorage(targetPath);
   }
 
-  private getDefaultStoragePath(): string {
-    const home = os.homedir();
-    let dir: string;
-    switch (process.platform) {
-      case 'win32':
-        dir = path.join(
-          process.env.APPDATA || path.join(home, 'AppData', 'Roaming'),
-          'parable-workspaces',
-        );
-        break;
-      case 'darwin':
-        dir = path.join(
-          home,
-          'Library',
-          'Application Support',
-          'parable-workspaces',
-        );
-        break;
-      default:
-        dir = path.join(
-          process.env.XDG_CONFIG_HOME || path.join(home, '.config'),
-          'parable-workspaces',
-        );
-        break;
-    }
-    return path.join(dir, 'workspaces.json');
-  }
-
-  private getTargetPath(): string {
-    return this.getDefaultStoragePath();
-  }
-
-  private updateStorageUri(): void {
-    const targetPath = this.getTargetPath();
-    this.storageUri = vscode.Uri.file(targetPath);
-
-    const targetDir = path.dirname(targetPath);
-    FileHelper.mkdir(targetDir);
-
-    if (!FileHelper.exists(targetPath)) {
+  private initializeStorage(targetPath: string): void {
+    if (!this.fileStorage.exists()) {
       const interimPath = path.join(
         os.homedir(),
         '.config',
@@ -73,13 +38,13 @@ export class WorkspaceRepository {
         try {
           FileHelper.writeText(targetPath, FileHelper.readText(interimPath));
         } catch (e) {
-          console.error(e);
+          console.error('Error migrating from interim path', e);
         }
       } else if (FileHelper.exists(legacyPath) && legacyPath !== targetPath) {
         try {
           FileHelper.writeText(targetPath, FileHelper.readText(legacyPath));
         } catch (e) {
-          console.error(e);
+          console.error('Error migrating from legacy path', e);
         }
       } else {
         this.syncFromFileSystem();
@@ -88,41 +53,29 @@ export class WorkspaceRepository {
   }
 
   private syncFromFileSystem(): void {
-    const stateData = this.context.globalState.get<Workspace[]>(
-      WorkspaceRepository.STORAGE_KEY,
-    );
-    if (stateData && !FileHelper.exists(this.storageUri.fsPath)) {
-      FileHelper.writeText(
-        this.storageUri.fsPath,
-        JSON.stringify(stateData, null, 2),
-      );
+    const stateData = this.stateStorage.read();
+    if (stateData.length > 0 && !this.fileStorage.exists()) {
+      this.fileStorage.write(stateData);
     }
   }
 
   getStoragePath(): string {
-    return path.dirname(this.storageUri.fsPath);
+    return this.fileStorage.getDirectoryPath();
   }
 
   getStorageUri(): vscode.Uri {
-    return this.storageUri;
+    return vscode.Uri.file(this.fileStorage.getFilePath());
   }
 
   getAll(): Workspace[] {
-    if (FileHelper.exists(this.storageUri.fsPath)) {
-      try {
-        const content = FileHelper.readText(this.storageUri.fsPath);
-        return JSON.parse(content);
-      } catch (e) {
-        console.error(
-          'Error reading workspaces file, falling back to globalState',
-          e,
-        );
+    if (this.fileStorage.exists()) {
+      const workspaces = this.fileStorage.read();
+      if (workspaces.length > 0) {
+        return workspaces;
       }
     }
-    return this.context.globalState.get<Workspace[]>(
-      WorkspaceRepository.STORAGE_KEY,
-      [],
-    );
+
+    return this.stateStorage.read();
   }
 
   async save(workspace: Workspace): Promise<void> {
@@ -134,49 +87,15 @@ export class WorkspaceRepository {
       workspaces.push(workspace);
     }
 
-    FileHelper.writeText(
-      this.storageUri.fsPath,
-      JSON.stringify(workspaces, null, 2),
-    );
-    await this.context.globalState.update(
-      WorkspaceRepository.STORAGE_KEY,
-      workspaces,
-    );
-    this._onDidChange.fire();
-  }
-
-  async saveAll(newWorkspaces: Workspace[]): Promise<void> {
-    const workspaces = this.getAll();
-    for (const workspace of newWorkspaces) {
-      const index = workspaces.findIndex((w) => w.id === workspace.id);
-      if (index >= 0) {
-        workspaces[index] = workspace;
-      } else {
-        workspaces.push(workspace);
-      }
-    }
-
-    FileHelper.writeText(
-      this.storageUri.fsPath,
-      JSON.stringify(workspaces, null, 2),
-    );
-    await this.context.globalState.update(
-      WorkspaceRepository.STORAGE_KEY,
-      workspaces,
-    );
+    this.fileStorage.write(workspaces);
+    await this.stateStorage.write(workspaces);
     this._onDidChange.fire();
   }
 
   async delete(workspaceId: string): Promise<void> {
     const workspaces = this.getAll().filter((w) => w.id !== workspaceId);
-    FileHelper.writeText(
-      this.storageUri.fsPath,
-      JSON.stringify(workspaces, null, 2),
-    );
-    await this.context.globalState.update(
-      WorkspaceRepository.STORAGE_KEY,
-      workspaces,
-    );
+    this.fileStorage.write(workspaces);
+    await this.stateStorage.write(workspaces);
     this._onDidChange.fire();
   }
 
@@ -185,14 +104,8 @@ export class WorkspaceRepository {
     const workspace = workspaces.find((w) => w.id === workspaceId);
     if (workspace) {
       workspace.lastOpened = Date.now();
-      FileHelper.writeText(
-        this.storageUri.fsPath,
-        JSON.stringify(workspaces, null, 2),
-      );
-      await this.context.globalState.update(
-        WorkspaceRepository.STORAGE_KEY,
-        workspaces,
-      );
+      this.fileStorage.write(workspaces);
+      await this.stateStorage.write(workspaces);
       this._onDidChange.fire();
     }
   }
