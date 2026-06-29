@@ -84,18 +84,7 @@
         "key": "alt+p",
         "mac": "cmd+opt+p"
       }
-    ],
-    "configuration": {
-      "title": "Parable Workspaces",
-      "properties": {
-        "workspaceManager.storagePath": {
-          "type": "string",
-          "default": "",
-          "description": "Custom folder path to save workspaces.json. If empty, the default OS-specific shared directory will be used.",
-          "scope": "application"
-        }
-      }
-    }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -107,9 +96,7 @@
     "build": "npm run compile",
     "package": "npx @vscode/vsce package"
   },
-  "dependencies": {
-    "zod": "^4.3.6"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "22.x",
     "@types/vscode": "^1.85.0",
