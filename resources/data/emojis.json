@@ -13521,22 +13521,6 @@
     "unicode_version": "0.7",
     "skin_tone_support": false
   },
-  "🏳️‍🌈": {
-    "name": "rainbow flag",
-    "slug": "rainbow_flag",
-    "group": "Flags",
-    "emoji_version": "4.0",
-    "unicode_version": "4.0",
-    "skin_tone_support": false
-  },
-  "🏳️‍⚧️": {
-    "name": "transgender flag",
-    "slug": "transgender_flag",
-    "group": "Flags",
-    "emoji_version": "13.0",
-    "unicode_version": "13.0",
-    "skin_tone_support": false
-  },
   "🏴‍☠️": {
     "name": "pirate flag",
     "slug": "pirate_flag",

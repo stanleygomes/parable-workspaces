@@ -10,7 +10,6 @@ eslint.config.mjs
 tsconfig.json
 webpack.config.js
 vsc-extension-quickstart.md
-landpage/**
 resources/screenshots/**
 **/*.map
 **/*.ts
