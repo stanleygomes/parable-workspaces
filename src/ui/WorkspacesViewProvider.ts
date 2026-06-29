@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { WorkspaceRepository } from '../repository/WorkspaceRepository';
 import { WebviewHelper } from '../helper/WebviewHelper';
 import { WorkspaceMapper } from '../mapper/WorkspaceMapper';
-import { WebviewMessage } from '../type/WebviewMessage';
+import { WebviewMessage } from '../dto/WebviewMessage';
 import { SaveWorkspaceService } from '../service/SaveWorkspaceService';
 import { OpenWorkspaceService } from '../service/OpenWorkspaceService';
 import { DeleteWorkspaceService } from '../service/DeleteWorkspaceService';
