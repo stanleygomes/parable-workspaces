@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path';
+import { FileHelper } from './FileHelper';
 
 export interface EmojiItem {
   label: string;
@@ -11,17 +10,17 @@ export interface EmojiItem {
 export class EmojiHelper {
   public static getEmojis(extensionUri: vscode.Uri): EmojiItem[] {
     try {
-      const emojiPath = path.join(
+      const emojiPath = FileHelper.buildPath(
         extensionUri.fsPath,
         'resources',
         'data',
         'emojis.json',
       );
-      if (!fs.existsSync(emojiPath)) {
-        return this.getFallbackEmojis();
+      if (!FileHelper.exists(emojiPath)) {
+        return [];
       }
 
-      const content = fs.readFileSync(emojiPath, 'utf8');
+      const content = FileHelper.readText(emojiPath);
       const emojiData = JSON.parse(content);
 
       return Object.entries(emojiData).map(([emoji, data]: [string, any]) => ({
@@ -31,15 +30,7 @@ export class EmojiHelper {
       }));
     } catch (e) {
       console.error('Error loading emojis', e);
-      return this.getFallbackEmojis();
+      return [];
     }
-  }
-
-  private static getFallbackEmojis(): EmojiItem[] {
-    return [
-      { label: '🚀', description: 'Rocket', emoji: '🚀' },
-      { label: '🛠️', description: 'Tools', emoji: '🛠️' },
-      { label: '📚', description: 'Books', emoji: '📚' },
-    ];
   }
 }
