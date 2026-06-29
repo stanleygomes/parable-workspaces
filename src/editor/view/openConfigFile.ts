@@ -1,14 +1,9 @@
-import * as vscode from 'vscode';
-import { WorkspaceRepository } from '../../repository/WorkspaceRepository';
+import { OpenConfigFileService } from '../../service/OpenConfigFileService';
 
-export function createOpenConfigFile(workspaceRepository: WorkspaceRepository) {
+export function createOpenConfigFile(
+  openConfigFileService: OpenConfigFileService,
+) {
   return async () => {
-    try {
-      const uri = workspaceRepository.getStorageUri();
-      const document = await vscode.workspace.openTextDocument(uri);
-      await vscode.window.showTextDocument(document);
-    } catch (e) {
-      vscode.window.showErrorMessage(`Failed to open workspaces.json: ${e}`);
-    }
+    await openConfigFileService.open();
   };
 }

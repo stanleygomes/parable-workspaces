@@ -14,7 +14,8 @@ import { QuickPickService } from './service/QuickPickService';
 import { NotificationCreateWorkspaceService } from './service/NotificationCreateWorkspaceService';
 import { ColorService } from './service/ColorService';
 import { WorkspacesViewProvider } from './ui/WorkspacesViewProvider';
-import { createOpenConfigFile } from './editor/view';
+import { createOpenConfigFile } from './editor/view/openConfigFile';
+import { OpenConfigFileService } from './service/OpenConfigFileService';
 
 export async function activate(
   context: vscode.ExtensionContext,
@@ -65,7 +66,8 @@ export async function activate(
     changeColorService,
   );
 
-  const openConfigFile = createOpenConfigFile(workspaceRepository);
+  const openConfigFileService = new OpenConfigFileService(workspaceRepository);
+  const openConfigFile = createOpenConfigFile(openConfigFileService);
 
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
