@@ -13,15 +13,6 @@ export class WorkspaceRepository {
   constructor(private readonly context: vscode.ExtensionContext) {
     this.updateStorageUri();
 
-    context.subscriptions.push(
-      vscode.workspace.onDidChangeConfiguration((e) => {
-        if (e.affectsConfiguration('workspaceManager.storagePath')) {
-          this.updateStorageUri();
-          this._onDidChange.fire();
-        }
-      }),
-    );
-
     if (context.globalState.setKeysForSync) {
       context.globalState.setKeysForSync([WorkspaceRepository.STORAGE_KEY]);
     }
@@ -56,18 +47,6 @@ export class WorkspaceRepository {
   }
 
   private getTargetPath(): string {
-    const config = vscode.workspace.getConfiguration('workspaceManager');
-    let customPath = config.get<string>('storagePath');
-    if (customPath) {
-      customPath = customPath.trim();
-      if (customPath.startsWith('~')) {
-        customPath = path.join(os.homedir(), customPath.slice(1));
-      }
-      if (customPath.endsWith('.json')) {
-        return customPath;
-      }
-      return path.join(customPath, 'workspaces.json');
-    }
     return this.getDefaultStoragePath();
   }
 
