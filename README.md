@@ -19,12 +19,13 @@
 - **Peacock Integration**: Customize the editor's color scheme per workspace to never lose track of where you are.
 <!-- Plugin description end -->
 
-## 🌐 Plugin Marketplace Links
+## 🌐 Install & Marketplace Links
 
-| Platform             | Link                                                                                                             |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| VS Code              | [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=StanleyGomes.parable-workspaces) |
-| Antigravity / Cursor | [Open VSX Registry](https://open-vsx.org/extension/stanleygomes/parable-workspaces)                              |
+| Platform               | Marketplace Link                                                                                           | Quick Install Command                                             |
+| :--------------------- | :--------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------- |
+| **Visual Studio Code** | [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=StanleyGomes.parable-workspaces) | `code --install-extension StanleyGomes.parable-workspaces`        |
+| **Cursor**             | [Open VSX Registry](https://open-vsx.org/extension/stanleygomes/parable-workspaces)                        | `cursor --install-extension StanleyGomes.parable-workspaces`      |
+| **Antigravity**        | [Open VSX Registry](https://open-vsx.org/extension/stanleygomes/parable-workspaces)                        | `antigravity --install-extension StanleyGomes.parable-workspaces` |
 
 ## 📋 Table of Contents
 

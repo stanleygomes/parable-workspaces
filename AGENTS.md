@@ -70,5 +70,3 @@ src/
 - Register commands, views, and configurations in `package.json`
 - Follow VS Code extension best practices
 - Use workspace and global state appropriately
-
-
