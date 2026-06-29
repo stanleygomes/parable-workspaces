@@ -15,7 +15,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - docs: update readme
 - chore(release): v1.5.0
 
-
 ## [1.6.0] - 2026-05-22
 
 - docs: author on readme

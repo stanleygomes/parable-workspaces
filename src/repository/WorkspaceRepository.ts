@@ -124,6 +124,10 @@ export class WorkspaceRepository {
     return path.dirname(this.storageUri.fsPath);
   }
 
+  getStorageUri(): vscode.Uri {
+    return this.storageUri;
+  }
+
   getAll(): Workspace[] {
     if (FileHelper.exists(this.storageUri.fsPath)) {
       try {

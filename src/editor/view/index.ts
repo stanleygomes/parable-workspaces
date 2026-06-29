@@ -1,1 +1,1 @@
-export { createHandleOpenBackup } from './handleOpenBackup';
+export { createOpenConfigFile } from './openConfigFile';

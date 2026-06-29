@@ -46,10 +46,10 @@
         "icon": "$(add)"
       },
       {
-        "command": "workspaceManager.openBackup",
-        "title": "Backup & Sync",
+        "command": "workspaceManager.openConfigFile",
+        "title": "Open workspaces.json",
         "category": "Parable",
-        "icon": "$(cloud-download)"
+        "icon": "$(file-code)"
       },
       {
         "command": "workspaceManager.refreshWorkspaces",
@@ -67,7 +67,7 @@
     "menus": {
       "view/title": [
         {
-          "command": "workspaceManager.openBackup",
+          "command": "workspaceManager.openConfigFile",
           "when": "view == workspaceManager.workspacesView",
           "group": "navigation@1"
         },
@@ -108,11 +108,9 @@
     "package": "npx @vscode/vsce package"
   },
   "dependencies": {
-    "archiver": "^7.0.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/archiver": "^6.0.3",
     "@types/node": "22.x",
     "@types/vscode": "^1.85.0",
     "eslint": "^9.39.3",

@@ -10,16 +10,11 @@ import { StatusBarService } from './service/StatusBarService';
 import { EditNameWorkspaceService } from './service/EditNameWorkspaceService';
 import { ChangeEmojiWorkspaceService } from './service/ChangeEmojiWorkspaceService';
 import { ChangeColorWorkspaceService } from './service/ChangeColorWorkspaceService';
-import { ImportWorkspaceService } from './service/ImportWorkspaceService';
 import { QuickPickService } from './service/QuickPickService';
-import { ExportWorkspaceService } from './service/ExportWorkspaceService';
-import { ImportBackupService } from './service/ImportBackupService';
-import { ExportBackupService } from './service/ExportBackupService';
-import { ExportZipService } from './service/ExportZipService';
 import { NotificationCreateWorkspaceService } from './service/NotificationCreateWorkspaceService';
 import { ColorService } from './service/ColorService';
 import { WorkspacesViewProvider } from './ui/WorkspacesViewProvider';
-import { createHandleOpenBackup } from './editor/view';
+import { createOpenConfigFile } from './editor/view';
 
 export async function activate(
   context: vscode.ExtensionContext,
@@ -43,15 +38,10 @@ export async function activate(
     workspaceRepository,
     colorService,
   );
-  const importService = new ImportWorkspaceService(workspaceRepository);
-  const importBackupService = new ImportBackupService(workspaceRepository);
-  const exportBackupService = new ExportBackupService();
-  const exportZipService = new ExportZipService(workspaceRepository);
   const quickPickService = new QuickPickService(
     workspaceRepository,
     openService,
   );
-  const exportService = new ExportWorkspaceService();
   const notificationService = new NotificationCreateWorkspaceService(
     workspaceRepository,
     saveService,
@@ -75,16 +65,7 @@ export async function activate(
     changeColorService,
   );
 
-  const handleOpenBackup = createHandleOpenBackup(
-    context.extensionUri,
-    importService,
-    exportService,
-    importBackupService,
-    exportBackupService,
-    exportZipService,
-    workspaceRepository,
-    () => provider.refresh(),
-  );
+  const openConfigFile = createOpenConfigFile(workspaceRepository);
 
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
@@ -101,12 +82,9 @@ export async function activate(
       'workspaceManager.openWorkspace',
       (workspaceId: string) => openService.open(workspaceId),
     ),
-    vscode.commands.registerCommand('workspaceManager.importWorkspace', () =>
-      importService.import(),
-    ),
     vscode.commands.registerCommand(
-      'workspaceManager.openBackup',
-      handleOpenBackup,
+      'workspaceManager.openConfigFile',
+      openConfigFile,
     ),
     vscode.commands.registerCommand('workspaceManager.refreshWorkspaces', () =>
       provider.refresh(),
