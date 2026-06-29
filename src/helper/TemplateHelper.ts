@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { FileHelper } from './FileHelper';
+import { StringHelper } from './StringHelper';
 
 export class TemplateHelper {
   /**
@@ -16,18 +17,13 @@ export class TemplateHelper {
     variables: Record<string, string> = {},
   ): string {
     const fullPath = FileHelper.buildPath(extensionUri.fsPath, ...templatePath);
-    let content = FileHelper.readText(fullPath);
+    const content = FileHelper.readText(fullPath);
 
     if (!content) {
       console.error(`Template not found or empty: ${fullPath}`);
       return `<!-- Error: Template not found at ${fullPath} -->`;
     }
 
-    for (const [key, value] of Object.entries(variables)) {
-      const regex = new RegExp(`{{${key}}}`, 'g');
-      content = content.replace(regex, value);
-    }
-
-    return content;
+    return StringHelper.replace(content, variables);
   }
 }
