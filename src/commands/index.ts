@@ -1,0 +1,32 @@
+import * as vscode from 'vscode';
+import { Container } from '../container';
+import { WorkspacesViewProvider } from '../ui/WorkspacesViewProvider';
+import { createOpenConfigFile } from '../editor/view/openConfigFile';
+
+export function registerCommands(
+  context: vscode.ExtensionContext,
+  container: Container,
+  provider: WorkspacesViewProvider,
+): void {
+  const openConfigFile = createOpenConfigFile(container.openConfigFileService);
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('workspaceManager.saveProject', () =>
+      container.saveWorkspaceService.save(),
+    ),
+    vscode.commands.registerCommand(
+      'workspaceManager.openWorkspace',
+      (workspaceId: string) => container.openWorkspaceService.open(workspaceId),
+    ),
+    vscode.commands.registerCommand(
+      'workspaceManager.openConfigFile',
+      openConfigFile,
+    ),
+    vscode.commands.registerCommand('workspaceManager.refreshWorkspaces', () =>
+      provider.refresh(),
+    ),
+    vscode.commands.registerCommand('workspaceManager.listProjects', () =>
+      container.quickPickService.show(),
+    ),
+  );
+}
