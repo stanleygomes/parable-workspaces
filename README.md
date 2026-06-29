@@ -34,7 +34,6 @@
 - [Development](#-development)
   - [Requirements](#requirements)
   - [Building from source](#building-from-source)
-  - [Running tests](#running-tests)
   - [Running code inspections](#running-code-inspections)
 - [CI/CD](#-cicd)
 - [Contributing](#-contributing)
@@ -96,12 +95,9 @@ You can save and register a new workspace in **Parable Workspaces** in two ways:
 | `npm install`          | Installs dependencies                          |
 | `npm run build`        | Compiles the extension                         |
 | `npm run lint`         | Runs ESLint checks                             |
-| `npm run test`         | Runs extension tests                           |
 | `npm run package`      | Packages the extension for distribution        |
 | `npm run publish`      | Publishes the extension to VS Code Marketplace |
 | `npm run ovsx:publish` | Publishes to OpenVSX Registry                  |
-
-Coverage reports are generated in `coverage/` and use the `nyc` tool.
 
 ## 🚀 CI/CD
 
@@ -112,7 +108,7 @@ This project uses GitHub Actions for continuous integration and deployment. The 
 - **Trigger**: Push to `master` branch or pull requests
 - **Actions**:
   - Validates conventional commits
-  - Builds and validates the VS Code extension (lint, test, package)
+  - Builds and validates the VS Code extension (lint, package)
 
 ### Release Workflow (`release.yml`)
 
