@@ -13,14 +13,38 @@
 
 ```
 src/
-├── extension.ts           # Main extension entry point
-├── workspaces/            # Workspace management logic
-│   ├── WorkspaceRepository.ts
-│   └── WorkspaceService.ts
-├── ui/                    # Webview UI components
-├── commands/              # Command registrations
-└── utils/                 # Utility functions
+├── extension.ts               # Main entry point to activate VS Code extension
+├── container.ts               # Dependency injection container wiring services and adapters
+├── commands.ts                # VS Code command registrations mapping to services
+├── core/                      # Pure domain/business logic and data structures
+│   ├── dtos/                  # Data structures (Workspace structure, WebviewMessage)
+│   ├── enums/                 # Application enums (Emojis, SettingsKey, SortType, WorkspaceColor)
+│   ├── helpers/               # Utilities (DateHelper, FileHelper, StringHelper, TemplateHelper)
+│   ├── repositories/          # Domain repository managing workspace persistence
+│   └── services/              # Domain services implementing single business cases (Save, Open, Delete, Sort)
+└── infra/                     # Infrastructure implementations & VS Code integration adapters
+    ├── editor/                # Adapters for VS Code UI interactions (status bar, themes, confirmation dialogs)
+    ├── persistence/           # State persistence, backing up globalState to workspaces.json
+    └── view/                  # Sidebar Webview module
+        ├── css/               # Webview stylesheets (main.css)
+        ├── html/              # HTML layout segments (toolbar, filters, workspaces list)
+        ├── js/                # Modular frontend JS files (controller, renderer, contextMenu, utils)
+        ├── HtmlTemplateBuilder.ts # Dynamic HTML builder concatenating segments & JS
+        ├── ViewMessageHandler.ts  # Webview message router bridging UI to domain services
+        ├── ViewProvider.ts    # Webview provider resolving side bar panels
+        └── ViewState.ts       # Cache of current filters/sorting and generator of webview data payloads
 ```
+
+### Folder Responsibilities
+
+- **`core/dtos`**: Defines schemas and typed interfaces for communication and storage.
+- **`core/enums`**: Project-wide lookup constants and sorting modes.
+- **`core/helpers`**: Domain helpers for string manipulation, relative dates, and template replacement.
+- **`core/repositories`**: Bridge between services and state management storage.
+- **`core/services`**: House all business rules, ensuring controllers/view handler don't contain domain logic.
+- **`infra/editor`**: VS Code host window adapters for dialogs, status bar, and editor colors.
+- **`infra/persistence`**: Low-level JSON file writing and OS configurations.
+- **`infra/view`**: Decoupled UI layer comprising raw template assets, modular webview scripts, and the state compiler (`ViewState`).
 
 ### VS Code Extension Architecture
 
