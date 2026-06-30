@@ -12,7 +12,10 @@ export class OpenWorkspaceService {
     if (workspace) {
       workspace.lastOpened = Date.now();
       await this.repository.save(workspace);
-      await this.userInteraction.openFolder(workspace.folders[0], forceNewWindow);
+      await this.userInteraction.openFolder(
+        workspace.folders[0],
+        forceNewWindow,
+      );
     }
   }
 }

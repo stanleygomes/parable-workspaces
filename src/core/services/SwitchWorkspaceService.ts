@@ -18,7 +18,9 @@ export class SwitchWorkspaceService {
         'Save Current Workspace',
       );
       if (selection === 'Save Current Workspace') {
-        await this.userInteraction.executeCommand('workspaceManager.saveProject');
+        await this.userInteraction.executeCommand(
+          'workspaceManager.saveProject',
+        );
       }
       return;
     }

@@ -51,8 +51,15 @@ export class UserInteraction {
     await vscode.window.showTextDocument(document);
   }
 
-  public async openFolder(path: string, forceNewWindow: boolean = false): Promise<void> {
+  public async openFolder(
+    path: string,
+    forceNewWindow: boolean = false,
+  ): Promise<void> {
     const uri = vscode.Uri.file(path);
-    await vscode.commands.executeCommand('vscode.openFolder', uri, forceNewWindow);
+    await vscode.commands.executeCommand(
+      'vscode.openFolder',
+      uri,
+      forceNewWindow,
+    );
   }
 }

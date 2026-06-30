@@ -2,7 +2,9 @@ import * as vscode from 'vscode';
 import { StringHelper } from '../../core/helpers/StringHelper';
 
 export class EditorContext {
-  private static getActiveFolders(): readonly vscode.WorkspaceFolder[] | undefined {
+  private static getActiveFolders():
+    | readonly vscode.WorkspaceFolder[]
+    | undefined {
     const folders = vscode.workspace.workspaceFolders;
     return folders && folders.length > 0 ? folders : undefined;
   }

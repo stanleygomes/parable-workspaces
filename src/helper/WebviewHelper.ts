@@ -10,21 +10,56 @@ export class WebviewHelper {
   ): string {
     const nonce = this.generateNonce();
 
-    // Load CSS first
     const style = TemplateHelper.render(extensionUri, [
-      'resources',
-      'templates',
-      'style',
+      'src',
+      'infra',
+      'view',
+      'css',
       'main.css',
     ]);
 
-    // Render HTML with nonce and the loaded CSS
+    const script = TemplateHelper.render(extensionUri, [
+      'src',
+      'infra',
+      'view',
+      'js',
+      'index.js',
+    ]);
+
+    const toolbar = TemplateHelper.render(extensionUri, [
+      'src',
+      'infra',
+      'view',
+      'html',
+      'toolbar.html',
+    ]);
+
+    const filters = TemplateHelper.render(extensionUri, [
+      'src',
+      'infra',
+      'view',
+      'html',
+      'filters.html',
+    ]);
+
+    const workspaces = TemplateHelper.render(extensionUri, [
+      'src',
+      'infra',
+      'view',
+      'html',
+      'workspaces.html',
+    ]);
+
     return TemplateHelper.render(
       extensionUri,
-      ['resources', 'templates', 'html', `${templateName}.html`],
+      ['src', 'infra', 'view', 'html', `${templateName}.html`],
       {
         nonce: nonce,
         style: style,
+        script: script,
+        toolbar: toolbar,
+        filters: filters,
+        workspaces: workspaces,
         ...extraVariables,
       },
     );
