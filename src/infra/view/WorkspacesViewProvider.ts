@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { WorkspaceRepository } from '../../core/repositories/WorkspaceRepository';
-import { WebviewHelper } from './WebviewHelper';
+import { HtmlTemplateBuilder } from './HtmlTemplateBuilder';
 import { WorkspaceMapper } from './WorkspaceMapper';
 import { WebviewMessage } from '../../core/dtos/WebviewMessage';
 import { SaveWorkspaceService } from '../../core/services/SaveWorkspaceService';
@@ -66,7 +66,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       localResourceRoots: [this.extensionUri],
     };
 
-    webviewView.webview.html = WebviewHelper.getHtml(
+    webviewView.webview.html = HtmlTemplateBuilder.build(
       webviewView.webview,
       this.extensionUri,
     );
