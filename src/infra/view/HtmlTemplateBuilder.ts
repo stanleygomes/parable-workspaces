@@ -20,10 +20,17 @@ export class HtmlTemplateBuilder {
         vars,
       );
 
+    const js = (file: string) => render('js', `${file}.js`);
+
     return render('html', `${templateName}.html`, {
       nonce: nonce,
       style: render('css', 'main.css'),
-      script: render('js', 'index.js'),
+      script: [
+        js('utils'),
+        js('contextMenu'),
+        js('renderer'),
+        js('controller'),
+      ].join('\n'),
       toolbar: render('html', 'toolbar.html'),
       filters: render('html', 'filters.html'),
       workspaces: render('html', 'workspaces.html'),
