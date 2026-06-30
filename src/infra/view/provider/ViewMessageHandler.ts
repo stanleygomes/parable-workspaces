@@ -1,4 +1,3 @@
-import * as vscode from 'vscode';
 import { WebviewMessage } from '../../../core/dtos/WebviewMessage';
 import { SaveWorkspaceService } from '../../../core/services/SaveWorkspaceService';
 import { OpenWorkspaceService } from '../../../core/services/OpenWorkspaceService';
@@ -50,14 +49,7 @@ export class ViewMessageHandler {
         break;
       case 'deleteWorkspace':
         if (message.workspaceId) {
-          const confirm = await vscode.window.showWarningMessage(
-            'Are you sure you want to delete this workspace?',
-            { modal: true },
-            'Yes',
-          );
-          if (confirm === 'Yes') {
-            await this.deleteService.delete(message.workspaceId);
-          }
+          await this.deleteService.delete(message.workspaceId);
         }
         break;
       case 'editWorkspace':
