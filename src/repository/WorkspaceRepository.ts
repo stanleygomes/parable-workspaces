@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as os from 'os';
 import { Workspace } from '../dto/Workspace';
-import { FileHelper } from '../helper/FileHelper';
-import { OSHelper } from '../helper/OSHelper';
+import { FileHelper } from '../core/helpers/FileHelper';
+import { OSHelper } from '../core/helpers/OSHelper';
 import { WorkspaceFileStorage } from './WorkspaceFileStorage';
 import { WorkspaceStateStorage } from '../editor/state/WorkspaceStateStorage';
 

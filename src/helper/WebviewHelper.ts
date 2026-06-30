@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TemplateHelper } from './TemplateHelper';
+import { TemplateHelper } from '../core/helpers/TemplateHelper';
 
 export class WebviewHelper {
   public static getHtml(

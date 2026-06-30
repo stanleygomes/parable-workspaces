@@ -1,5 +1,5 @@
 import { Workspace } from '../dto/Workspace';
-import { DateHelper } from '../helper/DateHelper';
+import { DateHelper } from '../core/helpers/DateHelper';
 
 export class WorkspaceMapper {
   public static toWebview(workspace: Workspace) {
