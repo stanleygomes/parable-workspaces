@@ -31,7 +31,9 @@ export class UpdateWorkspaceEmojiService {
       },
     );
 
-    if (selectedEmoji === undefined) {return;}
+    if (selectedEmoji === undefined) {
+      return;
+    }
 
     workspace.emoji = (selectedEmoji as any).emoji;
     await this.repository.save(workspace);

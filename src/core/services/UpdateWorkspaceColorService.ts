@@ -29,7 +29,9 @@ export class UpdateWorkspaceColorService {
       },
     );
 
-    if (selectedColor === undefined) {return;}
+    if (selectedColor === undefined) {
+      return;
+    }
 
     workspace.color = (selectedColor as any).color;
     workspace.textColor = (selectedColor as any).textColor;

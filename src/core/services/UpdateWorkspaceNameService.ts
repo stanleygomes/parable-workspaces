@@ -18,7 +18,9 @@ export class UpdateWorkspaceNameService {
       value: workspace.name,
     });
 
-    if (name === undefined) {return;}
+    if (name === undefined) {
+      return;
+    }
 
     workspace.name = name;
     await this.repository.save(workspace);

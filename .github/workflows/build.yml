@@ -60,10 +60,26 @@ jobs:
       - name: Run Prettier Check
         run: npm run format:check
 
+  # Run Dependency Audit Check
+  audit:
+    name: Audit Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Run Audit Check
+        run: npm audit
+
   # Build and package extension
   buildExtension:
     name: Build Extension
-    needs: [validateCommits, lint, prettier]
+    needs: [validateCommits, lint, prettier, audit]
     runs-on: ubuntu-latest
     permissions:
       contents: read
