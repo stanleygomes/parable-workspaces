@@ -6,6 +6,45 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-06-30
+
+- docs: update project architecture documentation to reflect refactored directory structure and responsibilities
+- chore: update project dependencies in package-lock.json
+- refactor: reformat script injection in index.html for improved readability and template consistency
+- refactor: improve code formatting for service null-checks and CSS, and add a dependency audit check to CI pipeline
+- refactor: standardize module imports and fix code style throughout the project
+- refactor: reorganize project directory structure and update import paths
+- feat: modularize workspace UI logic and implement controller-based view management
+- docs: add JSDoc comment for ViewProvider class to clarify workspace sidebar responsibilities
+- feat: add SortWorkspacesService and migrate view filter state management to ViewState
+- refactor: improve formatting in DeleteWorkspaceService and document ViewMessageHandler class
+- feat: centralize workspace deletion confirmation logic within DeleteWorkspaceService
+- chore: rename commands
+- refactor: reorganize and clean up CSS structure with modular grouping and updated component styles
+- refactor: modularize workspace view provider logic into dedicated message handling, state management, and query classes
+- refactor: replace WebviewHelper with HtmlTemplateBuilder to simplify webview content generation
+- refactor: relocate WorkspacesViewProvider and remove redundant code comments
+- refactor: remove redundant createOpenConfigFile factory and inline command registration
+- refactor: restructure UI infrastructure, migrate webview templates, and remove local emoji dataset
+- refactor: modularize workspace services and introduce infrastructure layers for editor interaction and state management
+- refactor: migrate helper modules to the core directory structure
+- refactor: remove legacy test config and add descriptive comments to extension activation logic
+- refactor: implement dependency injection container and modularize command registration
+- refactor: modularize workspace storage by extracting file system and state management logic into dedicated classes
+- chore: remove unused workspace configuration and dependencies, and add .nvmrc specifying Node 24
+- chore: remove custom storage path configuration
+- refactor: move configuration file opening logic to a dedicated service class
+- refactor: remove legacy backup and sync webview services in favor of direct workspace configuration access
+- refactor: update import path for WebviewMessage to reflect DTO move
+- refactor: extract string replacement logic to StringHelper and add nonce generation to WebviewHelper
+- refactor: decouple EmojiHelper from fs module by utilizing FileHelper and removing fallback emojis
+- refactor: remove landpage directory and related build artifacts
+- docs: update marketplace install instructions and clean up whitespace in documentation
+- ci: add ESLint and Prettier checks to build workflow and clean up agent documentation
+- refactor: remove test suite and associated documentation
+- refactor: replace date-fns with Intl.RelativeTimeFormat in DateHelper and add comprehensive test suite
+
+
 ## [1.7.0] - 2026-05-29
 
 - feat: add configurable workspace storage path and implement dynamic path updates
