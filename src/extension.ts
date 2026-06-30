@@ -21,7 +21,7 @@ export async function activate(
     container.deleteWorkspaceService,
     container.FindWorkspaceService,
     container.UpdateWorkspaceFavoriteService,
-    container.settingsService,
+    container.SettingsStateManager,
     container.UpdateWorkspaceNameService,
     container.UpdateWorkspaceEmojiService,
     container.UpdateWorkspaceColorService,

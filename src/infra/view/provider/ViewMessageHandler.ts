@@ -3,27 +3,28 @@ import { SaveWorkspaceService } from '../../../core/services/SaveWorkspaceServic
 import { OpenWorkspaceService } from '../../../core/services/OpenWorkspaceService';
 import { DeleteWorkspaceService } from '../../../core/services/DeleteWorkspaceService';
 import { UpdateWorkspaceFavoriteService } from '../../../core/services/UpdateWorkspaceFavoriteService';
-import {
-  SettingsService,
-  SettingsKey,
-} from '../../../core/services/SettingsService';
 import { UpdateWorkspaceNameService } from '../../../core/services/UpdateWorkspaceNameService';
 import { UpdateWorkspaceEmojiService } from '../../../core/services/UpdateWorkspaceEmojiService';
 import { UpdateWorkspaceColorService } from '../../../core/services/UpdateWorkspaceColorService';
 import { SortType } from '../../../core/enums/SortType';
 import { WorkspaceQuery } from './WorkspaceQuery';
+import { UpdateViewFilterService } from '../../../core/services/UpdateViewFilterService';
 
+/**
+ * Dispatches messages received from the webview UI to the appropriate domain
+ * service, acting as the bridge between the sidebar frontend and the core layer.
+ */
 export class ViewMessageHandler {
   constructor(
     private readonly saveService: SaveWorkspaceService,
     private readonly openService: OpenWorkspaceService,
     private readonly deleteService: DeleteWorkspaceService,
     private readonly favoriteService: UpdateWorkspaceFavoriteService,
-    private readonly settingsService: SettingsService,
     private readonly editNameService: UpdateWorkspaceNameService,
     private readonly changeEmojiService: UpdateWorkspaceEmojiService,
     private readonly changeColorService: UpdateWorkspaceColorService,
     private readonly workspaceQuery: WorkspaceQuery,
+    private readonly filterService: UpdateViewFilterService,
     private readonly refreshCallback: () => void,
   ) {}
 
@@ -72,28 +73,16 @@ export class ViewMessageHandler {
         this.refreshCallback();
         break;
       case 'toggleFavoritesFilter':
-        this.workspaceQuery.showOnlyFavorites = !!message.showOnlyFavorites;
-        await this.settingsService.set(
-          SettingsKey.ShowOnlyFavorites,
-          this.workspaceQuery.showOnlyFavorites,
-        );
+        await this.filterService.toggleFavoritesFilter(!!message.showOnlyFavorites);
         this.refreshCallback();
         break;
       case 'toggleFilters':
-        this.workspaceQuery.showFilters = !!message.showFilters;
-        await this.settingsService.set(
-          SettingsKey.ShowFilters,
-          this.workspaceQuery.showFilters,
-        );
+        await this.filterService.toggleFilters(!!message.showFilters);
         this.refreshCallback();
         break;
       case 'changeSort':
         if (message.sortType) {
-          this.workspaceQuery.currentSort = message.sortType as SortType;
-          await this.settingsService.set(
-            SettingsKey.SortType,
-            this.workspaceQuery.currentSort,
-          );
+          await this.filterService.changeSort(message.sortType as SortType);
           this.refreshCallback();
         }
         break;

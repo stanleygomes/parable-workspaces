@@ -5,7 +5,7 @@ import { OpenWorkspaceService } from './service/OpenWorkspaceService';
 import { DeleteWorkspaceService } from './service/DeleteWorkspaceService';
 import { FindWorkspaceService } from './service/FindWorkspaceService';
 import { UpdateWorkspaceFavoriteService } from './service/UpdateWorkspaceFavoriteService';
-import { SettingsService } from './service/SettingsService';
+import { SettingsStateManager } from './service/SettingsStateManager';
 import { UpdateWorkspaceStatusBarService } from './service/UpdateWorkspaceStatusBarService';
 import { UpdateWorkspaceNameService } from './core/services/UpdateWorkspaceNameService';
 import { UpdateWorkspaceEmojiService } from './core/services/UpdateWorkspaceEmojiService';
@@ -22,7 +22,7 @@ export class Container {
   public readonly userInteraction: UserInteraction;
   public readonly workspaceStateManager: WorkspaceStateManager;
   public readonly workspaceRepository: WorkspaceRepository;
-  public readonly settingsService: SettingsService;
+  public readonly SettingsStateManager: SettingsStateManager;
   public readonly saveWorkspaceService: SaveWorkspaceService;
   public readonly openWorkspaceService: OpenWorkspaceService;
   public readonly deleteWorkspaceService: DeleteWorkspaceService;
@@ -45,7 +45,7 @@ export class Container {
     this.workspaceRepository = new WorkspaceRepository(
       this.workspaceStateManager,
     );
-    this.settingsService = new SettingsService(context);
+    this.SettingsStateManager = new SettingsStateManager(context);
 
     this.saveWorkspaceService = new SaveWorkspaceService(
       this.workspaceRepository,

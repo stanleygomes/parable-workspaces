@@ -7,12 +7,13 @@ import { OpenWorkspaceService } from '../../../core/services/OpenWorkspaceServic
 import { DeleteWorkspaceService } from '../../../core/services/DeleteWorkspaceService';
 import { FindWorkspaceService } from '../../../core/services/FindWorkspaceService';
 import { UpdateWorkspaceFavoriteService } from '../../../core/services/UpdateWorkspaceFavoriteService';
-import { SettingsService } from '../../../core/services/SettingsService';
+import { SettingsStateManager } from '../../../infra/persistence/SettingsStateManager';
 import { UpdateWorkspaceNameService } from '../../../core/services/UpdateWorkspaceNameService';
 import { UpdateWorkspaceEmojiService } from '../../../core/services/UpdateWorkspaceEmojiService';
 import { UpdateWorkspaceColorService } from '../../../core/services/UpdateWorkspaceColorService';
 import { WorkspaceQuery } from './WorkspaceQuery';
 import { ViewMessageHandler } from './ViewMessageHandler';
+import { UpdateViewFilterService } from '../../../core/services/UpdateViewFilterService';
 
 export class ViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'workspaceManager.workspacesView';
@@ -29,7 +30,7 @@ export class ViewProvider implements vscode.WebviewViewProvider {
     deleteService: DeleteWorkspaceService,
     searchService: FindWorkspaceService,
     favoriteService: UpdateWorkspaceFavoriteService,
-    settingsService: SettingsService,
+    SettingsStateManager: SettingsStateManager,
     editNameService: UpdateWorkspaceNameService,
     changeEmojiService: UpdateWorkspaceEmojiService,
     changeColorService: UpdateWorkspaceColorService,
@@ -37,18 +38,22 @@ export class ViewProvider implements vscode.WebviewViewProvider {
     this.workspaceQuery = new WorkspaceQuery(
       repository,
       searchService,
-      settingsService,
+      SettingsStateManager,
+    );
+    const filterService = new UpdateViewFilterService(
+      this.workspaceQuery,
+      SettingsStateManager,
     );
     this.messageHandler = new ViewMessageHandler(
       saveService,
       openService,
       deleteService,
       favoriteService,
-      settingsService,
       editNameService,
       changeEmojiService,
       changeColorService,
       this.workspaceQuery,
+      filterService,
       () => this.refresh(),
     );
 

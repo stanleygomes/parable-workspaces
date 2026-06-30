@@ -1,12 +1,7 @@
 import * as vscode from 'vscode';
+import { SettingsKey } from '../../core/enums/SettingsKey';
 
-export enum SettingsKey {
-  ShowOnlyFavorites = 'showOnlyFavorites',
-  SortType = 'sortType',
-  ShowFilters = 'showFilters',
-}
-
-export class SettingsService {
+export class SettingsStateManager {
   constructor(private readonly context: vscode.ExtensionContext) {}
 
   public get<T>(key: SettingsKey, defaultValue: T): T {

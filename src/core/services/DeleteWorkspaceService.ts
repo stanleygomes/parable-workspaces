@@ -11,9 +11,11 @@ export class DeleteWorkspaceService {
     const confirmed = await this.userInteraction.showConfirmation(
       'Are you sure you want to delete this workspace?',
     );
+
     if (!confirmed) {
       return;
     }
+
     await this.repository.delete(id);
     this.userInteraction.showInfo('Workspace deleted successfully.');
   }

@@ -1,10 +1,8 @@
 import * as vscode from 'vscode';
 import { WorkspaceRepository } from '../../../core/repositories/WorkspaceRepository';
 import { FindWorkspaceService } from '../../../core/services/FindWorkspaceService';
-import {
-  SettingsService,
-  SettingsKey,
-} from '../../../core/services/SettingsService';
+import { SettingsStateManager } from '../../../infra/persistence/SettingsStateManager';
+import { SettingsKey } from '../../../core/enums/SettingsKey';
 import { SortType } from '../../../core/enums/SortType';
 import { WorkspaceColors } from '../../../core/enums/WorkspaceColor';
 import { DateHelper } from '../../../core/helpers/DateHelper';
@@ -18,17 +16,20 @@ export class WorkspaceQuery {
   constructor(
     private readonly repository: WorkspaceRepository,
     private readonly searchService: FindWorkspaceService,
-    private readonly settingsService: SettingsService,
+    private readonly SettingsStateManager: SettingsStateManager,
   ) {
-    this.showOnlyFavorites = this.settingsService.get(
+    this.showOnlyFavorites = this.SettingsStateManager.get(
       SettingsKey.ShowOnlyFavorites,
       false,
     );
-    this.currentSort = this.settingsService.get(
+    this.currentSort = this.SettingsStateManager.get(
       SettingsKey.SortType,
       SortType.FavoritesFirst,
     );
-    this.showFilters = this.settingsService.get(SettingsKey.ShowFilters, false);
+    this.showFilters = this.SettingsStateManager.get(
+      SettingsKey.ShowFilters,
+      false,
+    );
   }
 
   public getPayload() {
