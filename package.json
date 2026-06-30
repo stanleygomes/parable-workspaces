@@ -98,7 +98,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "22.x",
+    "@types/node": "26.x",
     "@types/vscode": "^1.85.0",
     "eslint": "^9.39.3",
     "prettier": "^3.8.3",
