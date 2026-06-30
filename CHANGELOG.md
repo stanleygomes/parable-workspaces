@@ -6,6 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.9.1] - 2026-06-30
+
+- Merge pull request #19 from stanleygomes/release/v1.9.0
+
+
 ## [1.9.0] - 2026-06-30
 
 - docs: update project architecture documentation to reflect refactored directory structure and responsibilities
