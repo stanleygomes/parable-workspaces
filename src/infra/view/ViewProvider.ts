@@ -16,6 +16,11 @@ import { ViewMessageHandler } from './ViewMessageHandler';
 import { UpdateViewFilterService } from '../../../core/services/UpdateViewFilterService';
 import { SortWorkspacesService } from '../../../core/services/SortWorkspacesService';
 
+/**
+ * VS Code WebviewViewProvider for the workspace sidebar panel.
+ * Wires together the view state, message handler and HTML template, pushing
+ * updated payloads to the webview whenever the workspace list or filters change.
+ */
 export class ViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'workspaceManager.workspacesView';
 
