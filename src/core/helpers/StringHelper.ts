@@ -10,4 +10,8 @@ export class StringHelper {
     }
     return result;
   }
+
+  public static toBase64(value: string): string {
+    return Buffer.from(value).toString('base64');
+  }
 }

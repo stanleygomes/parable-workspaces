@@ -1,9 +1,9 @@
-import { OpenConfigFileService } from '../../service/OpenConfigFileService';
+import { OpenWorkspacesFileService } from '../../service/OpenWorkspacesFileService';
 
 export function createOpenConfigFile(
-  openConfigFileService: OpenConfigFileService,
+  OpenWorkspacesFileService: OpenWorkspacesFileService,
 ) {
   return async () => {
-    await openConfigFileService.open();
+    await OpenWorkspacesFileService.open();
   };
 }

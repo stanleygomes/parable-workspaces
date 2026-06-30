@@ -1,6 +1,6 @@
 import * as path from 'path';
-import { Workspace } from '../dto/Workspace';
-import { FileHelper } from '../core/helpers/FileHelper';
+import { Workspace } from '../../dto/Workspace';
+import { FileHelper } from '../helpers/FileHelper';
 
 export class WorkspaceFileStorage {
   constructor(private readonly filePath: string) {

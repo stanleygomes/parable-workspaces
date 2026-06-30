@@ -10,7 +10,7 @@ export async function activate(
 
   // Initialize dependency injection container
   const container = new Container(context);
-  context.subscriptions.push(container.statusBarService);
+  context.subscriptions.push(container.updateWorkspaceStatusBarService);
 
   console.log('Services initialized successfully');
 
@@ -21,12 +21,12 @@ export async function activate(
     container.saveWorkspaceService,
     container.openWorkspaceService,
     container.deleteWorkspaceService,
-    container.searchWorkspaceService,
-    container.favoriteWorkspaceService,
+    container.FindWorkspaceService,
+    container.UpdateWorkspaceFavoriteService,
     container.settingsService,
-    container.editNameWorkspaceService,
-    container.changeEmojiWorkspaceService,
-    container.changeColorWorkspaceService,
+    container.UpdateWorkspaceNameService,
+    container.UpdateWorkspaceEmojiService,
+    container.UpdateWorkspaceColorService,
   );
 
   // Register the webview view provider with VS Code
@@ -42,14 +42,14 @@ export async function activate(
 
   // Listen for changes in workspace folders to verify and notify updates
   context.subscriptions.push(
-    vscode.workspace.onDidChangeWorkspaceFolders(() =>
-      container.notificationCreateWorkspaceService.checkAndNotify(),
+    vscode.workspace.onDidUpdateWorkspaceFolders(() =>
+      container.suggestSaveWorkspaceService.suggest(),
     ),
   );
 
   // Initial verification and applying theme colors to current workspace
-  container.notificationCreateWorkspaceService.checkAndNotify();
-  await container.colorService.applyCurrentWorkspaceColor();
+  container.suggestSaveWorkspaceService.suggest();
+  await container.editorTheme.applyCurrentWorkspaceColor();
 
   console.log('Parable Workspaces extension activated successfully');
 }

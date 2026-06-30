@@ -1,19 +1,19 @@
 import * as vscode from 'vscode';
-import { WorkspaceRepository } from '../repository/WorkspaceRepository';
+import { WorkspaceRepository } from '../core/repositories/WorkspaceRepository';
 import { WebviewHelper } from '../helper/WebviewHelper';
 import { WorkspaceMapper } from '../mapper/WorkspaceMapper';
-import { WebviewMessage } from '../dto/WebviewMessage';
+import { WebviewMessage } from '../core/dtos/WebviewMessage';
 import { SaveWorkspaceService } from '../service/SaveWorkspaceService';
 import { OpenWorkspaceService } from '../service/OpenWorkspaceService';
 import { DeleteWorkspaceService } from '../service/DeleteWorkspaceService';
-import { SearchWorkspaceService } from '../service/SearchWorkspaceService';
-import { FavoriteWorkspaceService } from '../service/FavoriteWorkspaceService';
+import { FindWorkspaceService } from '../service/FindWorkspaceService';
+import { UpdateWorkspaceFavoriteService } from '../service/UpdateWorkspaceFavoriteService';
 import { SettingsService, SettingsKey } from '../service/SettingsService';
-import { EditNameWorkspaceService } from '../service/EditNameWorkspaceService';
-import { ChangeEmojiWorkspaceService } from '../service/ChangeEmojiWorkspaceService';
-import { ChangeColorWorkspaceService } from '../service/ChangeColorWorkspaceService';
-import { WorkspaceColors } from '../enum/WorkspaceColor';
-import { SortType } from '../enum/SortType';
+import { UpdateWorkspaceNameService } from '../service/UpdateWorkspaceNameService';
+import { UpdateWorkspaceEmojiService } from '../core/services/UpdateWorkspaceEmojiService';
+import { UpdateWorkspaceColorService } from '../core/services/UpdateWorkspaceColorService';
+import { WorkspaceColors } from '../core/enums/WorkspaceColor';
+import { SortType } from '../core/enums/SortType';
 
 export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'workspaceManager.workspacesView';
@@ -30,12 +30,12 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
     private readonly saveService: SaveWorkspaceService,
     private readonly openService: OpenWorkspaceService,
     private readonly deleteService: DeleteWorkspaceService,
-    private readonly searchService: SearchWorkspaceService,
-    private readonly favoriteService: FavoriteWorkspaceService,
+    private readonly searchService: FindWorkspaceService,
+    private readonly favoriteService: UpdateWorkspaceFavoriteService,
     private readonly settingsService: SettingsService,
-    private readonly editNameService: EditNameWorkspaceService,
-    private readonly changeEmojiService: ChangeEmojiWorkspaceService,
-    private readonly changeColorService: ChangeColorWorkspaceService,
+    private readonly editNameService: UpdateWorkspaceNameService,
+    private readonly changeEmojiService: UpdateWorkspaceEmojiService,
+    private readonly changeColorService: UpdateWorkspaceColorService,
   ) {
     this.showOnlyFavorites = this.settingsService.get(
       SettingsKey.ShowOnlyFavorites,
@@ -119,7 +119,9 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       const currentId = Buffer.from(
         workspaceFile?.fsPath || primaryFolder.uri.fsPath,
       ).toString('base64');
-      isCurrentSaved = this.repository.getAll().some((w) => w.id === currentId);
+      isCurrentSaved = this.repository
+        .findAll()
+        .some((w) => w.id === currentId);
       currentWorkspaceName = workspaceFile
         ? vscode.workspace.name || primaryFolder.name
         : primaryFolder.name;
@@ -155,7 +157,7 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
         break;
       case 'toggleFavorite':
         if (message.workspaceId) {
-          await this.favoriteService.toggleFavorite(message.workspaceId);
+          await this.favoriteService.toggle(message.workspaceId);
         }
         break;
       case 'saveCurrent':
@@ -175,17 +177,17 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
         break;
       case 'editWorkspace':
         if (message.workspaceId) {
-          await this.editNameService.edit(message.workspaceId);
+          await this.editNameService.update(message.workspaceId);
         }
         break;
       case 'changeEmoji':
         if (message.workspaceId) {
-          await this.changeEmojiService.changeEmoji(message.workspaceId);
+          await this.changeEmojiService.update(message.workspaceId);
         }
         break;
       case 'changeColor':
         if (message.workspaceId) {
-          await this.changeColorService.changeColor(message.workspaceId);
+          await this.changeColorService.update(message.workspaceId);
         }
         break;
       case 'search':

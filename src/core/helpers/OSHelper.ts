@@ -1,32 +1,29 @@
 import * as os from 'os';
-import * as path from 'path';
+import { FileHelper } from './FileHelper';
 
 export class OSHelper {
-  public static getDefaultConfigPath(): string {
+  public static getBaseConfigDir(): string {
     const home = os.homedir();
-    let dir: string;
     switch (process.platform) {
       case 'win32':
-        dir = path.join(
-          process.env.APPDATA || path.join(home, 'AppData', 'Roaming'),
-          'parable-workspaces',
+        return (
+          process.env.APPDATA ||
+          FileHelper.buildPath(home, 'AppData', 'Roaming')
         );
-        break;
       case 'darwin':
-        dir = path.join(
-          home,
-          'Library',
-          'Application Support',
-          'parable-workspaces',
-        );
-        break;
+        return FileHelper.buildPath(home, 'Library', 'Application Support');
       default:
-        dir = path.join(
-          process.env.XDG_CONFIG_HOME || path.join(home, '.config'),
-          'parable-workspaces',
+        return (
+          process.env.XDG_CONFIG_HOME || FileHelper.buildPath(home, '.config')
         );
-        break;
     }
-    return path.join(dir, 'workspaces.json');
+  }
+
+  public static getDefaultConfigPath(): string {
+    return FileHelper.buildPath(
+      this.getBaseConfigDir(),
+      'parable-workspaces',
+      'workspaces.json',
+    );
   }
 }

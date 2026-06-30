@@ -1,28 +1,26 @@
-import * as vscode from 'vscode';
-import { WorkspaceRepository } from '../repository/WorkspaceRepository';
-import { EmojiHelper } from '../helper/EmojiHelper';
+import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
+import { EMOJIS, EmojiItem } from '../core/enums/Emojis';
+import { UserInteraction } from '../infra/editor/UserInteraction';
 
-export class ChangeEmojiWorkspaceService {
+export class UpdateWorkspaceEmojiService {
   constructor(
     private readonly repository: WorkspaceRepository,
-    private readonly extensionUri: vscode.Uri,
+    private readonly userInteraction: UserInteraction,
   ) {}
 
-  public async changeEmoji(workspaceId: string): Promise<void> {
-    const workspace = this.repository
-      .getAll()
-      .find((w) => w.id === workspaceId);
+  public async update(workspaceId: string): Promise<void> {
+    const workspace = this.repository.findOne(workspaceId);
     if (!workspace) {
       return;
     }
 
-    const emojiItems = EmojiHelper.getEmojis(this.extensionUri).map((item) => ({
+    const emojiItems = EMOJIS.map((item: EmojiItem) => ({
       label: item.label,
       description: item.description,
       emoji: item.emoji,
     }));
 
-    const selectedEmoji = await vscode.window.showQuickPick(
+    const selectedEmoji = await this.userInteraction.showQuickPick(
       [
         { label: '$(circle-slash)', description: 'None', emoji: '' },
         ...emojiItems,

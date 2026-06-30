@@ -20,5 +20,17 @@ export const WorkspaceColors = [
     color: '#e67e22',
     textColor: '#ffffff',
   },
+  {
+    label: '🟤',
+    description: 'Brown',
+    color: '#795548',
+    textColor: '#ffffff',
+  },
+  {
+    label: '⚫',
+    description: 'Black',
+    color: '#1a1a1a',
+    textColor: '#ffffff',
+  },
   { label: '⚪', description: 'None', color: '', textColor: '' },
 ];
