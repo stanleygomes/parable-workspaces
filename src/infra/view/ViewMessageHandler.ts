@@ -7,7 +7,7 @@ import { UpdateWorkspaceNameService } from '../../../core/services/UpdateWorkspa
 import { UpdateWorkspaceEmojiService } from '../../../core/services/UpdateWorkspaceEmojiService';
 import { UpdateWorkspaceColorService } from '../../../core/services/UpdateWorkspaceColorService';
 import { SortType } from '../../../core/enums/SortType';
-import { WorkspaceQuery } from './WorkspaceQuery';
+import { ViewState } from './ViewState';
 import { UpdateViewFilterService } from '../../../core/services/UpdateViewFilterService';
 
 /**
@@ -23,7 +23,7 @@ export class ViewMessageHandler {
     private readonly editNameService: UpdateWorkspaceNameService,
     private readonly changeEmojiService: UpdateWorkspaceEmojiService,
     private readonly changeColorService: UpdateWorkspaceColorService,
-    private readonly workspaceQuery: WorkspaceQuery,
+    private readonly ViewState: ViewState,
     private readonly filterService: UpdateViewFilterService,
     private readonly refreshCallback: () => void,
   ) {}
@@ -69,11 +69,13 @@ export class ViewMessageHandler {
         }
         break;
       case 'search':
-        this.workspaceQuery.currentQuery = message.query ?? '';
+        this.ViewState.currentQuery = message.query ?? '';
         this.refreshCallback();
         break;
       case 'toggleFavoritesFilter':
-        await this.filterService.toggleFavoritesFilter(!!message.showOnlyFavorites);
+        await this.filterService.toggleFavoritesFilter(
+          !!message.showOnlyFavorites,
+        );
         this.refreshCallback();
         break;
       case 'toggleFilters':

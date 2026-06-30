@@ -11,15 +11,16 @@ import { SettingsStateManager } from '../../../infra/persistence/SettingsStateMa
 import { UpdateWorkspaceNameService } from '../../../core/services/UpdateWorkspaceNameService';
 import { UpdateWorkspaceEmojiService } from '../../../core/services/UpdateWorkspaceEmojiService';
 import { UpdateWorkspaceColorService } from '../../../core/services/UpdateWorkspaceColorService';
-import { WorkspaceQuery } from './WorkspaceQuery';
+import { ViewState } from './ViewState';
 import { ViewMessageHandler } from './ViewMessageHandler';
 import { UpdateViewFilterService } from '../../../core/services/UpdateViewFilterService';
+import { SortWorkspacesService } from '../../../core/services/SortWorkspacesService';
 
 export class ViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'workspaceManager.workspacesView';
 
   private view?: vscode.WebviewView;
-  private readonly workspaceQuery: WorkspaceQuery;
+  private readonly ViewState: ViewState;
   private readonly messageHandler: ViewMessageHandler;
 
   constructor(
@@ -35,13 +36,14 @@ export class ViewProvider implements vscode.WebviewViewProvider {
     changeEmojiService: UpdateWorkspaceEmojiService,
     changeColorService: UpdateWorkspaceColorService,
   ) {
-    this.workspaceQuery = new WorkspaceQuery(
+    this.ViewState = new ViewState(
       repository,
       searchService,
+      new SortWorkspacesService(),
       SettingsStateManager,
     );
     const filterService = new UpdateViewFilterService(
-      this.workspaceQuery,
+      this.ViewState,
       SettingsStateManager,
     );
     this.messageHandler = new ViewMessageHandler(
@@ -52,7 +54,7 @@ export class ViewProvider implements vscode.WebviewViewProvider {
       editNameService,
       changeEmojiService,
       changeColorService,
-      this.workspaceQuery,
+      this.ViewState,
       filterService,
       () => this.refresh(),
     );
@@ -94,7 +96,7 @@ export class ViewProvider implements vscode.WebviewViewProvider {
 
   public refresh(): void {
     if (this.view) {
-      this.view.webview.postMessage(this.workspaceQuery.getPayload());
+      this.view.webview.postMessage(this.ViewState.getPayload());
     }
   }
 }

@@ -1,13 +1,19 @@
-import * as vscode from 'vscode';
 import { WorkspaceRepository } from '../../../core/repositories/WorkspaceRepository';
 import { FindWorkspaceService } from '../../../core/services/FindWorkspaceService';
+import { SortWorkspacesService } from '../../../core/services/SortWorkspacesService';
 import { SettingsStateManager } from '../../../infra/persistence/SettingsStateManager';
 import { SettingsKey } from '../../../core/enums/SettingsKey';
 import { SortType } from '../../../core/enums/SortType';
 import { WorkspaceColors } from '../../../core/enums/WorkspaceColor';
 import { DateHelper } from '../../../core/helpers/DateHelper';
+import { EditorContext } from '../../editor/EditorContext';
 
-export class WorkspaceQuery {
+/**
+ * Holds the current filter, sort and search state of the sidebar view.
+ * Initializes from persisted settings and builds the webview payload on demand
+ * by applying search, favorites filter and ordering to the workspace list.
+ */
+export class ViewState {
   public currentQuery = '';
   public showOnlyFavorites = false;
   public currentSort = SortType.FavoritesFirst;
@@ -16,6 +22,7 @@ export class WorkspaceQuery {
   constructor(
     private readonly repository: WorkspaceRepository,
     private readonly searchService: FindWorkspaceService,
+    private readonly sortService: SortWorkspacesService,
     private readonly SettingsStateManager: SettingsStateManager,
   ) {
     this.showOnlyFavorites = this.SettingsStateManager.get(
@@ -39,42 +46,13 @@ export class WorkspaceQuery {
       workspaces = workspaces.filter((ws) => ws.isFavorite);
     }
 
-    workspaces.sort((a, b) => {
-      switch (this.currentSort) {
-        case SortType.FavoritesFirst:
-          if (a.isFavorite && !b.isFavorite) {
-            return -1;
-          }
-          if (!a.isFavorite && b.isFavorite) {
-            return 1;
-          }
-          return b.lastOpened - a.lastOpened;
-        case SortType.Alphabetical:
-          return a.name.localeCompare(b.name);
-        case SortType.Recent:
-          return b.lastOpened - a.lastOpened;
-        default:
-          return 0;
-      }
-    });
+    workspaces = this.sortService.sort(workspaces, this.currentSort);
 
-    const workspaceFolders = vscode.workspace.workspaceFolders;
-    let isCurrentSaved = true;
-    let currentWorkspaceName = '';
-
-    if (workspaceFolders && workspaceFolders.length > 0) {
-      const primaryFolder = workspaceFolders[0];
-      const workspaceFile = vscode.workspace.workspaceFile;
-      const currentId = Buffer.from(
-        workspaceFile?.fsPath || primaryFolder.uri.fsPath,
-      ).toString('base64');
-      isCurrentSaved = this.repository
-        .findAll()
-        .some((w) => w.id === currentId);
-      currentWorkspaceName = workspaceFile
-        ? vscode.workspace.name || primaryFolder.name
-        : primaryFolder.name;
-    }
+    const currentId = EditorContext.getCurrentWorkspaceId();
+    const isCurrentSaved = currentId
+      ? !!this.repository.findOne(currentId)
+      : true;
+    const currentWorkspaceName = EditorContext.getCurrentWorkspaceName() ?? '';
 
     return {
       command: 'updateWorkspaces',
