@@ -1,6 +1,6 @@
-import { WorkspaceRepository } from '../core/repositories/WorkspaceRepository';
+import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
 import { OpenWorkspaceService } from './OpenWorkspaceService';
-import { UserInteraction } from '../infra/editor/UserInteraction';
+import { UserInteraction } from '../../infra/editor/UserInteraction';
 
 export class SwitchWorkspaceService {
   constructor(

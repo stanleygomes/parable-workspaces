@@ -1,7 +1,7 @@
 import { SettingsStateManager } from '../../infra/persistence/SettingsStateManager';
 import { SettingsKey } from '../enums/SettingsKey';
 import { SortType } from '../enums/SortType';
-import { ViewState } from '../../infra/view/provider/ViewState';
+import { ViewState } from '../../infra/view/ViewState';
 
 export class UpdateViewFilterService {
   constructor(

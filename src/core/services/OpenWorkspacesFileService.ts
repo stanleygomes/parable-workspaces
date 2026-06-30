@@ -1,5 +1,5 @@
-import { WorkspaceStateManager } from '../infra/persistence/WorkspaceStateManager';
-import { UserInteraction } from '../infra/editor/UserInteraction';
+import { WorkspaceStateManager } from '../../infra/persistence/WorkspaceStateManager';
+import { UserInteraction } from '../../infra/editor/UserInteraction';
 
 export class OpenWorkspacesFileService {
   constructor(

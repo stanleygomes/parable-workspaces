@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Container } from './container';
-import { ViewProvider } from './infra/view/provider/ViewProvider';
+import { ViewProvider } from './infra/view/ViewProvider';
 import { registerCommands } from './commands';
 
 export async function activate(
@@ -34,7 +34,7 @@ export async function activate(
   registerCommands(context, container, provider);
 
   context.subscriptions.push(
-    vscode.workspace.onDidUpdateWorkspaceFolders(() =>
+    vscode.workspace.onDidChangeWorkspaceFolders(() =>
       container.suggestSaveWorkspaceService.suggest(),
     ),
   );

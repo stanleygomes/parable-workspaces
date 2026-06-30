@@ -1,8 +1,8 @@
 import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
-import { EditorTheme } from '../infra/editor/EditorTheme';
-import { WorkspaceColors } from '../enum/WorkspaceColor';
-import { UserInteraction } from '../infra/editor/UserInteraction';
-import { EditorContext } from '../infra/editor/EditorContext';
+import { EditorTheme } from '../../infra/editor/EditorTheme';
+import { WorkspaceColors } from '../enums/WorkspaceColor';
+import { UserInteraction } from '../../infra/editor/UserInteraction';
+import { EditorContext } from '../../infra/editor/EditorContext';
 
 export class UpdateWorkspaceColorService {
   constructor(
@@ -18,7 +18,7 @@ export class UpdateWorkspaceColorService {
     }
 
     const selectedColor = await this.userInteraction.showQuickPick(
-      WorkspaceColors.map((c) => ({
+      WorkspaceColors.map((c: any) => ({
         label: c.label,
         description: c.description,
         color: c.color,
@@ -29,7 +29,7 @@ export class UpdateWorkspaceColorService {
       },
     );
 
-    if (selectedColor === undefined) return;
+    if (selectedColor === undefined) {return;}
 
     workspace.color = (selectedColor as any).color;
     workspace.textColor = (selectedColor as any).textColor;

@@ -15,7 +15,7 @@ import { SuggestSaveWorkspaceService } from './core/services/SuggestSaveWorkspac
 import { EditorTheme } from './infra/editor/EditorTheme';
 import { EditorStatusBar } from './infra/editor/EditorStatusBar';
 import { OpenWorkspacesFileService } from './core/services/OpenWorkspacesFileService';
-import { WorkspaceStateManager } from './core/persistence/WorkspaceStateManager';
+import { WorkspaceStateManager } from './infra/persistence/WorkspaceStateManager';
 import { UserInteraction } from './infra/editor/UserInteraction';
 
 export class Container {

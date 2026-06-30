@@ -18,23 +18,35 @@ class WorkspacesViewController {
 
   bindEvents() {
     this.searchBox.addEventListener('input', () => {
-      this.vscode.postMessage({ command: 'search', query: this.searchBox.value });
+      this.vscode.postMessage({
+        command: 'search',
+        query: this.searchBox.value,
+      });
     });
 
     this.btnShowFavorites.addEventListener('click', () => {
       this.showOnlyFavorites = !this.showOnlyFavorites;
       this.btnShowFavorites.classList.toggle('active', this.showOnlyFavorites);
-      this.vscode.postMessage({ command: 'toggleFavoritesFilter', showOnlyFavorites: this.showOnlyFavorites });
+      this.vscode.postMessage({
+        command: 'toggleFavoritesFilter',
+        showOnlyFavorites: this.showOnlyFavorites,
+      });
     });
 
     this.sortSelect.addEventListener('change', () => {
       this.currentSort = this.sortSelect.value;
-      this.vscode.postMessage({ command: 'changeSort', sortType: this.currentSort });
+      this.vscode.postMessage({
+        command: 'changeSort',
+        sortType: this.currentSort,
+      });
     });
 
     this.btnToggleFilters.addEventListener('click', () => {
       this.showFilters = !this.showFilters;
-      this.vscode.postMessage({ command: 'toggleFilters', showFilters: this.showFilters });
+      this.vscode.postMessage({
+        command: 'toggleFilters',
+        showFilters: this.showFilters,
+      });
     });
 
     document.addEventListener('click', (e) => {

@@ -53,7 +53,10 @@ function renderWorkspaces(vscode, workspacesList, workspaces) {
   workspacesList.querySelectorAll('.star-btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      vscode.postMessage({ command: 'toggleFavorite', workspaceId: btn.dataset.id });
+      vscode.postMessage({
+        command: 'toggleFavorite',
+        workspaceId: btn.dataset.id,
+      });
     });
   });
 
@@ -62,24 +65,41 @@ function renderWorkspaces(vscode, workspacesList, workspaces) {
     if (ws) {
       const wrapper = item.querySelector('.workspace-emoji-wrapper');
       if (wrapper) {
-        wrapper.style.setProperty('--workspace-color', ws.color || 'var(--vscode-foreground)');
+        wrapper.style.setProperty(
+          '--workspace-color',
+          ws.color || 'var(--vscode-foreground)',
+        );
       }
     }
 
     item.addEventListener('click', () => {
-      vscode.postMessage({ command: 'openWorkspace', workspaceId: item.dataset.id });
+      vscode.postMessage({
+        command: 'openWorkspace',
+        workspaceId: item.dataset.id,
+      });
     });
 
     item.addEventListener('contextmenu', (e) => {
       e.preventDefault();
-      showContextMenu(vscode, e.clientX, e.clientY, item.dataset.id, ws?.isFavorite);
+      showContextMenu(
+        vscode,
+        e.clientX,
+        e.clientY,
+        item.dataset.id,
+        ws?.isFavorite,
+      );
     });
   });
 }
 
 function renderBanner(vscode, status, workspaces) {
   const container = document.getElementById('bannerContainer');
-  if (!status || status.isSaved || !status.name || (workspaces && workspaces.length === 0)) {
+  if (
+    !status ||
+    status.isSaved ||
+    !status.name ||
+    (workspaces && workspaces.length === 0)
+  ) {
     container.innerHTML = '';
     return;
   }

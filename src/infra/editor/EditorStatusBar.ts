@@ -26,6 +26,6 @@ export class EditorStatusBar {
   }
 
   public onDidChangeWorkspaceFolders(callback: () => void): vscode.Disposable {
-    return vscode.workspace.onDidUpdateWorkspaceFolders(callback);
+    return vscode.workspace.onDidChangeWorkspaceFolders(callback);
   }
 }

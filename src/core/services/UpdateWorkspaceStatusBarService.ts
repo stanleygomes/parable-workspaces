@@ -1,6 +1,6 @@
-import { WorkspaceRepository } from '../core/repositories/WorkspaceRepository';
-import { EditorContext } from '../infra/editor/EditorContext';
-import { EditorStatusBar } from '../infra/editor/EditorStatusBar';
+import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
+import { EditorContext } from '../../infra/editor/EditorContext';
+import { EditorStatusBar } from '../../infra/editor/EditorStatusBar';
 
 export class UpdateWorkspaceStatusBarService {
   private readonly subscription: { dispose(): void };

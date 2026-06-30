@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import * as os from 'os';
-import { Workspace } from '../../dto/Workspace';
-import { FileHelper } from '../helpers/FileHelper';
-import { OSHelper } from '../helpers/OSHelper';
+import { Workspace } from '../../core/dtos/Workspace';
+import { FileHelper } from '../../core/helpers/FileHelper';
+import { OSHelper } from '../../core/helpers/OSHelper';
 import { WorkspaceFileStorage } from './WorkspaceFileStorage';
 
 export class WorkspaceStateManager {

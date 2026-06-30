@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { Container } from '../container';
-import { ViewProvider } from '../infra/view/provider/ViewProvider';
+import { Container } from './container';
+import { ViewProvider } from './infra/view/ViewProvider';
 
 export function registerCommands(
   context: vscode.ExtensionContext,

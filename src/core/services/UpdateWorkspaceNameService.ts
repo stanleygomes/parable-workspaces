@@ -1,5 +1,5 @@
 import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
-import { UserInteraction } from '../infra/editor/UserInteraction';
+import { UserInteraction } from '../../infra/editor/UserInteraction';
 
 export class UpdateWorkspaceNameService {
   constructor(
@@ -18,7 +18,7 @@ export class UpdateWorkspaceNameService {
       value: workspace.name,
     });
 
-    if (name === undefined) return;
+    if (name === undefined) {return;}
 
     workspace.name = name;
     await this.repository.save(workspace);

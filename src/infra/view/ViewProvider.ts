@@ -1,20 +1,20 @@
 import * as vscode from 'vscode';
-import { WorkspaceRepository } from '../../../core/repositories/WorkspaceRepository';
-import { HtmlTemplateBuilder } from '../HtmlTemplateBuilder';
-import { WebviewMessage } from '../../../core/dtos/WebviewMessage';
-import { SaveWorkspaceService } from '../../../core/services/SaveWorkspaceService';
-import { OpenWorkspaceService } from '../../../core/services/OpenWorkspaceService';
-import { DeleteWorkspaceService } from '../../../core/services/DeleteWorkspaceService';
-import { FindWorkspaceService } from '../../../core/services/FindWorkspaceService';
-import { UpdateWorkspaceFavoriteService } from '../../../core/services/UpdateWorkspaceFavoriteService';
-import { SettingsStateManager } from '../../../infra/persistence/SettingsStateManager';
-import { UpdateWorkspaceNameService } from '../../../core/services/UpdateWorkspaceNameService';
-import { UpdateWorkspaceEmojiService } from '../../../core/services/UpdateWorkspaceEmojiService';
-import { UpdateWorkspaceColorService } from '../../../core/services/UpdateWorkspaceColorService';
+import { WorkspaceRepository } from '../../core/repositories/WorkspaceRepository';
+import { HtmlTemplateBuilder } from './HtmlTemplateBuilder';
+import { WebviewMessage } from '../../core/dtos/WebviewMessage';
+import { SaveWorkspaceService } from '../../core/services/SaveWorkspaceService';
+import { OpenWorkspaceService } from '../../core/services/OpenWorkspaceService';
+import { DeleteWorkspaceService } from '../../core/services/DeleteWorkspaceService';
+import { FindWorkspaceService } from '../../core/services/FindWorkspaceService';
+import { UpdateWorkspaceFavoriteService } from '../../core/services/UpdateWorkspaceFavoriteService';
+import { SettingsStateManager } from '../persistence/SettingsStateManager';
+import { UpdateWorkspaceNameService } from '../../core/services/UpdateWorkspaceNameService';
+import { UpdateWorkspaceEmojiService } from '../../core/services/UpdateWorkspaceEmojiService';
+import { UpdateWorkspaceColorService } from '../../core/services/UpdateWorkspaceColorService';
 import { ViewState } from './ViewState';
 import { ViewMessageHandler } from './ViewMessageHandler';
-import { UpdateViewFilterService } from '../../../core/services/UpdateViewFilterService';
-import { SortWorkspacesService } from '../../../core/services/SortWorkspacesService';
+import { UpdateViewFilterService } from '../../core/services/UpdateViewFilterService';
+import { SortWorkspacesService } from '../../core/services/SortWorkspacesService';
 
 /**
  * VS Code WebviewViewProvider for the workspace sidebar panel.

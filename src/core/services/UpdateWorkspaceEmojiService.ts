@@ -1,6 +1,6 @@
 import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
-import { EMOJIS, EmojiItem } from '../core/enums/Emojis';
-import { UserInteraction } from '../infra/editor/UserInteraction';
+import { EMOJIS, EmojiItem } from '../enums/Emojis';
+import { UserInteraction } from '../../infra/editor/UserInteraction';
 
 export class UpdateWorkspaceEmojiService {
   constructor(
@@ -31,7 +31,7 @@ export class UpdateWorkspaceEmojiService {
       },
     );
 
-    if (selectedEmoji === undefined) return;
+    if (selectedEmoji === undefined) {return;}
 
     workspace.emoji = (selectedEmoji as any).emoji;
     await this.repository.save(workspace);

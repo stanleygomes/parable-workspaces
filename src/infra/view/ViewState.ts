@@ -1,12 +1,12 @@
-import { WorkspaceRepository } from '../../../core/repositories/WorkspaceRepository';
-import { FindWorkspaceService } from '../../../core/services/FindWorkspaceService';
-import { SortWorkspacesService } from '../../../core/services/SortWorkspacesService';
-import { SettingsStateManager } from '../../../infra/persistence/SettingsStateManager';
-import { SettingsKey } from '../../../core/enums/SettingsKey';
-import { SortType } from '../../../core/enums/SortType';
-import { WorkspaceColors } from '../../../core/enums/WorkspaceColor';
-import { DateHelper } from '../../../core/helpers/DateHelper';
-import { EditorContext } from '../../editor/EditorContext';
+import { WorkspaceRepository } from '../../core/repositories/WorkspaceRepository';
+import { FindWorkspaceService } from '../../core/services/FindWorkspaceService';
+import { SortWorkspacesService } from '../../core/services/SortWorkspacesService';
+import { SettingsStateManager } from '../persistence/SettingsStateManager';
+import { SettingsKey } from '../../core/enums/SettingsKey';
+import { SortType } from '../../core/enums/SortType';
+import { WorkspaceColors } from '../../core/enums/WorkspaceColor';
+import { DateHelper } from '../../core/helpers/DateHelper';
+import { EditorContext } from '../editor/EditorContext';
 
 /**
  * Holds the current filter, sort and search state of the sidebar view.

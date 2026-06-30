@@ -16,7 +16,10 @@ function showContextMenu(vscode, x, y, workspaceId, isFavorite) {
 
   contextMenu.querySelectorAll('.context-menu-item').forEach((item) => {
     item.addEventListener('click', () => {
-      vscode.postMessage({ command: item.getAttribute('data-action'), workspaceId });
+      vscode.postMessage({
+        command: item.getAttribute('data-action'),
+        workspaceId,
+      });
       contextMenu.style.display = 'none';
     });
   });

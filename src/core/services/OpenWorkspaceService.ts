@@ -1,5 +1,5 @@
-import { WorkspaceRepository } from '../core/repositories/WorkspaceRepository';
-import { UserInteraction } from '../infra/editor/UserInteraction';
+import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
+import { UserInteraction } from '../../infra/editor/UserInteraction';
 
 export class OpenWorkspaceService {
   constructor(

@@ -1,14 +1,14 @@
-import { WebviewMessage } from '../../../core/dtos/WebviewMessage';
-import { SaveWorkspaceService } from '../../../core/services/SaveWorkspaceService';
-import { OpenWorkspaceService } from '../../../core/services/OpenWorkspaceService';
-import { DeleteWorkspaceService } from '../../../core/services/DeleteWorkspaceService';
-import { UpdateWorkspaceFavoriteService } from '../../../core/services/UpdateWorkspaceFavoriteService';
-import { UpdateWorkspaceNameService } from '../../../core/services/UpdateWorkspaceNameService';
-import { UpdateWorkspaceEmojiService } from '../../../core/services/UpdateWorkspaceEmojiService';
-import { UpdateWorkspaceColorService } from '../../../core/services/UpdateWorkspaceColorService';
-import { SortType } from '../../../core/enums/SortType';
+import { WebviewMessage } from '../../core/dtos/WebviewMessage';
+import { SaveWorkspaceService } from '../../core/services/SaveWorkspaceService';
+import { OpenWorkspaceService } from '../../core/services/OpenWorkspaceService';
+import { DeleteWorkspaceService } from '../../core/services/DeleteWorkspaceService';
+import { UpdateWorkspaceFavoriteService } from '../../core/services/UpdateWorkspaceFavoriteService';
+import { UpdateWorkspaceNameService } from '../../core/services/UpdateWorkspaceNameService';
+import { UpdateWorkspaceEmojiService } from '../../core/services/UpdateWorkspaceEmojiService';
+import { UpdateWorkspaceColorService } from '../../core/services/UpdateWorkspaceColorService';
+import { SortType } from '../../core/enums/SortType';
 import { ViewState } from './ViewState';
-import { UpdateViewFilterService } from '../../../core/services/UpdateViewFilterService';
+import { UpdateViewFilterService } from '../../core/services/UpdateViewFilterService';
 
 /**
  * Dispatches messages received from the webview UI to the appropriate domain
