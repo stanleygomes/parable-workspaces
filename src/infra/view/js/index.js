@@ -1,62 +1,89 @@
-const vscode = acquireVsCodeApi();
-let currentWorkspaceId = null;
-let showOnlyFavorites = false;
-let currentSort = 'favorites';
-let showFilters = false;
+class WorkspacesViewController {
+  constructor() {
+    this.vscode = acquireVsCodeApi();
+    this.currentWorkspaceId = null;
+    this.showOnlyFavorites = false;
+    this.currentSort = 'favorites';
+    this.showFilters = false;
+    this.availableColors = [];
 
-const searchBox = document.getElementById('searchBox');
-const btnToggleFilters = document.getElementById('btnToggleFilters');
-const btnShowFavorites = document.getElementById('btnShowFavorites');
-const sortSelect = document.getElementById('sortSelect');
-const workspacesList = document.getElementById('workspacesList');
-const contextMenu = document.getElementById('contextMenu');
-const filterRow = document.querySelector('.filter-row');
-let availableColors = [];
+    this.searchBox = document.getElementById('searchBox');
+    this.btnToggleFilters = document.getElementById('btnToggleFilters');
+    this.btnShowFavorites = document.getElementById('btnShowFavorites');
+    this.sortSelect = document.getElementById('sortSelect');
+    this.workspacesList = document.getElementById('workspacesList');
+    this.contextMenu = document.getElementById('contextMenu');
+    this.filterRow = document.querySelector('.filter-row');
 
-searchBox.addEventListener('input', () => {
-  vscode.postMessage({ command: 'search', query: searchBox.value });
-});
-
-btnShowFavorites.addEventListener('click', () => {
-  showOnlyFavorites = !showOnlyFavorites;
-  btnShowFavorites.classList.toggle('active', showOnlyFavorites);
-  vscode.postMessage({
-    command: 'toggleFavoritesFilter',
-    showOnlyFavorites,
-  });
-});
-
-sortSelect.addEventListener('change', () => {
-  currentSort = sortSelect.value;
-  vscode.postMessage({ command: 'changeSort', sortType: currentSort });
-});
-
-btnToggleFilters.addEventListener('click', () => {
-  showFilters = !showFilters;
-  vscode.postMessage({ command: 'toggleFilters', showFilters });
-});
-
-document.addEventListener('click', (e) => {
-  if (!contextMenu.contains(e.target)) {
-    contextMenu.style.display = 'none';
+    this.bindEvents();
   }
-});
 
-function renderWorkspaces(workspaces) {
-  if (workspaces.length === 0) {
-    workspacesList.innerHTML = `
-    <div class="empty-state">
-      <p>No workspaces saved yet.</p>
-      <button class="primary-btn" id="btnSaveCurrent">Save Current Workspace</button>
-    </div>
-  `;
-    document.getElementById('btnSaveCurrent').addEventListener('click', () => {
-      vscode.postMessage({ command: 'saveCurrent' });
+  bindEvents() {
+    this.searchBox.addEventListener('input', () => {
+      this.vscode.postMessage({
+        command: 'search',
+        query: this.searchBox.value,
+      });
     });
-    return;
+
+    this.btnShowFavorites.addEventListener('click', () => {
+      this.showOnlyFavorites = !this.showOnlyFavorites;
+      this.btnShowFavorites.classList.toggle('active', this.showOnlyFavorites);
+      this.vscode.postMessage({
+        command: 'toggleFavoritesFilter',
+        showOnlyFavorites: this.showOnlyFavorites,
+      });
+    });
+
+    this.sortSelect.addEventListener('change', () => {
+      this.currentSort = this.sortSelect.value;
+      this.vscode.postMessage({
+        command: 'changeSort',
+        sortType: this.currentSort,
+      });
+    });
+
+    this.btnToggleFilters.addEventListener('click', () => {
+      this.showFilters = !this.showFilters;
+      this.vscode.postMessage({
+        command: 'toggleFilters',
+        showFilters: this.showFilters,
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!this.contextMenu.contains(e.target)) {
+        this.contextMenu.style.display = 'none';
+      }
+    });
+
+    window.addEventListener('message', (event) => {
+      const message = event.data;
+      if (message.command === 'updateWorkspaces') {
+        this.handleUpdateWorkspaces(message);
+      }
+    });
   }
 
-  function getInitials(name) {
+  handleUpdateWorkspaces(message) {
+    if (message.filters) {
+      this.showOnlyFavorites = message.filters.showOnlyFavorites;
+      this.btnShowFavorites.classList.toggle('active', this.showOnlyFavorites);
+      this.currentSort = message.filters.sortType;
+      this.sortSelect.value = this.currentSort;
+
+      this.showFilters = !!message.filters.showFilters;
+      this.btnToggleFilters.classList.toggle('active', this.showFilters);
+      this.filterRow.classList.toggle('hidden', !this.showFilters);
+    }
+    if (message.availableColors) {
+      this.availableColors = message.availableColors;
+    }
+    this.renderWorkspaces(message.workspaces);
+    this.renderBanner(message.currentStatus, message.workspaces);
+  }
+
+  getInitials(name) {
     if (!name) {
       return 'WS';
     }
@@ -67,165 +94,163 @@ function renderWorkspaces(workspaces) {
     return name.substring(0, 2).toUpperCase();
   }
 
-  workspacesList.innerHTML = workspaces
-    .map((ws) => {
-      return `
-    <div class="workspace-item design-emoji-ring" data-id="${ws.id}">
-      <div class="workspace-emoji-wrapper">
-        ${
-          ws.emoji
-            ? `<span class="workspace-emoji">${ws.emoji}</span>`
-            : `<span class="workspace-initials">${getInitials(ws.name)}</span>`
-        }
+  escapeHtml(str) {
+    if (!str) {
+      return '';
+    }
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  renderWorkspaces(workspaces) {
+    if (workspaces.length === 0) {
+      this.workspacesList.innerHTML = `
+      <div class="empty-state">
+        <p>No workspaces saved yet.</p>
+        <button class="primary-btn" id="btnSaveCurrent">Save Current Workspace</button>
       </div>
-      <div class="workspace-body">
-        <div class="workspace-header">
-          <span class="workspace-title">
-            ${escapeHtml(ws.name)}
-          </span>
-          <div class="header-actions">
-            <span class="workspace-date">${ws.dateLabel}</span>
-            <button class="star-btn ${ws.isFavorite ? 'favorite-active' : ''}" data-id="${ws.id}">
-              <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 0L10.5 5.5L16 6.5L12 10.5L13 16L8 13.5L3 16L4 10.5L0 6.5L5.5 5.5L8 0Z" />
-              </svg>
-            </button>
-          </div>
+    `;
+      document
+        .getElementById('btnSaveCurrent')
+        .addEventListener('click', () => {
+          this.vscode.postMessage({ command: 'saveCurrent' });
+        });
+      return;
+    }
+
+    this.workspacesList.innerHTML = workspaces
+      .map((ws) => {
+        return `
+      <div class="workspace-item design-emoji-ring" data-id="${ws.id}">
+        <div class="workspace-emoji-wrapper">
+          ${
+            ws.emoji
+              ? `<span class="workspace-emoji">${ws.emoji}</span>`
+              : `<span class="workspace-initials">${this.getInitials(ws.name)}</span>`
+          }
         </div>
-
-        ${
-          ws.tags && ws.tags.length > 0
-            ? `
-          <div class="workspace-tags">
-            ${ws.tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+        <div class="workspace-body">
+          <div class="workspace-header">
+            <span class="workspace-title">
+              ${this.escapeHtml(ws.name)}
+            </span>
+            <div class="header-actions">
+              <span class="workspace-date">${ws.dateLabel}</span>
+              <button class="star-btn ${ws.isFavorite ? 'favorite-active' : ''}" data-id="${ws.id}">
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M8 0L10.5 5.5L16 6.5L12 10.5L13 16L8 13.5L3 16L4 10.5L0 6.5L5.5 5.5L8 0Z" />
+                </svg>
+              </button>
+            </div>
           </div>
-        `
-            : ''
-        }
+
+          ${
+            ws.tags && ws.tags.length > 0
+              ? `
+            <div class="workspace-tags">
+              ${ws.tags.map((tag) => `<span class="tag">${this.escapeHtml(tag)}</span>`).join('')}
+            </div>
+          `
+              : ''
+          }
+        </div>
       </div>
-    </div>
-  `;
-    })
-    .join('');
+    `;
+      })
+      .join('');
 
-  workspacesList.querySelectorAll('.star-btn').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      vscode.postMessage({
-        command: 'toggleFavorite',
-        workspaceId: btn.dataset.id,
+    this.workspacesList.querySelectorAll('.star-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.vscode.postMessage({
+          command: 'toggleFavorite',
+          workspaceId: btn.dataset.id,
+        });
       });
     });
-  });
 
-  workspacesList.querySelectorAll('.workspace-item').forEach((item) => {
-    const ws = workspaces.find((w) => w.id === item.dataset.id);
-    if (ws) {
-      const color = ws.color || 'var(--vscode-foreground)';
-      const wrapper = item.querySelector('.workspace-emoji-wrapper');
-      if (wrapper) {
-        wrapper.style.setProperty('--workspace-color', color);
+    this.workspacesList.querySelectorAll('.workspace-item').forEach((item) => {
+      const ws = workspaces.find((w) => w.id === item.dataset.id);
+      if (ws) {
+        const color = ws.color || 'var(--vscode-foreground)';
+        const wrapper = item.querySelector('.workspace-emoji-wrapper');
+        if (wrapper) {
+          wrapper.style.setProperty('--workspace-color', color);
+        }
       }
-    }
 
-    item.addEventListener('click', (e) => {
-      vscode.postMessage({
-        command: 'openWorkspace',
-        workspaceId: item.dataset.id,
+      item.addEventListener('click', (e) => {
+        this.vscode.postMessage({
+          command: 'openWorkspace',
+          workspaceId: item.dataset.id,
+        });
+      });
+      item.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        this.showContextMenu(
+          e.clientX,
+          e.clientY,
+          item.dataset.id,
+          ws?.isFavorite,
+        );
       });
     });
-    item.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-      showContextMenu(e.clientX, e.clientY, item.dataset.id, ws?.isFavorite);
-    });
-  });
-}
-
-function getColorEmoji(hex) {
-  const color = availableColors.find((c) => c.color === hex);
-  return color ? color.label : '⚪';
-}
-
-function showContextMenu(x, y, workspaceId, isFavorite) {
-  currentWorkspaceId = workspaceId;
-  contextMenu.innerHTML = `
-  <div class="context-menu-item" data-action="openWorkspace">Open Workspace</div>
-  <div class="context-menu-item" data-action="openWorkspaceNewWindow">Open in New Window</div>
-  <div class="context-menu-item" data-action="toggleFavorite">${isFavorite ? 'Unfavorite' : 'Favorite'}</div>
-  <div class="context-menu-item" data-action="changeEmoji">Change Emoji</div>
-  <div class="context-menu-item" data-action="changeColor">Change Color</div>
-  <div class="context-menu-separator"></div>
-  <div class="context-menu-item" data-action="editWorkspace">Rename</div>
-  <div class="context-menu-item" data-action="deleteWorkspace">Delete</div>
-`;
-  contextMenu.style.left = x + 'px';
-  contextMenu.style.top = y + 'px';
-  contextMenu.style.display = 'block';
-
-  contextMenu.querySelectorAll('.context-menu-item').forEach((item) => {
-    item.addEventListener('click', () => {
-      const action = item.getAttribute('data-action');
-      vscode.postMessage({
-        command: action,
-        workspaceId: currentWorkspaceId,
-      });
-      contextMenu.style.display = 'none';
-    });
-  });
-}
-
-function escapeHtml(str) {
-  if (!str) {
-    return '';
-  }
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-window.addEventListener('message', (event) => {
-  const message = event.data;
-  if (message.command === 'updateWorkspaces') {
-    if (message.filters) {
-      showOnlyFavorites = message.filters.showOnlyFavorites;
-      btnShowFavorites.classList.toggle('active', showOnlyFavorites);
-      currentSort = message.filters.sortType;
-      sortSelect.value = currentSort;
-
-      showFilters = !!message.filters.showFilters;
-      btnToggleFilters.classList.toggle('active', showFilters);
-      filterRow.classList.toggle('hidden', !showFilters);
-    }
-    if (message.availableColors) {
-      availableColors = message.availableColors;
-    }
-    renderWorkspaces(message.workspaces);
-    renderBanner(message.currentStatus, message.workspaces);
-  }
-});
-
-function renderBanner(status, workspaces) {
-  const container = document.getElementById('bannerContainer');
-  if (
-    !status ||
-    status.isSaved ||
-    !status.name ||
-    (workspaces && workspaces.length === 0)
-  ) {
-    container.innerHTML = '';
-    return;
   }
 
-  container.innerHTML = `
-    <div class="save-banner">
-      <p class="banner-text">This workspace is not saved yet</p>
-      <button class="primary-btn featured-btn" id="btnSaveBanner">Save "${escapeHtml(status.name)}"</button>
-    </div>
+  showContextMenu(x, y, workspaceId, isFavorite) {
+    this.currentWorkspaceId = workspaceId;
+    this.contextMenu.innerHTML = `
+    <div class="context-menu-item" data-action="openWorkspace">Open Workspace</div>
+    <div class="context-menu-item" data-action="openWorkspaceNewWindow">Open in New Window</div>
+    <div class="context-menu-item" data-action="toggleFavorite">${isFavorite ? 'Unfavorite' : 'Favorite'}</div>
+    <div class="context-menu-item" data-action="changeEmoji">Change Emoji</div>
+    <div class="context-menu-item" data-action="changeColor">Change Color</div>
+    <div class="context-menu-separator"></div>
+    <div class="context-menu-item" data-action="editWorkspace">Rename</div>
+    <div class="context-menu-item" data-action="deleteWorkspace">Delete</div>
   `;
+    this.contextMenu.style.left = x + 'px';
+    this.contextMenu.style.top = y + 'px';
+    this.contextMenu.style.display = 'block';
 
-  document.getElementById('btnSaveBanner').addEventListener('click', () => {
-    vscode.postMessage({ command: 'saveCurrent' });
-  });
+    this.contextMenu.querySelectorAll('.context-menu-item').forEach((item) => {
+      item.addEventListener('click', () => {
+        const action = item.getAttribute('data-action');
+        this.vscode.postMessage({
+          command: action,
+          workspaceId: this.currentWorkspaceId,
+        });
+        this.contextMenu.style.display = 'none';
+      });
+    });
+  }
+
+  renderBanner(status, workspaces) {
+    const container = document.getElementById('bannerContainer');
+    if (
+      !status ||
+      status.isSaved ||
+      !status.name ||
+      (workspaces && workspaces.length === 0)
+    ) {
+      container.innerHTML = '';
+      return;
+    }
+
+    container.innerHTML = `
+      <div class="save-banner">
+        <p class="banner-text">This workspace is not saved yet</p>
+        <button class="primary-btn featured-btn" id="btnSaveBanner">Save "${this.escapeHtml(status.name)}"</button>
+      </div>
+    `;
+
+    document.getElementById('btnSaveBanner').addEventListener('click', () => {
+      this.vscode.postMessage({ command: 'saveCurrent' });
+    });
+  }
 }
+
+new WorkspacesViewController();

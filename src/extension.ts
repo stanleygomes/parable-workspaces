@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Container } from './container';
-import { WorkspacesViewProvider } from './infra/view/WorkspacesViewProvider';
+import { ViewProvider } from './infra/view/provider/ViewProvider';
 import { registerCommands } from './commands';
 
 export async function activate(
@@ -13,7 +13,7 @@ export async function activate(
 
   console.log('Services initialized successfully');
 
-  const provider = new WorkspacesViewProvider(
+  const provider = new ViewProvider(
     context.extensionUri,
     container.workspaceRepository,
     container.saveWorkspaceService,
@@ -28,10 +28,7 @@ export async function activate(
   );
 
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(
-      WorkspacesViewProvider.viewType,
-      provider,
-    ),
+    vscode.window.registerWebviewViewProvider(ViewProvider.viewType, provider),
   );
 
   registerCommands(context, container, provider);

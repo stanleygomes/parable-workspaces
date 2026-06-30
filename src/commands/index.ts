@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 import { Container } from '../container';
-import { WorkspacesViewProvider } from '../infra/view/WorkspacesViewProvider';
+import { ViewProvider } from '../infra/view/provider/ViewProvider';
 
 export function registerCommands(
   context: vscode.ExtensionContext,
   container: Container,
-  provider: WorkspacesViewProvider,
+  provider: ViewProvider,
 ): void {
   context.subscriptions.push(
     vscode.commands.registerCommand('workspaceManager.saveProject', () =>
