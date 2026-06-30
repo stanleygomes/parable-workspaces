@@ -1,7 +1,7 @@
-import { WorkspaceRepository } from '../core/repositories/WorkspaceRepository';
-import { Workspace } from '../core/dtos/Workspace';
-import { UserInteraction } from '../infra/editor/UserInteraction';
-import { EditorContext } from '../infra/editor/EditorContext';
+import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
+import { Workspace } from '../dtos/Workspace';
+import { UserInteraction } from '../../infra/editor/UserInteraction';
+import { EditorContext } from '../../infra/editor/EditorContext';
 
 export class SaveWorkspaceService {
   constructor(

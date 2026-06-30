@@ -1,5 +1,5 @@
-import { WorkspaceRepository } from '../repository/WorkspaceRepository';
-import { Workspace } from '../dto/Workspace';
+import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
+import { Workspace } from '../dtos/Workspace';
 
 export class FindWorkspaceService {
   constructor(private readonly repository: WorkspaceRepository) {}

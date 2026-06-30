@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { Workspace } from '../dto/Workspace';
-import { WorkspaceStateManager } from '../core/persistence/WorkspaceStateManager';
+import { Workspace } from '../dtos/Workspace';
+import { WorkspaceStateManager } from '../persistence/WorkspaceStateManager';
 
 export class WorkspaceRepository {
   private readonly _onDidChange = new vscode.EventEmitter<void>();

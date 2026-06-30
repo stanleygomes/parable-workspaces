@@ -1,4 +1,4 @@
-import { WorkspaceRepository } from '../repository/WorkspaceRepository';
+import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
 
 export class UpdateWorkspaceFavoriteService {
   constructor(private readonly repository: WorkspaceRepository) {}
