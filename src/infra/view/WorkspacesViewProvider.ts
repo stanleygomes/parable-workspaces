@@ -1,19 +1,22 @@
 import * as vscode from 'vscode';
-import { WorkspaceRepository } from '../core/repositories/WorkspaceRepository';
-import { WebviewHelper } from '../helper/WebviewHelper';
-import { WorkspaceMapper } from '../mapper/WorkspaceMapper';
-import { WebviewMessage } from '../core/dtos/WebviewMessage';
-import { SaveWorkspaceService } from '../service/SaveWorkspaceService';
-import { OpenWorkspaceService } from '../service/OpenWorkspaceService';
-import { DeleteWorkspaceService } from '../service/DeleteWorkspaceService';
-import { FindWorkspaceService } from '../service/FindWorkspaceService';
-import { UpdateWorkspaceFavoriteService } from '../service/UpdateWorkspaceFavoriteService';
-import { SettingsService, SettingsKey } from '../service/SettingsService';
-import { UpdateWorkspaceNameService } from '../service/UpdateWorkspaceNameService';
-import { UpdateWorkspaceEmojiService } from '../core/services/UpdateWorkspaceEmojiService';
-import { UpdateWorkspaceColorService } from '../core/services/UpdateWorkspaceColorService';
-import { WorkspaceColors } from '../core/enums/WorkspaceColor';
-import { SortType } from '../core/enums/SortType';
+import { WorkspaceRepository } from '../../core/repositories/WorkspaceRepository';
+import { WebviewHelper } from './WebviewHelper';
+import { WorkspaceMapper } from './WorkspaceMapper';
+import { WebviewMessage } from '../../core/dtos/WebviewMessage';
+import { SaveWorkspaceService } from '../../core/services/SaveWorkspaceService';
+import { OpenWorkspaceService } from '../../core/services/OpenWorkspaceService';
+import { DeleteWorkspaceService } from '../../core/services/DeleteWorkspaceService';
+import { FindWorkspaceService } from '../../core/services/FindWorkspaceService';
+import { UpdateWorkspaceFavoriteService } from '../../core/services/UpdateWorkspaceFavoriteService';
+import {
+  SettingsService,
+  SettingsKey,
+} from '../../core/services/SettingsService';
+import { UpdateWorkspaceNameService } from '../../core/services/UpdateWorkspaceNameService';
+import { UpdateWorkspaceEmojiService } from '../../core/services/UpdateWorkspaceEmojiService';
+import { UpdateWorkspaceColorService } from '../../core/services/UpdateWorkspaceColorService';
+import { WorkspaceColors } from '../../core/enums/WorkspaceColor';
+import { SortType } from '../../core/enums/SortType';
 
 export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'workspaceManager.workspacesView';
@@ -92,12 +95,15 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       workspaces = workspaces.filter((ws) => ws.isFavorite);
     }
 
-    // Sort logic
     workspaces.sort((a, b) => {
       switch (this.currentSort) {
         case SortType.FavoritesFirst:
-          if (a.isFavorite && !b.isFavorite) return -1;
-          if (!a.isFavorite && b.isFavorite) return 1;
+          if (a.isFavorite && !b.isFavorite) {
+            return -1;
+          }
+          if (!a.isFavorite && b.isFavorite) {
+            return 1;
+          }
           return b.lastOpened - a.lastOpened;
         case SortType.Alphabetical:
           return a.name.localeCompare(b.name);
@@ -108,7 +114,6 @@ export class WorkspacesViewProvider implements vscode.WebviewViewProvider {
       }
     });
 
-    // Check if current workspace is saved
     const workspaceFolders = vscode.workspace.workspaceFolders;
     let isCurrentSaved = true;
     let currentWorkspaceName = '';

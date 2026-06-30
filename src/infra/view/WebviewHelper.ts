@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { TemplateHelper } from '../core/helpers/TemplateHelper';
+import { TemplateHelper } from '../../core/helpers/TemplateHelper';
 
 export class WebviewHelper {
   public static getHtml(
@@ -65,11 +65,6 @@ export class WebviewHelper {
     );
   }
 
-  /**
-   * Generates a random 32-character alphanumeric nonce for Content Security Policy (CSP).
-   *
-   * @returns A random 32-character string.
-   */
   private static generateNonce(): string {
     let text = '';
     const possible =

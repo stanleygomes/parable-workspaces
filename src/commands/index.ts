@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { Container } from '../container';
-import { WorkspacesViewProvider } from '../ui/WorkspacesViewProvider';
+import { WorkspacesViewProvider } from '../infra/view/WorkspacesViewProvider';
 
 export function registerCommands(
   context: vscode.ExtensionContext,
