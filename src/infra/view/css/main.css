@@ -168,6 +168,18 @@ body {
   gap: 4px;
 }
 
+.filter-chip svg {
+  flex-shrink: 0;
+}
+
+.filter-row.compact .filter-chip {
+  padding: 4px 7px;
+}
+
+.filter-row.compact .filter-chip-label {
+  display: none;
+}
+
 .filter-chip.active {
   background: var(--vscode-button-background);
   color: var(--vscode-button-foreground);

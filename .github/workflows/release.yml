@@ -161,6 +161,7 @@ jobs:
         run: npx ovsx publish parable-workspaces.vsix
 
       - name: Upload VSIX Artifact
+        if: ${{ !env.ACT }}
         uses: actions/upload-artifact@v7
         with:
           name: vscode-extension-vsix

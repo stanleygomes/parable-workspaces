@@ -18,6 +18,7 @@ export class ViewState {
   public showOnlyFavorites = false;
   public currentSort = SortType.FavoritesFirst;
   public showFilters = false;
+  public showTimeUpdated = false;
 
   constructor(
     private readonly repository: WorkspaceRepository,
@@ -35,6 +36,10 @@ export class ViewState {
     );
     this.showFilters = this.SettingsStateManager.get(
       SettingsKey.ShowFilters,
+      false,
+    );
+    this.showTimeUpdated = this.SettingsStateManager.get(
+      SettingsKey.ShowTimeUpdated,
       false,
     );
   }
@@ -70,6 +75,7 @@ export class ViewState {
         showOnlyFavorites: this.showOnlyFavorites,
         sortType: this.currentSort,
         showFilters: this.showFilters,
+        showTimeUpdated: this.showTimeUpdated,
       },
       availableColors: WorkspaceColors,
     };

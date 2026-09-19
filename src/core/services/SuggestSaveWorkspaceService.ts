@@ -2,6 +2,7 @@ import { WorkspaceRepository } from '../repositories/WorkspaceRepository';
 import { SaveWorkspaceService } from './SaveWorkspaceService';
 import { EditorContext } from '../../infra/editor/EditorContext';
 import { UserInteraction } from '../../infra/editor/UserInteraction';
+import { StringHelper } from '../helpers/StringHelper';
 
 export class SuggestSaveWorkspaceService {
   constructor(
@@ -16,23 +17,46 @@ export class SuggestSaveWorkspaceService {
       return;
     }
 
-    const workspace = this.repository.findOne(currentId);
-
-    if (!workspace) {
-      const name = EditorContext.getCurrentWorkspaceName();
-      if (!name) {
-        return;
-      }
-
-      const action = await this.userInteraction.showInfo(
-        `Would you like to save "${name}" as a Workspace?`,
-        'Save Workspace',
-        'Not Now',
-      );
-
-      if (action === 'Save Workspace') {
-        await this.saveService.save();
-      }
+    if (this.isAlreadySaved(currentId)) {
+      return;
     }
+
+    const name = EditorContext.getCurrentWorkspaceName();
+    if (!name) {
+      return;
+    }
+
+    const action = await this.userInteraction.showInfo(
+      `Would you like to save "${name}" as a Workspace?`,
+      'Save Workspace',
+      'Not Now',
+    );
+
+    if (action === 'Save Workspace') {
+      await this.saveService.save();
+    }
+  }
+
+  private isAlreadySaved(currentId: string): boolean {
+    if (this.repository.findOne(currentId)) {
+      return true;
+    }
+
+    const currentWorkspaceFile = EditorContext.getCurrentWorkspaceFile();
+    if (!currentWorkspaceFile) {
+      return false;
+    }
+
+    return this.repository.findAll().some((workspace) => {
+      if (workspace.workspaceFile === currentWorkspaceFile) {
+        return true;
+      }
+
+      try {
+        return StringHelper.fromBase64(workspace.id) === currentWorkspaceFile;
+      } catch {
+        return false;
+      }
+    });
   }
 }

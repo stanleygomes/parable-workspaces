@@ -76,10 +76,63 @@ jobs:
       - name: Run Audit Check
         run: npm audit
 
+  # Run Vitest unit tests and publish coverage reports
+  test-unit:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Unit Tests with Coverage
+        run: npm run test:unit:coverage
+
+      - name: Upload Unit Coverage
+        if: ${{ !env.ACT }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: unit-coverage
+          path: coverage/unit
+
+  # Run Mocha e2e tests in a VS Code Extension Host
+  test-e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run E2E Tests with Coverage
+        run: xvfb-run -a npm run test:e2e:coverage
+
+      - name: Upload E2E Coverage
+        if: ${{ always() && !env.ACT }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-coverage
+          path: coverage/e2e
+          if-no-files-found: ignore
+
   # Build and package extension
   buildExtension:
     name: Build Extension
-    needs: [validateCommits, lint, prettier, audit]
+    needs: [validateCommits, lint, prettier, audit, test-unit, test-e2e]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -102,7 +155,7 @@ jobs:
         run: npx @vscode/vsce package --no-yarn --out parable-workspaces.vsix
 
       - name: Upload VSIX Artifact
-        if: github.event_name == 'push'
+        if: ${{ github.event_name == 'push' && !env.ACT }}
         uses: actions/upload-artifact@v7
         with:
           name: vscode-extension-vsix
