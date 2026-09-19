@@ -3,27 +3,52 @@ import { FileHelper } from './FileHelper';
 import { StringHelper } from './StringHelper';
 
 export class TemplateHelper {
-  /**
-   * Renders a template by reading its content and replacing placeholders.
-   *
-   * @param extensionUri The URI of the extension.
-   * @param templatePath Array of path parts relative to the extension root (e.g., ['resources', 'templates', 'html', 'index.html']).
-   * @param variables A map of placeholders to their values (e.g., { 'nonce': 'abc' }).
-   * @returns The rendered template string.
-   */
+  private static readonly contentCache = new Map<string, string>();
+
+  public static prefetch(
+    extensionUri: vscode.Uri,
+    templatePaths: string[][],
+  ): void {
+    for (const templatePath of templatePaths) {
+      this.readCached(extensionUri, templatePath);
+    }
+  }
+
+  public static clearCache(): void {
+    this.contentCache.clear();
+  }
+
   public static render(
     extensionUri: vscode.Uri,
     templatePath: string[],
     variables: Record<string, string> = {},
   ): string {
-    const fullPath = FileHelper.buildPath(extensionUri.fsPath, ...templatePath);
-    const content = FileHelper.readText(fullPath);
+    const content = this.readCached(extensionUri, templatePath);
 
     if (!content) {
+      const fullPath = FileHelper.buildPath(
+        extensionUri.fsPath,
+        ...templatePath,
+      );
       console.error(`Template not found or empty: ${fullPath}`);
       return `<!-- Error: Template not found at ${fullPath} -->`;
     }
 
     return StringHelper.replace(content, variables);
+  }
+
+  private static readCached(
+    extensionUri: vscode.Uri,
+    templatePath: string[],
+  ): string {
+    const fullPath = FileHelper.buildPath(extensionUri.fsPath, ...templatePath);
+    const cached = this.contentCache.get(fullPath);
+    if (cached !== undefined) {
+      return cached;
+    }
+
+    const content = FileHelper.readText(fullPath);
+    this.contentCache.set(fullPath, content);
+    return content;
   }
 }

@@ -2,4 +2,6 @@ export enum SettingsKey {
   ShowOnlyFavorites = 'showOnlyFavorites',
   SortType = 'sortType',
   ShowFilters = 'showFilters',
+  ShowTimeUpdated = 'showTimeUpdated',
+  ShowFavicon = 'showFavicon',
 }

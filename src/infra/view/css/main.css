@@ -168,6 +168,18 @@ body {
   gap: 4px;
 }
 
+.filter-chip svg {
+  flex-shrink: 0;
+}
+
+.filter-row.compact .filter-chip {
+  padding: 4px 7px;
+}
+
+.filter-row.compact .filter-chip-label {
+  display: none;
+}
+
 .filter-chip.active {
   background: var(--vscode-button-background);
   color: var(--vscode-button-foreground);
@@ -240,6 +252,29 @@ body {
   font-size: 20px;
   flex-shrink: 0;
   line-height: 1;
+}
+
+.workspace-favicon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+}
+
+.workspace-item.no-icons {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.workspace-item.no-icons .workspace-body {
+  flex: 1;
+  min-width: 0;
+  padding-left: 0;
+}
+
+.workspace-emoji-wrapper.has-favicon {
+  overflow: hidden;
 }
 
 .workspace-date {

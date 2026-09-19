@@ -84,26 +84,51 @@
         "key": "alt+p",
         "mac": "cmd+opt+p"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Parable Workspaces",
+      "properties": {
+        "parableWorkspaces.detectIcons": {
+          "type": "boolean",
+          "default": false,
+          "scope": "window",
+          "description": "When true, discover favicon/icon/logo images under workspace folders for sidebar and QuickPick badges. Configured workspace icons still show when false."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "compile": "tsc -p ./tsconfig.build.json",
+    "compile:fresh": "rm -rf out && npm run compile",
+    "watch": "tsc -watch -p ./tsconfig.build.json",
     "lint": "eslint src",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "build": "npm run compile",
-    "package": "npx @vscode/vsce package"
+    "package": "npx @vscode/vsce package",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:unit:coverage": "vitest run --coverage && node ./scripts/print-coverage-summary.mjs unit",
+    "test:e2e": "npm run compile:fresh && node ./scripts/run-vscode-test.mjs",
+    "test:e2e:coverage": "npm run compile:fresh && node ./scripts/run-vscode-test.mjs --coverage --coverage-output ./coverage/e2e --coverage-reporter html --coverage-reporter lcov && node ./scripts/print-coverage-summary.mjs e2e",
+    "test:coverage": "npm run test:unit:coverage && npm run test:e2e:coverage",
+    "coverage:summary": "node ./scripts/print-coverage-summary.mjs"
   },
-  "dependencies": {},
   "devDependencies": {
+    "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
     "@types/vscode": "^1.85.0",
+    "@vitest/coverage-v8": "^5.0.0",
+    "@vscode/test-cli": "^0.0.15",
+    "@vscode/test-electron": "^3.1.0",
     "eslint": "^9.39.3",
+    "mocha": "^12.0.1",
     "prettier": "^3.8.3",
     "ts-loader": "^9.5.4",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.1"
+    "typescript-eslint": "^8.56.1",
+    "vitest": "^5.0.0"
   }
 }

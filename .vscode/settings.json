@@ -1,11 +1,15 @@
-// Place your settings in this file to overwrite default and user settings.
 {
   "files.exclude": {
-    "out": false
+    "out": false,
+    "coverage": false
   },
   "search.exclude": {
-    "out": true
+    "out": true,
+    "coverage": true
   },
+  "explorer.excludeGitIgnore": false,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsc.autoDetect": "off",
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
