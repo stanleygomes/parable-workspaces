@@ -91,14 +91,33 @@ You can save and register a new workspace in **Parable Workspaces** in two ways:
 
 **Available Commands**
 
-| Command                | Description                                    |
-| ---------------------- | ---------------------------------------------- |
-| `npm install`          | Installs dependencies                          |
-| `npm run build`        | Compiles the extension                         |
-| `npm run lint`         | Runs ESLint checks                             |
-| `npm run package`      | Packages the extension for distribution        |
-| `npm run publish`      | Publishes the extension to VS Code Marketplace |
-| `npm run ovsx:publish` | Publishes to OpenVSX Registry                  |
+| Command                      | Description                                                   |
+| ---------------------------- | ------------------------------------------------------------- |
+| `npm install`                | Installs dependencies                                         |
+| `npm run build`              | Compiles the extension                                        |
+| `npm run lint`               | Runs ESLint checks                                            |
+| `npm run test`               | Runs unit tests then e2e tests                                |
+| `npm run test:unit`          | Runs Vitest unit tests                                        |
+| `npm run test:unit:coverage` | Runs unit tests and writes `coverage/unit` (brief folder summary) |
+| `npm run test:e2e`           | Compiles and runs Mocha e2e tests in a VS Code Extension Host |
+| `npm run test:e2e:coverage`  | Runs e2e tests and writes `coverage/e2e` (brief folder summary) |
+| `npm run test:coverage`      | Runs unit coverage then e2e coverage (separate report folders) |
+| `npm run coverage:summary`   | Prints folder % summaries for existing coverage reports |
+| `npm run package`            | Packages the extension for distribution                       |
+| `npm run publish`            | Publishes the extension to VS Code Marketplace                |
+| `npm run ovsx:publish`       | Publishes to OpenVSX Registry                                 |
+
+### Testing
+
+- **Unit tests** use **Vitest** (fast Node runner, no VS Code process). Co-locate them next to the code under test as `*.test.ts` (for example `src/core/helpers/StringHelper.test.ts`).
+- **E2E / integration tests** use **`@vscode/test-cli`** + **Mocha** (official Extension Development Host runner). Place them in `src/test/e2e/**/*.test.ts`.
+- Coverage is **separate by design**:
+  - `coverage/unit/` — Vitest V8 coverage (primary, actionable metric). Open `coverage/unit/index.html`.
+  - `coverage/e2e/` — `@vscode/test-cli --coverage` via Extension Host `NODE_V8_COVERAGE`. Open `coverage/e2e/index.html`.
+- CLI coverage output is a short **path %** table. Root entry files are listed individually (`src/extension.ts`, …), not rolled into a misleading `src` bucket. E2E summary leads with **function** coverage because line % is inflated by activation/module load. Re-print anytime with `npm run coverage:summary`.
+- Treat e2e coverage as a coarse Extension Host report: activation loads much of the DI graph, so percentages look higher than unit coverage and are not a path-coverage substitute.
+- CI uploads both artifacts. There is no coverage threshold gate. E2e output is filtered for known Extension Host noise (AgentHost session spam, clean exit `signal: unknown`).
+- Placeholder dirs `coverage/unit` and `coverage/e2e` are tracked; generated HTML/LCOV files stay gitignored.
 
 ## 🚀 CI/CD
 
@@ -109,7 +128,9 @@ This project uses GitHub Actions for continuous integration and deployment. The 
 - **Trigger**: Push to `master` branch or pull requests
 - **Actions**:
   - Validates conventional commits
-  - Builds and validates the VS Code extension (lint, package)
+  - Lints and checks formatting
+  - Runs Vitest unit tests and VS Code Mocha e2e tests, uploading separate `coverage/unit` and `coverage/e2e` artifacts
+  - Builds and packages the VS Code extension
 
 ### Release Workflow (`release.yml`)
 

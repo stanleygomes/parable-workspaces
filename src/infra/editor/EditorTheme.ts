@@ -7,7 +7,9 @@ export class EditorTheme {
 
   public async applyCurrentWorkspaceColor(): Promise<void> {
     const currentId = EditorContext.getCurrentWorkspaceId();
-    if (!currentId) return;
+    if (!currentId) {
+      return;
+    }
 
     const workspace = this.repository.findOne(currentId);
     if (workspace && workspace.color) {

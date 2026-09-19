@@ -8,6 +8,7 @@ import { WorkspaceFileStorage } from './WorkspaceFileStorage';
 export class WorkspaceStateManager {
   private static readonly STORAGE_KEY = 'savedProjects';
   private readonly fileStorage: WorkspaceFileStorage;
+  private cachedWorkspaces?: Workspace[];
 
   constructor(private readonly context: vscode.ExtensionContext) {
     const targetPath = OSHelper.getDefaultConfigPath();
@@ -18,6 +19,7 @@ export class WorkspaceStateManager {
     }
 
     this.initializeStorage(targetPath);
+    this.cachedWorkspaces = this.readFromDisk();
   }
 
   private initializeStorage(targetPath: string): void {
@@ -67,6 +69,22 @@ export class WorkspaceStateManager {
   }
 
   read(): Workspace[] {
+    if (!this.cachedWorkspaces) {
+      this.cachedWorkspaces = this.readFromDisk();
+    }
+    return this.cachedWorkspaces;
+  }
+
+  async write(workspaces: Workspace[]): Promise<void> {
+    this.cachedWorkspaces = workspaces;
+    this.fileStorage.write(workspaces);
+    await this.context.globalState.update(
+      WorkspaceStateManager.STORAGE_KEY,
+      workspaces,
+    );
+  }
+
+  private readFromDisk(): Workspace[] {
     if (this.fileStorage.exists()) {
       const workspaces = this.fileStorage.read();
       if (workspaces.length > 0) {
@@ -74,14 +92,6 @@ export class WorkspaceStateManager {
       }
     }
     return this.readState();
-  }
-
-  async write(workspaces: Workspace[]): Promise<void> {
-    this.fileStorage.write(workspaces);
-    await this.context.globalState.update(
-      WorkspaceStateManager.STORAGE_KEY,
-      workspaces,
-    );
   }
 
   private readState(): Workspace[] {

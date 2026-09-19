@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; style-src 'nonce-{{nonce}}' 'unsafe-inline'; script-src 'nonce-{{nonce}}';"
+      content="default-src 'none'; style-src 'nonce-{{nonce}}' 'unsafe-inline'; script-src 'nonce-{{nonce}}'; img-src {{cspSource}} data:;"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Parable Workspaces</title>
@@ -15,6 +15,9 @@
   <body>
     {{toolbar}} {{filters}} {{workspaces}}
 
+    <script type="application/json" id="initial-payload">
+      {{initialPayload}}
+    </script>
     <!-- prettier-ignore -->
     <script nonce="{{nonce}}">{{script}}</script>
   </body>
