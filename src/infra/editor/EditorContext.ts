@@ -11,7 +11,9 @@ export class EditorContext {
 
   public static getCurrentWorkspaceId(): string | undefined {
     const folders = this.getActiveFolders();
-    if (!folders) return undefined;
+    if (!folders) {
+      return undefined;
+    }
 
     const primaryFolder = folders[0];
     const workspaceFile = vscode.workspace.workspaceFile;
@@ -23,13 +25,17 @@ export class EditorContext {
 
   public static getCurrentWorkspaceFolders(): string[] {
     const folders = this.getActiveFolders();
-    if (!folders) return [];
+    if (!folders) {
+      return [];
+    }
     return folders.map((f) => f.uri.fsPath);
   }
 
   public static getCurrentWorkspaceName(): string | undefined {
     const folders = this.getActiveFolders();
-    if (!folders) return undefined;
+    if (!folders) {
+      return undefined;
+    }
 
     const primaryFolder = folders[0];
     const workspaceFile = vscode.workspace.workspaceFile;
