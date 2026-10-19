@@ -158,7 +158,9 @@ const printReport = (kind) => {
   const htmlPath = join(target.dir, 'index.html');
 
   if (!existsSync(lcovPath)) {
-    console.log(`${target.label} coverage: missing ${relative(root, lcovPath)}`);
+    console.log(
+      `${target.label} coverage: missing ${relative(root, lcovPath)}`,
+    );
     return false;
   }
 
@@ -169,7 +171,10 @@ const printReport = (kind) => {
         bucket.linesFound + bucket.branchesFound + bucket.functionsFound > 0,
     )
     .sort(([a], [b]) => a.localeCompare(b));
-  const totals = rows.reduce((acc, [, bucket]) => addBucket(acc, bucket), emptyTotals());
+  const totals = rows.reduce(
+    (acc, [, bucket]) => addBucket(acc, bucket),
+    emptyTotals(),
+  );
   const nameWidth = Math.max(18, ...rows.map(([name]) => name.length), 5);
   const primary = target.primary;
   const header =
