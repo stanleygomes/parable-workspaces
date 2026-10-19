@@ -6,6 +6,31 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [1.9.2] - 2026-10-19
+
+- Merge pull request #37 from stanleygomes/test/unit-and-e2e-coverage
+- docs: describe test mocks, e2e sandbox and coverage gate
+- test(e2e): exercise commands and persistence in a sandbox
+- test: cover core and infra with unit tests
+- fix(test): compile e2e suites so they actually run
+- Merge pull request #36 from stanleygomes/fix/security-audit
+- Merge pull request #35 from stanleygomes/fix/context-menu-viewport-overflow
+- fix(deps): resolve npm audit vulnerabilities and format documentation
+- fix(view): prevent context menu from overflowing viewport
+- Merge pull request #27 from jeremydavidson/feature/add-test-runners
+- fix: skipped artifact uploads under act local runs
+- fix: pinned Node typings for the workspace TypeScript project
+- fix: typed co-located tests in the IDE via a build tsconfig split
+- fix: clarified coverage summary path buckets and e2e metrics
+- fix: added brief folder coverage summaries and visible report dirs
+- fix: quieted e2e logs and used Extension Host coverage reports
+- fix: compiled e2e suites by narrowing TypeScript test excludes
+- test: co-located unit tests and published coverage reports
+- ci: run unit and e2e tests in the build workflow
+- chore: fix CHANGELOG prettier formatting
+- chore: add Vitest unit tests and VS Code Mocha e2e runners
+
+
 ## [1.9.0] - 2026-06-30
 
 - docs: update project architecture documentation to reflect refactored directory structure and responsibilities
