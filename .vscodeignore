@@ -2,12 +2,14 @@
 .vscode-test/**
 out/test/**
 src/**
+coverage/**
 .gitignore
 .prettierrc
 .prettierignore
 .commitlintrc.json
 eslint.config.mjs
 tsconfig.json
+vitest.config.mts
 webpack.config.js
 vsc-extension-quickstart.md
 resources/screenshots/**
@@ -17,4 +19,3 @@ resources/screenshots/**
 !src/infra/view/**/*.html
 !src/infra/view/**/*.css
 !src/infra/view/**/*.js
-

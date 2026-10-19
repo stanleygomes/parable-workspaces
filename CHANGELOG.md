@@ -44,7 +44,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - refactor: remove test suite and associated documentation
 - refactor: replace date-fns with Intl.RelativeTimeFormat in DateHelper and add comprehensive test suite
 
-
 ## [1.7.0] - 2026-05-29
 
 - feat: add configurable workspace storage path and implement dynamic path updates
