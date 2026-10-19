@@ -13,18 +13,22 @@ export class SaveWorkspaceService {
     const id = EditorContext.getCurrentWorkspaceId();
     const folders = EditorContext.getCurrentWorkspaceFolders();
     const name = EditorContext.getCurrentWorkspaceName();
+    const workspaceFile = EditorContext.getCurrentWorkspaceFile();
 
     if (!id || folders.length === 0 || !name) {
       this.userInteraction.showError('No folder open to save.');
       return;
     }
 
+    const existing = this.repository.findOne(id);
     const workspace: Workspace = {
+      ...existing,
       id,
       name,
       folders,
+      workspaceFile,
       lastOpened: Date.now(),
-      tags: [],
+      tags: existing?.tags ?? [],
     };
 
     await this.repository.save(workspace);
