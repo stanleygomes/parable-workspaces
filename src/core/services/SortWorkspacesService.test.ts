@@ -72,4 +72,16 @@ describe('SortWorkspacesService', () => {
 
     expect(sorted.map((item) => item.id)).toEqual(['new', 'old']);
   });
+
+  it('keeps the original order for unknown sort types', () => {
+    const input = [
+      workspace({ id: 'b', name: 'b', lastOpened: 1 }),
+      workspace({ id: 'a', name: 'a', lastOpened: 2 }),
+    ];
+
+    const sorted = service.sort(input, 'unknown' as SortType);
+
+    expect(sorted.map((item) => item.id)).toEqual(['b', 'a']);
+    expect(sorted).not.toBe(input);
+  });
 });

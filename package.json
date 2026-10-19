@@ -90,6 +90,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./tsconfig.build.json",
     "compile:fresh": "rm -rf out && npm run compile",
+    "compile:e2e": "rm -rf out && tsc -p ./tsconfig.e2e.json",
     "watch": "tsc -watch -p ./tsconfig.build.json",
     "lint": "eslint src",
     "format:check": "prettier --check .",
@@ -100,8 +101,8 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:unit:coverage": "vitest run --coverage && node ./scripts/print-coverage-summary.mjs unit",
-    "test:e2e": "npm run compile:fresh && node ./scripts/run-vscode-test.mjs",
-    "test:e2e:coverage": "npm run compile:fresh && node ./scripts/run-vscode-test.mjs --coverage --coverage-output ./coverage/e2e --coverage-reporter html --coverage-reporter lcov && node ./scripts/print-coverage-summary.mjs e2e",
+    "test:e2e": "npm run compile:e2e && node ./scripts/run-vscode-test.mjs",
+    "test:e2e:coverage": "npm run compile:e2e && node ./scripts/run-vscode-test.mjs --coverage --coverage-output ./coverage/e2e --coverage-reporter html --coverage-reporter lcov && node ./scripts/print-coverage-summary.mjs e2e",
     "test:coverage": "npm run test:unit:coverage && npm run test:e2e:coverage",
     "coverage:summary": "node ./scripts/print-coverage-summary.mjs"
   },

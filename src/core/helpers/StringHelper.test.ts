@@ -11,6 +11,14 @@ describe('StringHelper', () => {
     expect(result).toBe('Hello Parable costs $10');
   });
 
+  it('replaces every occurrence of the same variable', () => {
+    expect(StringHelper.replace('{{a}}-{{a}}', { a: 'x' })).toBe('x-x');
+  });
+
+  it('keeps unknown placeholders untouched', () => {
+    expect(StringHelper.replace('{{a}} {{b}}', { a: 'x' })).toBe('x {{b}}');
+  });
+
   it('encodes values as base64', () => {
     const value = '/Users/jeremy/dev/opensource/parable-workspaces';
 

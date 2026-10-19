@@ -8,7 +8,7 @@ coverage/**
 .prettierignore
 .commitlintrc.json
 eslint.config.mjs
-tsconfig.json
+tsconfig*.json
 vitest.config.mts
 webpack.config.js
 vsc-extension-quickstart.md

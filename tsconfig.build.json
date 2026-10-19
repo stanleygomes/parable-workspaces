@@ -11,6 +11,7 @@
     "landpage*",
     "out",
     "src/**/*.test.ts",
-    "src/**/*.bench.test.ts"
+    "src/**/*.bench.test.ts",
+    "src/test/**"
   ]
 }

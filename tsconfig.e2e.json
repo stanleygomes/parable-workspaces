@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.build.json",
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    ".vscode-test",
+    "landpage*",
+    "out",
+    "src/*.test.ts",
+    "src/core/**/*.test.ts",
+    "src/infra/**/*.test.ts",
+    "src/test/unit/**"
+  ]
+}

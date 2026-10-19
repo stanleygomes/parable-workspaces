@@ -5,7 +5,7 @@ import { registerCommands } from './commands';
 
 export async function activate(
   context: vscode.ExtensionContext,
-): Promise<void> {
+): Promise<Container> {
   console.log('Activating Parable Workspaces extension...');
 
   const container = new Container(context);
@@ -43,6 +43,8 @@ export async function activate(
   await container.editorTheme.applyCurrentWorkspaceColor();
 
   console.log('Parable Workspaces extension activated successfully');
+
+  return container;
 }
 
 export function deactivate(): void {}
