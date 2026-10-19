@@ -19,3 +19,4 @@ resources/screenshots/**
 !src/infra/view/**/*.html
 !src/infra/view/**/*.css
 !src/infra/view/**/*.js
+vercel.json
