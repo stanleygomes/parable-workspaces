@@ -1,8 +1,14 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   resolve: {
     extensions: ['.ts', '.js', '.json'],
+    alias: {
+      vscode: fileURLToPath(
+        new URL('./src/test/unit/mocks/vscode.ts', import.meta.url),
+      ),
+    },
   },
   test: {
     name: 'unit',
@@ -10,6 +16,8 @@ export default defineConfig({
     exclude: ['src/test/e2e/**', '**/node_modules/**'],
     environment: 'node',
     globals: false,
+    mockReset: true,
+    setupFiles: ['./src/test/unit/setup.ts'],
     coverage: {
       provider: 'v8',
       include: ['src/core/**/*.ts', 'src/infra/**/*.ts', 'src/*.ts'],
@@ -22,9 +30,15 @@ export default defineConfig({
         'src/infra/view/html/**',
         '**/node_modules/**',
       ],
-      reporter: ['html', 'lcov', 'json-summary'],
+      reporter: ['html', 'lcov', 'json-summary', 'text-summary'],
       reportsDirectory: './coverage/unit',
       reportOnFailure: true,
+      thresholds: {
+        lines: 95,
+        statements: 95,
+        functions: 95,
+        branches: 90,
+      },
     },
   },
 });
