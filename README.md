@@ -110,13 +110,17 @@ You can save and register a new workspace in **Parable Workspaces** in two ways:
 ### Testing
 
 - **Unit tests** use **Vitest** (fast Node runner, no VS Code process). Co-locate them next to the code under test as `*.test.ts` (for example `src/core/helpers/StringHelper.test.ts`).
-- **E2E / integration tests** use **`@vscode/test-cli`** + **Mocha** (official Extension Development Host runner). Place them in `src/test/e2e/**/*.test.ts`.
+  - The `vscode` module is aliased to an in-memory mock (`src/test/unit/mocks/vscode.ts`), reset before every test.
+  - Shared fakes (in-memory repository, `UserInteraction`, `ExtensionContext`) live in `src/test/unit/fakes.ts`.
+- **E2E / integration tests** use **`@vscode/test-cli`** + **Mocha** (official Extension Development Host runner). Place them in `src/test/e2e/**/*.test.ts`; they are compiled with `tsconfig.e2e.json`.
+  - Each run opens a throwaway workspace folder and points `XDG_CONFIG_HOME` to a temp dir, so your real `workspaces.json` is never touched. Tests refuse to run if storage resolves outside that sandbox (e.g. on macOS/Windows, which ignore `XDG_CONFIG_HOME`).
+  - `activate()` returns the service `Container` (`extension.exports`) so tests can assert real persisted state.
 - Coverage is **separate by design**:
   - `coverage/unit/` — Vitest V8 coverage (primary, actionable metric). Open `coverage/unit/index.html`.
   - `coverage/e2e/` — `@vscode/test-cli --coverage` via Extension Host `NODE_V8_COVERAGE`. Open `coverage/e2e/index.html`.
 - CLI coverage output is a short **path %** table. Root entry files are listed individually (`src/extension.ts`, …), not rolled into a misleading `src` bucket. E2E summary leads with **function** coverage because line % is inflated by activation/module load. Re-print anytime with `npm run coverage:summary`.
 - Treat e2e coverage as a coarse Extension Host report: activation loads much of the DI graph, so percentages look higher than unit coverage and are not a path-coverage substitute.
-- CI uploads both artifacts. There is no coverage threshold gate. E2e output is filtered for known Extension Host noise (AgentHost session spam, clean exit `signal: unknown`).
+- CI uploads both artifacts. Unit coverage is gated by thresholds in `vitest.config.mts` (95% lines/statements/functions, 90% branches); the build fails below that. E2e output is filtered for known Extension Host noise (AgentHost session spam, clean exit `signal: unknown`).
 - Placeholder dirs `coverage/unit` and `coverage/e2e` are tracked; generated HTML/LCOV files stay gitignored.
 
 ## 🚀 CI/CD
