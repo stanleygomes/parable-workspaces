@@ -5,15 +5,12 @@ import { DeleteWorkspaceService } from '../../core/services/DeleteWorkspaceServi
 import { UpdateWorkspaceFavoriteService } from '../../core/services/UpdateWorkspaceFavoriteService';
 import { UpdateWorkspaceNameService } from '../../core/services/UpdateWorkspaceNameService';
 import { UpdateWorkspaceEmojiService } from '../../core/services/UpdateWorkspaceEmojiService';
+import { UpdateWorkspaceIconService } from '../../core/services/UpdateWorkspaceIconService';
 import { UpdateWorkspaceColorService } from '../../core/services/UpdateWorkspaceColorService';
 import { SortType } from '../../core/enums/SortType';
 import { ViewState } from './ViewState';
 import { UpdateViewFilterService } from '../../core/services/UpdateViewFilterService';
 
-/**
- * Dispatches messages received from the webview UI to the appropriate domain
- * service, acting as the bridge between the sidebar frontend and the core layer.
- */
 export class ViewMessageHandler {
   constructor(
     private readonly saveService: SaveWorkspaceService,
@@ -22,6 +19,7 @@ export class ViewMessageHandler {
     private readonly favoriteService: UpdateWorkspaceFavoriteService,
     private readonly editNameService: UpdateWorkspaceNameService,
     private readonly changeEmojiService: UpdateWorkspaceEmojiService,
+    private readonly changeIconService: UpdateWorkspaceIconService,
     private readonly changeColorService: UpdateWorkspaceColorService,
     private readonly ViewState: ViewState,
     private readonly filterService: UpdateViewFilterService,
@@ -63,6 +61,11 @@ export class ViewMessageHandler {
           await this.changeEmojiService.update(message.workspaceId);
         }
         break;
+      case 'changeIcon':
+        if (message.workspaceId) {
+          await this.changeIconService.update(message.workspaceId);
+        }
+        break;
       case 'changeColor':
         if (message.workspaceId) {
           await this.changeColorService.update(message.workspaceId);
@@ -87,6 +90,10 @@ export class ViewMessageHandler {
           await this.filterService.changeSort(message.sortType as SortType);
           this.refreshCallback();
         }
+        break;
+      case 'toggleTimeUpdated':
+        await this.filterService.toggleTimeUpdated(!!message.showTimeUpdated);
+        this.refreshCallback();
         break;
       case 'refresh':
         this.refreshCallback();

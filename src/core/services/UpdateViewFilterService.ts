@@ -23,4 +23,9 @@ export class UpdateViewFilterService {
     this.ViewState.currentSort = sortType;
     await this.settingsStateManager.set(SettingsKey.SortType, sortType);
   }
+
+  public async toggleTimeUpdated(value: boolean): Promise<void> {
+    this.ViewState.showTimeUpdated = value;
+    await this.settingsStateManager.set(SettingsKey.ShowTimeUpdated, value);
+  }
 }

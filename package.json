@@ -84,7 +84,18 @@
         "key": "alt+p",
         "mac": "cmd+opt+p"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Parable Workspaces",
+      "properties": {
+        "parableWorkspaces.detectIcons": {
+          "type": "boolean",
+          "default": false,
+          "scope": "window",
+          "description": "When true, discover favicon/icon/logo images under workspace folders for sidebar and QuickPick badges. Configured workspace icons still show when false."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

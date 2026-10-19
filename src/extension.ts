@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { Container } from './container';
 import { ViewProvider } from './infra/view/ViewProvider';
 import { registerCommands } from './commands';
+import { ConfigurationKey } from './core/enums/ConfigurationKey';
 
 export async function activate(
   context: vscode.ExtensionContext,
@@ -24,9 +25,11 @@ export async function activate(
     container.SettingsStateManager,
     container.UpdateWorkspaceNameService,
     container.UpdateWorkspaceEmojiService,
+    container.UpdateWorkspaceIconService,
     container.UpdateWorkspaceColorService,
+    container.workspaceIconCache,
+    container.webviewIconCacheDir,
   );
-
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(ViewProvider.viewType, provider),
   );
@@ -37,10 +40,17 @@ export async function activate(
     vscode.workspace.onDidChangeWorkspaceFolders(() =>
       container.suggestSaveWorkspaceService.suggest(),
     ),
+    vscode.workspace.onDidChangeConfiguration((event) => {
+      if (event.affectsConfiguration(ConfigurationKey.DetectIcons)) {
+        provider.refresh();
+      }
+    }),
   );
 
-  container.suggestSaveWorkspaceService.suggest();
-  await container.editorTheme.applyCurrentWorkspaceColor();
+  setTimeout(() => {
+    void container.suggestSaveWorkspaceService.suggest();
+    void container.editorTheme.applyCurrentWorkspaceColor();
+  }, 0);
 
   console.log('Parable Workspaces extension activated successfully');
 }
