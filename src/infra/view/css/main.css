@@ -5,6 +5,9 @@
 }
 
 body {
+  margin: 0;
+  padding: 0 5px !important;
+  padding-left: 8px !important;
   font-family: var(--vscode-font-family);
   font-size: var(--vscode-font-size);
   color: var(--vscode-foreground);
@@ -16,7 +19,7 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 6px 8px;
+  padding: 6px 4px;
   border-bottom: 1px solid var(--vscode-sideBarSectionHeader-border);
   flex-wrap: wrap;
 }
@@ -121,7 +124,7 @@ body {
 .filter-row {
   display: flex;
   gap: 8px;
-  padding: 6px 8px;
+  padding: 6px 4px;
   border-bottom: 1px solid var(--vscode-sideBarSectionHeader-border);
   overflow-x: auto;
   align-items: center;
@@ -166,6 +169,18 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+}
+
+.filter-chip svg {
+  flex-shrink: 0;
+}
+
+.filter-row.compact .filter-chip {
+  padding: 4px 7px;
+}
+
+.filter-row.compact .filter-chip-label {
+  display: none;
 }
 
 .filter-chip.active {
@@ -213,7 +228,7 @@ body {
 
 .workspace-body {
   flex: 1;
-  padding: 10px 12px;
+  padding: 10px 4px;
   min-width: 0;
 }
 
@@ -240,6 +255,48 @@ body {
   font-size: 20px;
   flex-shrink: 0;
   line-height: 1;
+}
+
+.workspace-favicon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  display: block;
+}
+
+.workspace-item.no-icons {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.workspace-item.no-icons .workspace-body {
+  flex: 1;
+  min-width: 0;
+  padding-left: 0;
+}
+
+.workspace-emoji-wrapper.has-favicon {
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1.5px solid transparent;
+  border-radius: 6px;
+  background-color: transparent;
+  background-clip: padding-box;
+  box-shadow: none;
+}
+
+.workspace-item.design-emoji-ring:hover .workspace-emoji-wrapper.has-favicon {
+  border-color: transparent;
+  background-color: transparent;
+  box-shadow: none;
+  transform: none;
 }
 
 .workspace-date {
@@ -313,7 +370,7 @@ body {
 
 /* Empty state */
 .empty-state {
-  padding: 40px 20px;
+  padding: 40px 4px;
   text-align: center;
   color: var(--vscode-descriptionForeground);
 }
@@ -327,7 +384,7 @@ body {
 .save-banner {
   background: var(--vscode-editor-background);
   border-bottom: 1px solid var(--vscode-sideBarSectionHeader-border);
-  padding: 12px;
+  padding: 12px 4px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -343,7 +400,8 @@ body {
 .workspace-item.design-emoji-ring {
   border-left: none !important;
   align-items: center;
-  padding-left: 12px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .workspace-item.design-emoji-ring .workspace-body {

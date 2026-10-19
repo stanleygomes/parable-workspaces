@@ -2,6 +2,9 @@
 .vscode-test/**
 out/test/**
 src/**
+releases/**
+scripts/**
+docs/**
 coverage/**
 .gitignore
 .prettierrc
@@ -9,6 +12,7 @@ coverage/**
 .commitlintrc.json
 eslint.config.mjs
 tsconfig.json
+tsconfig.build.json
 vitest.config.mts
 webpack.config.js
 vsc-extension-quickstart.md

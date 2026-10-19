@@ -1,7 +1,23 @@
 import * as vscode from 'vscode';
 import { TemplateHelper } from '../../core/helpers/TemplateHelper';
 
+const VIEW_ASSETS: string[][] = [
+  ['src', 'infra', 'view', 'html', 'index.html'],
+  ['src', 'infra', 'view', 'html', 'toolbar.html'],
+  ['src', 'infra', 'view', 'html', 'filters.html'],
+  ['src', 'infra', 'view', 'html', 'workspaces.html'],
+  ['src', 'infra', 'view', 'css', 'main.css'],
+  ['src', 'infra', 'view', 'js', 'utils.js'],
+  ['src', 'infra', 'view', 'js', 'contextMenu.js'],
+  ['src', 'infra', 'view', 'js', 'renderer.js'],
+  ['src', 'infra', 'view', 'js', 'controller.js'],
+];
+
 export class HtmlTemplateBuilder {
+  public static prefetch(extensionUri: vscode.Uri): void {
+    TemplateHelper.prefetch(extensionUri, VIEW_ASSETS);
+  }
+
   public static build(
     webview: vscode.Webview,
     extensionUri: vscode.Uri,
@@ -24,6 +40,7 @@ export class HtmlTemplateBuilder {
 
     return render('html', `${templateName}.html`, {
       nonce: nonce,
+      cspSource: webview.cspSource,
       style: render('css', 'main.css'),
       script: [
         js('utils'),
@@ -34,6 +51,7 @@ export class HtmlTemplateBuilder {
       toolbar: render('html', 'toolbar.html'),
       filters: render('html', 'filters.html'),
       workspaces: render('html', 'workspaces.html'),
+      initialPayload: extraVariables.initialPayload ?? 'null',
       ...extraVariables,
     });
   }
